@@ -254,6 +254,7 @@ option{background:var(--c1)}
 .status-btn.interview.active{color:var(--interview);border-color:var(--interview);background:var(--interview-bg)}
 .status-btn.offer.active{color:var(--offer);border-color:var(--offer);background:var(--offer-bg)}
 .status-btn.rejected.active{color:var(--rejected);border-color:var(--rejected);background:var(--rejected-bg)}
+.activity-section{}
 .activity-header{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
 .activity-log{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;margin-bottom:10px}
 .activity-item{background:var(--c2);border-radius:8px;padding:9px 12px}
@@ -309,6 +310,69 @@ option{background:var(--c1)}
 /* ── KEYBOARD SHORTCUT HINT ── */
 .kbd{display:inline-block;background:var(--c2);border:.5px solid var(--c3);border-radius:4px;padding:1px 5px;font-family:'DM Mono',monospace;font-size:10px;color:var(--c4)}
 
+/* ── ANALYTICS ── */
+.analytics-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:150;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto}
+.analytics-overlay.open{display:flex}
+.analytics-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:20px;padding:1.75rem;width:100%;max-width:860px;margin:auto;display:flex;flex-direction:column;gap:1.25rem}
+.analytics-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.analytics-title{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--c6);letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
+.analytics-title i{color:var(--accent);font-size:1.1rem}
+.analytics-close-btn{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:6px 12px;color:var(--c4);font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:5px}
+.analytics-close-btn:hover{color:var(--c5);border-color:var(--c4)}
+/* KPI row */
+.analytics-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:600px){.analytics-kpi-row{grid-template-columns:1fr 1fr}}
+.analytics-kpi{background:var(--c2);border:.5px solid var(--c3);border-radius:12px;padding:14px 16px}
+.analytics-kpi-val{font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;line-height:1;color:var(--c6)}
+.analytics-kpi-label{font-size:11px;color:var(--c4);margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
+.analytics-kpi-sub{font-size:11px;color:var(--c4);margin-top:2px;font-family:'DM Mono',monospace}
+/* section */
+.analytics-section{background:var(--c2);border:.5px solid var(--c3);border-radius:14px;padding:16px}
+.analytics-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--c4);margin-bottom:12px}
+/* funnel */
+.funnel-rows{display:flex;flex-direction:column;gap:6px}
+.funnel-row{display:flex;align-items:center;gap:10px}
+.funnel-label{font-size:12px;color:var(--c5);width:90px;flex-shrink:0;text-align:right}
+.funnel-bar-wrap{flex:1;background:var(--c3);border-radius:20px;height:10px;overflow:hidden}
+.funnel-bar{height:100%;border-radius:20px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.funnel-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:24px;flex-shrink:0}
+.funnel-pct{font-family:'DM Mono',monospace;font-size:11px;width:38px;flex-shrink:0;text-align:right}
+/* response time chart */
+.resp-bars{display:flex;align-items:flex-end;gap:6px;height:80px}
+.resp-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.resp-bar{width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:2px;opacity:.8;transition:height .4s}
+.resp-bar-label{font-size:10px;color:var(--c4);text-align:center;white-space:nowrap;font-family:'DM Mono',monospace}
+/* rejection breakdown */
+.reject-rows{display:flex;flex-direction:column;gap:6px}
+.reject-row{display:flex;align-items:center;gap:10px}
+.reject-label{font-size:12px;color:var(--c5);flex:1}
+.reject-bar-wrap{width:100px;background:var(--c3);border-radius:20px;height:6px;flex-shrink:0}
+.reject-bar{height:100%;border-radius:20px;background:var(--rejected)}
+.reject-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:20px;text-align:right;flex-shrink:0}
+/* two col grid */
+.analytics-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.analytics-grid-2{grid-template-columns:1fr}}
+/* weekly activity */
+.weekly-bars{display:flex;align-items:flex-end;gap:4px;height:60px}
+.weekly-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.weekly-bar{width:100%;background:var(--applied);border-radius:3px 3px 0 0;min-height:1px;opacity:.75}
+.weekly-bar-label{font-size:9px;color:var(--c4);font-family:'DM Mono',monospace}
+/* status donut via conic-gradient */
+.donut-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.donut{width:80px;height:80px;border-radius:50%;flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:5px}
+.donut-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--c5)}
+.donut-swatch{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+/* insight chips */
+.insights-row{display:flex;flex-wrap:wrap;gap:8px}
+.insight-chip{background:var(--c2);border:.5px solid var(--c3);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--c5);display:flex;align-items:center;gap:6px}
+.insight-chip i{font-size:11px}
+.insight-chip.good{border-color:var(--offer);color:var(--offer)}
+.insight-chip.warn{border-color:var(--interview);color:var(--interview)}
+.insight-chip.bad{border-color:var(--rejected);color:var(--rejected)}
+/* empty analytics */
+.analytics-empty{text-align:center;padding:2.5rem;color:var(--c4);font-size:13px}
+
 /* ── MISC ── */
 .app{display:flex;flex-direction:column;min-height:100vh;padding:1.5rem 1.25rem}
 @media(max-width:480px){.app{padding:1rem .75rem}}
@@ -347,6 +411,7 @@ option{background:var(--c1)}
       </div>
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme (T)" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
       <button class="icon-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> CSV</button>
+      <button class="icon-btn" onclick="openAnalytics()" title="Analytics (A)"><i class="fa-solid fa-chart-line"></i></button>
       <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
       <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
     </div>
@@ -519,6 +584,17 @@ option{background:var(--c1)}
       </div>
     </div>
     <button class="del-btn" onclick="deleteJob()"><i class="fa-solid fa-trash"></i> Delete application</button>
+  </div>
+</div>
+
+<!-- ANALYTICS OVERLAY -->
+<div class="analytics-overlay" id="analyticsOverlay" onclick="if(event.target===this)closeAnalytics()">
+  <div class="analytics-modal">
+    <div class="analytics-header">
+      <div class="analytics-title"><i class="fa-solid fa-chart-line"></i> Analytics</div>
+      <button class="analytics-close-btn" onclick="closeAnalytics()"><i class="fa-solid fa-xmark"></i> Close</button>
+    </div>
+    <div id="analyticsBody"><div class="analytics-empty">No data yet — add some applications first.</div></div>
   </div>
 </div>
 
@@ -1247,13 +1323,232 @@ window.exportCSV=function(){
   a.download='huntlog-export.csv';a.click();
 };
 
+// ── ANALYTICS ──
+const REJECT_REASONS_ANALYTICS={no_response:'No response',skills_gap:'Skills gap',salary_mismatch:'Salary mismatch',position_filled:'Pos. filled',culture_fit:'Culture fit',withdrew:'Withdrew',other:'Other'};
+
+window.openAnalytics=function(){
+  document.getElementById('analyticsOverlay').classList.add('open');
+  renderAnalytics();
+};
+window.closeAnalytics=function(){
+  document.getElementById('analyticsOverlay').classList.remove('open');
+};
+
+function renderAnalytics(){
+  const body=document.getElementById('analyticsBody');
+  if(!jobs.length){body.innerHTML='<div class="analytics-empty">No data yet — add some applications first.</div>';return;}
+
+  // --- KPIs ---
+  const total=jobs.length;
+  const offers=jobs.filter(j=>j.status==='offer').length;
+  const rejected=jobs.filter(j=>j.status==='rejected').length;
+  const interviews=jobs.filter(j=>j.status==='interview'||j.status==='offer').length;
+  const screenings=jobs.filter(j=>j.status==='screening'||j.status==='interview'||j.status==='offer').length;
+
+  const successRate=total>0?Math.round((offers/total)*100):0;
+  const interviewRate=total>0?Math.round((interviews/total)*100):0;
+  const screenRate=total>0?Math.round((screenings/total)*100):0;
+  const rejRate=total>0?Math.round((rejected/total)*100):0;
+
+  // avg response time: days from applied to first status change (approximation via daysSince)
+  // We use: for offers+interviews, avg days since apply date
+  const responded=jobs.filter(j=>j.status!=='applied'&&j.date);
+  const avgResponse=responded.length>0
+    ?Math.round(responded.reduce((acc,j)=>{
+        const n=daysSince(j.date);return acc+(n??0);
+      },0)/responded.length)
+    :null;
+
+  // stalest active jobs
+  const active=jobs.filter(j=>j.status==='applied'||j.status==='screening');
+  const avgStale=active.length>0
+    ?Math.round(active.reduce((acc,j)=>acc+(daysSince(j.date)??0),0)/active.length)
+    :null;
+
+  // weekly activity (last 8 weeks)
+  const now=new Date();now.setHours(0,0,0,0);
+  const weekBuckets=Array(8).fill(0);
+  jobs.forEach(j=>{
+    const d=j.date?.toDate?j.date.toDate():(j.date?new Date(j.date):null);
+    if(!d||isNaN(d))return;
+    const diffDays=Math.floor((now-d)/(1000*60*60*24));
+    const week=Math.floor(diffDays/7);
+    if(week>=0&&week<8)weekBuckets[week]++;
+  });
+  const weekLabels=['now','1w','2w','3w','4w','5w','6w','7w'];
+  const maxWeek=Math.max(...weekBuckets,1);
+
+  // funnel
+  const statusCounts={applied:0,screening:0,interview:0,offer:0,rejected:0};
+  jobs.forEach(j=>{if(statusCounts[j.status]!==undefined)statusCounts[j.status]++;});
+
+  // rejection reasons
+  const rejectBreakdown={};
+  jobs.filter(j=>j.status==='rejected').forEach(j=>{
+    const r=j.rejectReason||'unknown';
+    rejectBreakdown[r]=(rejectBreakdown[r]||0)+1;
+  });
+  const rejectEntries=Object.entries(rejectBreakdown).sort((a,b)=>b[1]-a[1]);
+  const maxReject=rejectEntries.length>0?rejectEntries[0][1]:1;
+
+  // tags frequency
+  const tagFreq={};
+  jobs.forEach(j=>(j.tags||[]).forEach(t=>{tagFreq[t]=(tagFreq[t]||0)+1;}));
+  const topTags=Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+  // status donut via conic-gradient
+  const donutColors={applied:'#3b82f6',screening:'#8b5cf6',interview:'#f59e0b',offer:'#10b981',rejected:'#ef4444'};
+  const donutSegments=Object.entries(statusCounts).filter(([,v])=>v>0);
+  let cumulPct=0;
+  const conicParts=donutSegments.map(([s,v])=>{
+    const pct=(v/total)*100;
+    const part=`${donutColors[s]} ${cumulPct}% ${cumulPct+pct}%`;
+    cumulPct+=pct;
+    return part;
+  });
+
+  // insights
+  const insights=[];
+  if(successRate>=10)insights.push({cls:'good',icon:'fa-trophy',text:`${successRate}% offer rate — solid pipeline`});
+  else if(total>=5&&successRate===0)insights.push({cls:'warn',icon:'fa-triangle-exclamation',text:'No offers yet — keep pushing'});
+  if(interviewRate>=30)insights.push({cls:'good',icon:'fa-comments',text:`${interviewRate}% interview rate — strong signal`});
+  if(avgStale!==null&&avgStale>21)insights.push({cls:'bad',icon:'fa-clock',text:`Avg ${avgStale}d without update — follow up?`});
+  if(rejectBreakdown['no_response']>=3)insights.push({cls:'warn',icon:'fa-ghost',text:`${rejectBreakdown['no_response']} ghosted — diversify channels`});
+  if(topTags.length&&topTags[0][0]==='cold apply'&&topTags[0][1]>5)insights.push({cls:'warn',icon:'fa-ice-cream',text:'Mostly cold outreach — try referrals'});
+  if(avgResponse!==null&&avgResponse<14)insights.push({cls:'good',icon:'fa-bolt',text:`Avg ${avgResponse}d to hear back — fast pipeline`});
+
+  body.innerHTML=`
+    <!-- KPIs -->
+    <div class="analytics-kpi-row">
+      <div class="analytics-kpi">
+        <div class="analytics-kpi-val" style="color:var(--offer)">${successRate}%</div>
+        <div class="analytics-kpi-label">Offer rate</div>
+        <div class="analytics-kpi-sub">${offers} of ${total}</div>
+      </div>
+      <div class="analytics-kpi">
+        <div class="analytics-kpi-val" style="color:var(--interview)">${interviewRate}%</div>
+        <div class="analytics-kpi-label">Interview rate</div>
+        <div class="analytics-kpi-sub">${interviews} reached</div>
+      </div>
+      <div class="analytics-kpi">
+        <div class="analytics-kpi-val" style="color:var(--screen)">${screenRate}%</div>
+        <div class="analytics-kpi-label">Screen rate</div>
+        <div class="analytics-kpi-sub">${screenings} reached</div>
+      </div>
+      <div class="analytics-kpi">
+        <div class="analytics-kpi-val" style="color:var(--rejected)">${rejRate}%</div>
+        <div class="analytics-kpi-label">Rejection rate</div>
+        <div class="analytics-kpi-sub">${rejected} total</div>
+      </div>
+    </div>
+
+    ${insights.length?`
+    <!-- Insights -->
+    <div class="analytics-section">
+      <div class="analytics-section-title"><i class="fa-solid fa-lightbulb"></i> Insights</div>
+      <div class="insights-row">
+        ${insights.map(ins=>`<div class="insight-chip ${ins.cls}"><i class="fa-solid ${ins.icon}"></i>${ins.text}</div>`).join('')}
+      </div>
+    </div>`:'' }
+
+    <!-- Funnel + Donut -->
+    <div class="analytics-grid-2">
+      <div class="analytics-section">
+        <div class="analytics-section-title">Pipeline funnel</div>
+        <div class="funnel-rows">
+          ${Object.entries(statusCounts).map(([s,v])=>{
+            const pct=total>0?Math.round((v/total)*100):0;
+            const barColor=donutColors[s]||'var(--accent)';
+            return`<div class="funnel-row">
+              <div class="funnel-label" style="color:${barColor}">${SM[s]?.label||s}</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${pct}%;background:${barColor}"></div></div>
+              <div class="funnel-count">${v}</div>
+              <div class="funnel-pct" style="color:${barColor}">${pct}%</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <div class="analytics-section">
+        <div class="analytics-section-title">Distribution</div>
+        <div class="donut-wrap">
+          <div class="donut" style="background:conic-gradient(${conicParts.join(',')})"></div>
+          <div class="donut-legend">
+            ${donutSegments.map(([s,v])=>`
+              <div class="donut-legend-item">
+                <div class="donut-swatch" style="background:${donutColors[s]}"></div>
+                <span>${SM[s]?.label||s} <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${v}</span></span>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly activity + avg response -->
+    <div class="analytics-grid-2">
+      <div class="analytics-section">
+        <div class="analytics-section-title">Weekly applications (last 8 weeks)</div>
+        <div class="weekly-bars">
+          ${[...weekBuckets].reverse().map((v,i)=>`
+            <div class="weekly-bar-col">
+              <div class="weekly-bar" style="height:${Math.round((v/maxWeek)*50)+2}px;opacity:${.4+.6*(v/maxWeek)}"></div>
+              <div class="weekly-bar-label">${weekLabels[[...weekBuckets].length-1-i]}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+      <div class="analytics-section">
+        <div class="analytics-section-title">Response timing</div>
+        ${avgResponse!==null?`
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div>
+              <div style="font-family:'DM Mono',monospace;font-size:2rem;color:var(--c6);line-height:1">${avgResponse}</div>
+              <div style="font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em">avg days to status change</div>
+            </div>
+            ${avgStale!==null?`<div>
+              <div style="font-family:'DM Mono',monospace;font-size:1.4rem;color:${avgStale>21?'var(--rejected)':'var(--c5)'};line-height:1">${avgStale}</div>
+              <div style="font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em">avg days stale (active jobs)</div>
+            </div>`:''}
+          </div>`:'<div style="color:var(--c4);font-size:12px">Not enough data yet.</div>'}
+      </div>
+    </div>
+
+    <!-- Rejection reasons + Top tags -->
+    <div class="analytics-grid-2">
+      ${rejectEntries.length?`
+      <div class="analytics-section">
+        <div class="analytics-section-title">Rejection breakdown</div>
+        <div class="reject-rows">
+          ${rejectEntries.map(([k,v])=>`
+            <div class="reject-row">
+              <div class="reject-label">${REJECT_REASONS_ANALYTICS[k]||k}</div>
+              <div class="reject-bar-wrap"><div class="reject-bar" style="width:${Math.round((v/maxReject)*100)}%"></div></div>
+              <div class="reject-count">${v}</div>
+            </div>`).join('')}
+        </div>
+      </div>`:`<div class="analytics-section"><div class="analytics-section-title">Rejection breakdown</div><div style="color:var(--c4);font-size:12px">No rejections recorded yet.</div></div>`}
+
+      <div class="analytics-section">
+        <div class="analytics-section-title">Top tags</div>
+        ${topTags.length?`<div class="reject-rows">
+          ${topTags.map(([t,v])=>`
+            <div class="reject-row">
+              <div class="reject-label">${t}</div>
+              <div class="reject-bar-wrap"><div class="reject-bar" style="width:${Math.round((v/topTags[0][1])*100)}%;background:var(--accent)"></div></div>
+              <div class="reject-count">${v}</div>
+            </div>`).join('')}
+        </div>`:'<div style="color:var(--c4);font-size:12px">No tags used yet.</div>'}
+      </div>
+    </div>
+  `;
+}
+
 // ── KEYBOARD SHORTCUTS ──
 document.addEventListener('keydown',e=>{
   const tag=document.activeElement.tagName.toLowerCase();
   const inInput=tag==='input'||tag==='textarea'||tag==='select';
 
   if(e.key==='Escape'){
-    window.closeAdd();window.closeDetail();window.closeAdmin();
+    window.closeAdd();window.closeDetail();window.closeAdmin();window.closeAnalytics();
     if(quickAddOpen)toggleQuickAdd();
     return;
   }
@@ -1266,6 +1561,7 @@ document.addEventListener('keydown',e=>{
     case't':case'T':window.toggleTheme();break;
     case'l':case'L':window.setView('list');break;
     case'k':case'K':window.setView('kanban');break;
+    case'a':case'A':window.openAnalytics();break;
   }
 });
 
