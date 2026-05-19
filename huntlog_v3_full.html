@@ -1,0 +1,428 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--c0:#0b0b0f;--c1:#13131a;--c2:#1c1c27;--c3:#26263a;--c4:#8585a0;--c5:#b5b5cc;--c6:#e8e8f5;
+--applied:#3b82f6;--applied-bg:#0d1f3c;
+--screen:#8b5cf6;--screen-bg:#1e0d3c;
+--interview:#f59e0b;--interview-bg:#2d1f00;
+--offer:#10b981;--offer-bg:#0d2d1f;
+--rejected:#ef4444;--rejected-bg:#2d0d0d;
+--accent:#6366f1;
+}
+body{background:var(--c0);color:var(--c6);font-family:'Syne',sans-serif;min-height:100vh}
+.app{display:flex;flex-direction:column;min-height:100vh;padding:1.5rem 1.25rem}
+
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:80vh}
+.login-card{background:var(--c1);border:0.5px solid var(--c3);border-radius:20px;padding:3rem 2.5rem;text-align:center;max-width:360px;width:100%}
+.login-logo{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--c6);letter-spacing:-.02em;margin-bottom:.5rem}
+.login-logo span{color:var(--accent);font-style:italic}
+.login-sub{font-size:13px;color:var(--c4);margin-bottom:2rem;line-height:1.6}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--c2);border:0.5px solid var(--c3);border-radius:10px;padding:12px 20px;color:var(--c5);font-size:14px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.2s}
+.google-btn:hover{background:var(--c3);color:var(--c6)}
+.google-icon{width:18px;height:18px;flex-shrink:0}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--c6);letter-spacing:-.02em}
+.logo span{color:var(--accent);font-style:italic}
+.top-right{display:flex;align-items:center;gap:10px}
+.user-avatar{width:32px;height:32px;border-radius:50%;border:0.5px solid var(--c3);object-fit:cover;background:var(--c2)}
+.user-name{font-size:12px;color:var(--c4)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#10b981;flex-shrink:0}
+.sync-dot.syncing{background:#f59e0b;animation:pulse 1s infinite}
+.sync-dot.err{background:#ef4444}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.icon-btn{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:6px 10px;color:var(--c4);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;font-family:'Syne',sans-serif;transition:.15s}
+.icon-btn:hover{color:var(--c5);border-color:var(--c4)}
+
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:2rem}
+.stat{background:var(--c1);border:0.5px solid var(--c3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.2s}
+.stat:hover{border-color:var(--c4);background:var(--c2)}
+.stat.active{border-width:1px}
+.stat-num{font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;line-height:1}
+.stat-label{font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.stat.s-all .stat-num{color:var(--c6)}.stat.s-all.active{border-color:var(--c5)}
+.stat.s-applied .stat-num{color:var(--applied)}.stat.s-applied.active{border-color:var(--applied)}
+.stat.s-screen .stat-num{color:var(--screen)}.stat.s-screen.active{border-color:var(--screen)}
+.stat.s-interview .stat-num{color:var(--interview)}.stat.s-interview.active{border-color:var(--interview)}
+.stat.s-offer .stat-num{color:var(--offer)}.stat.s-offer.active{border-color:var(--offer)}
+
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem}
+.search-wrap{flex:1;position:relative}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--c4);font-size:15px}
+.search-input{width:100%;background:var(--c1);border:0.5px solid var(--c3);border-radius:8px;padding:9px 12px 9px 36px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s}
+.search-input::placeholder{color:var(--c4)}
+.search-input:focus{border-color:var(--accent);background:var(--c2)}
+.add-btn{background:var(--accent);border:none;border-radius:8px;padding:9px 18px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;white-space:nowrap;transition:.15s}
+.add-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+.jobs-list{display:flex;flex-direction:column;gap:8px}
+.job-card{background:var(--c1);border:0.5px solid var(--c3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
+.job-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px}
+.job-card.applied::before{background:var(--applied)}
+.job-card.screening::before{background:var(--screen)}
+.job-card.interview::before{background:var(--interview)}
+.job-card.offer::before{background:var(--offer)}
+.job-card.rejected::before{background:var(--rejected)}
+.job-card:hover{border-color:var(--c4);background:var(--c2);transform:translateX(2px)}
+.job-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.job-title{font-size:14px;font-weight:600;color:var(--c6);line-height:1.3}
+.job-status{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+.job-status.applied{color:var(--applied);background:var(--applied-bg)}
+.job-status.screening{color:var(--screen);background:var(--screen-bg)}
+.job-status.interview{color:var(--interview);background:var(--interview-bg)}
+.job-status.offer{color:var(--offer);background:var(--offer-bg)}
+.job-status.rejected{color:var(--rejected);background:var(--rejected-bg)}
+.job-company{font-size:13px;color:var(--c5);margin-bottom:6px}
+.job-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.job-tag{font-size:11px;color:var(--c4);display:flex;align-items:center;gap:4px}
+.job-tag i{font-size:12px}
+.no-results{text-align:center;padding:3rem;color:var(--c4);font-size:14px}
+.loading-state{text-align:center;padding:3rem;color:var(--c4);font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px}
+.spinner{width:16px;height:16px;border:2px solid var(--c3);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--c1);border:0.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:1.1rem;font-weight:600;margin-bottom:1.25rem;color:var(--c6)}
+.form-group{margin-bottom:1rem}
+.form-label{font-size:12px;font-weight:600;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--c2);border:0.5px solid var(--c3);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
+.form-select{cursor:pointer}
+option{background:var(--c1)}
+.form-textarea{resize:vertical;min-height:70px}
+.modal-actions{display:flex;gap:8px;margin-top:1.25rem}
+.btn-save{flex:1;background:var(--accent);border:none;border-radius:8px;padding:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.btn-save:hover{opacity:.9}
+.btn-cancel{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:10px 16px;color:var(--c4);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.btn-cancel:hover{border-color:var(--c5);color:var(--c5)}
+
+.detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;justify-content:flex-end}
+.detail-overlay.open{display:flex}
+.detail-panel{background:var(--c1);border-left:0.5px solid var(--c3);width:100%;max-width:420px;height:100vh;padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.detail-close{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:6px 10px;color:var(--c4);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;align-self:flex-start;font-family:'Syne',sans-serif}
+.detail-close:hover{color:var(--c5)}
+.detail-role{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--c6);line-height:1.2}
+.detail-co{font-size:13px;color:var(--c5);margin-top:2px}
+.detail-field{background:var(--c2);border-radius:10px;padding:11px 13px}
+.detail-field-label{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.detail-field-val{font-size:13px;color:var(--c5);white-space:pre-wrap}
+.status-change-label{font-size:11px;color:var(--c4);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.status-btns{display:flex;flex-wrap:wrap;gap:6px}
+.status-btn{background:var(--c2);border:0.5px solid var(--c3);border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
+.status-btn.applied.active{color:var(--applied);border-color:var(--applied);background:var(--applied-bg)}
+.status-btn.screening.active{color:var(--screen);border-color:var(--screen);background:var(--screen-bg)}
+.status-btn.interview.active{color:var(--interview);border-color:var(--interview);background:var(--interview-bg)}
+.status-btn.offer.active{color:var(--offer);border-color:var(--offer);background:var(--offer-bg)}
+.status-btn.rejected.active{color:var(--rejected);border-color:var(--rejected);background:var(--rejected-bg)}
+
+.activity-section{}
+.activity-header{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.activity-log{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;margin-bottom:10px}
+.activity-item{background:var(--c2);border-radius:8px;padding:9px 12px}
+.activity-text{font-size:12px;color:var(--c5)}
+.activity-time{font-size:11px;color:var(--c4);margin-top:2px;font-family:'DM Mono',monospace}
+.activity-input-row{display:flex;gap:6px}
+.activity-input{flex:1;background:var(--c2);border:0.5px solid var(--c3);border-radius:8px;padding:8px 11px;font-size:12px;color:var(--c6);font-family:'Syne',sans-serif;outline:none}
+.activity-input:focus{border-color:var(--accent)}
+.activity-add-btn{background:var(--accent);border:none;border-radius:8px;padding:8px 12px;color:#fff;font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;white-space:nowrap}
+
+.del-btn{background:transparent;border:0.5px solid #2d0d0d;border-radius:8px;padding:8px 14px;color:var(--rejected);font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:6px;transition:.15s}
+.del-btn:hover{background:var(--rejected-bg)}
+</style>
+
+<h2 class="sr-only">HuntLog — secure job application tracker with Google login and activity log</h2>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">hunt<span>log</span></div>
+    <p class="login-sub">Track every application, interview, and offer — all synced securely to your account.</p>
+    <button class="google-btn" onclick="signInGoogle()">
+      <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Continue with Google
+    </button>
+  </div>
+</div>
+
+<div id="mainApp" style="display:none;flex-direction:column;min-height:100vh">
+  <div class="topbar">
+    <div class="logo">hunt<span>log</span></div>
+    <div class="top-right">
+      <div class="sync-dot syncing" id="syncDot"></div>
+      <img class="user-avatar" id="userAvatar" src="" alt="avatar" />
+      <span class="user-name" id="userName"></span>
+      <button class="icon-btn" onclick="exportCSV()"><i class="ti ti-download" aria-hidden="true"></i> CSV</button>
+      <button class="icon-btn" onclick="signOutUser()"><i class="ti ti-logout" aria-hidden="true"></i> Sign out</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat s-all active" onclick="filterStat(this,'all')"><div class="stat-num" id="cnt-all">0</div><div class="stat-label">Total</div></div>
+    <div class="stat s-applied" onclick="filterStat(this,'applied')"><div class="stat-num" id="cnt-applied">0</div><div class="stat-label">Applied</div></div>
+    <div class="stat s-screen" onclick="filterStat(this,'screening')"><div class="stat-num" id="cnt-screen">0</div><div class="stat-label">Screening</div></div>
+    <div class="stat s-interview" onclick="filterStat(this,'interview')"><div class="stat-num" id="cnt-interview">0</div><div class="stat-label">Interview</div></div>
+    <div class="stat s-offer" onclick="filterStat(this,'offer')"><div class="stat-num" id="cnt-offer">0</div><div class="stat-label">Offers</div></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input class="search-input" type="text" placeholder="Search jobs or companies…" oninput="onSearch(this.value)" />
+    </div>
+    <button class="add-btn" onclick="openAdd()"><i class="ti ti-plus" aria-hidden="true"></i> Add Job</button>
+  </div>
+
+  <div class="jobs-list" id="jobsList"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
+  <div class="no-results" id="noResults" style="display:none">No matching jobs found.</div>
+</div>
+
+<div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAdd()">
+  <div class="modal">
+    <div class="modal-title">Add new application</div>
+    <div class="form-group"><label class="form-label">Job title</label><input class="form-input" id="f-title" placeholder="e.g. Senior Product Designer" /></div>
+    <div class="form-group"><label class="form-label">Company</label><input class="form-input" id="f-company" placeholder="e.g. Acme Corp" /></div>
+    <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-location" placeholder="e.g. Remote / Manila" /></div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-select" id="f-status">
+        <option value="applied">Applied</option>
+        <option value="screening">Screening</option>
+        <option value="interview">Interview</option>
+        <option value="offer">Offer</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Salary range</label><input class="form-input" id="f-salary" placeholder="e.g. ₱80k–120k / year" /></div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, links, deadlines…"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAdd()">Cancel</button>
+      <button class="btn-save" onclick="saveJob()">Save application</button>
+    </div>
+  </div>
+</div>
+
+<div class="detail-overlay" id="detailPanel" onclick="if(event.target===this)closeDetail()">
+  <div class="detail-panel">
+    <button class="detail-close" onclick="closeDetail()"><i class="ti ti-x" aria-hidden="true"></i> Close</button>
+    <div><div class="detail-role" id="d-title"></div><div class="detail-co" id="d-company"></div></div>
+    <div class="detail-field"><div class="detail-field-label">Location</div><div class="detail-field-val" id="d-location"></div></div>
+    <div class="detail-field"><div class="detail-field-label">Salary</div><div class="detail-field-val" id="d-salary"></div></div>
+    <div class="detail-field"><div class="detail-field-label">Applied on</div><div class="detail-field-val" id="d-date"></div></div>
+    <div class="detail-field"><div class="detail-field-label">Notes</div><div class="detail-field-val" id="d-notes"></div></div>
+    <div>
+      <div class="status-change-label">Move to</div>
+      <div class="status-btns" id="d-statusbtns"></div>
+    </div>
+    <div class="activity-section">
+      <div class="activity-header">Activity log</div>
+      <div class="activity-log" id="d-activitylog"></div>
+      <div class="activity-input-row">
+        <input class="activity-input" id="activityInput" placeholder="Add a note, call, or update…" onkeydown="if(event.key==='Enter')addActivity()" />
+        <button class="activity-add-btn" onclick="addActivity()">Log it</button>
+      </div>
+    </div>
+    <button class="del-btn" onclick="deleteJob()"><i class="ti ti-trash" aria-hidden="true"></i> Delete application</button>
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+
+const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
+const fbApp=initializeApp(cfg);
+const auth=getAuth(fbApp);
+const db=getFirestore(fbApp);
+
+const SM={applied:{label:'Applied'},screening:{label:'Screening'},interview:{label:'Interview'},offer:{label:'Offer'},rejected:{label:'Rejected'}};
+let jobs=[],currentFilter='all',currentSearch='',openJobId=null,unsubJobs=null,currentUser=null;
+
+function setSyncState(s){
+  const d=document.getElementById('syncDot');
+  d.className='sync-dot'+(s==='syncing'?' syncing':s==='err'?' err':'');
+}
+
+function fmt(ts){
+  if(!ts)return'—';
+  const d=ts.toDate?ts.toDate():new Date(ts);
+  return d.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
+}
+function fmtFull(ts){
+  if(!ts)return'';
+  const d=ts.toDate?ts.toDate():new Date(ts);
+  return d.toLocaleString('en-PH',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+function updateCounts(){
+  document.getElementById('cnt-all').textContent=jobs.length;
+  ['applied','screening','interview','offer'].forEach(s=>{
+    const el=document.getElementById('cnt-'+(s==='screening'?'screen':s));
+    if(el)el.textContent=jobs.filter(j=>j.status===s).length;
+  });
+}
+
+function render(){
+  updateCounts();
+  const q=currentSearch.toLowerCase();
+  const visible=jobs.filter(j=>{
+    const mf=currentFilter==='all'||j.status===currentFilter;
+    const ms=!q||(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.location||'').toLowerCase().includes(q);
+    return mf&&ms;
+  });
+  document.getElementById('jobsList').innerHTML=visible.map(j=>`
+    <div class="job-card ${j.status}" onclick="window._openDetail('${j.id}')">
+      <div class="job-top"><div class="job-title">${j.title||''}</div><div class="job-status ${j.status}">${SM[j.status]?.label||j.status}</div></div>
+      <div class="job-company">${j.company||''}</div>
+      <div class="job-meta">
+        ${j.location?`<span class="job-tag"><i class="ti ti-map-pin" aria-hidden="true"></i>${j.location}</span>`:''}
+        ${j.salary?`<span class="job-tag"><i class="ti ti-currency-dollar" aria-hidden="true"></i>${j.salary}</span>`:''}
+        <span class="job-tag"><i class="ti ti-calendar" aria-hidden="true"></i>${fmt(j.date)}</span>
+      </div>
+    </div>`).join('');
+  document.getElementById('noResults').style.display=visible.length?'none':'block';
+}
+
+function subscribeJobs(uid){
+  if(unsubJobs)unsubJobs();
+  const q2=query(collection(db,`users/${uid}/jobs`),orderBy('date','desc'));
+  unsubJobs=onSnapshot(q2,snap=>{
+    jobs=snap.docs.map(d=>({id:d.id,...d.data()}));
+    setSyncState('ok');render();
+  },()=>setSyncState('err'));
+}
+
+onAuthStateChanged(auth,user=>{
+  currentUser=user;
+  if(user){
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('mainApp').style.display='flex';
+    document.getElementById('userAvatar').src=user.photoURL||'';
+    document.getElementById('userName').textContent=user.displayName?.split(' ')[0]||'';
+    setSyncState('syncing');
+    subscribeJobs(user.uid);
+  }else{
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('mainApp').style.display='none';
+    if(unsubJobs)unsubJobs();
+    jobs=[];
+  }
+});
+
+window.signInGoogle=async()=>{
+  try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){alert('Sign-in failed: '+e.message);}
+};
+window.signOutUser=()=>signOut(auth);
+
+window.filterStat=function(el,f){
+  currentFilter=f;
+  document.querySelectorAll('.stat').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');render();
+};
+window.onSearch=function(v){currentSearch=v;render();};
+
+window.openAdd=()=>document.getElementById('addModal').classList.add('open');
+window.closeAdd=()=>{
+  document.getElementById('addModal').classList.remove('open');
+  ['f-title','f-company','f-location','f-salary','f-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('f-status').value='applied';
+};
+
+window.saveJob=async()=>{
+  if(!currentUser)return;
+  const title=document.getElementById('f-title').value.trim();
+  const company=document.getElementById('f-company').value.trim();
+  if(!title||!company){alert('Please enter a job title and company.');return;}
+  setSyncState('syncing');
+  const status=document.getElementById('f-status').value;
+  const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),{
+    title,company,
+    location:document.getElementById('f-location').value.trim(),
+    status,
+    salary:document.getElementById('f-salary').value.trim(),
+    notes:document.getElementById('f-notes').value.trim(),
+    date:serverTimestamp()
+  });
+  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
+    text:`Application added as "${SM[status]?.label}"`,
+    ts:serverTimestamp()
+  });
+  window.closeAdd();
+};
+
+window._openDetail=async function(id){
+  openJobId=id;
+  const j=jobs.find(x=>x.id===id);if(!j)return;
+  document.getElementById('d-title').textContent=j.title||'';
+  document.getElementById('d-company').textContent=j.company||'';
+  document.getElementById('d-location').textContent=j.location||'—';
+  document.getElementById('d-salary').textContent=j.salary||'—';
+  document.getElementById('d-notes').textContent=j.notes||'No notes.';
+  document.getElementById('d-date').textContent=fmt(j.date);
+  document.getElementById('d-statusbtns').innerHTML=Object.entries(SM).map(([k,v])=>
+    `<button class="status-btn ${k} ${j.status===k?'active':''}" onclick="window._changeStatus('${k}')">${v.label}</button>`
+  ).join('');
+  document.getElementById('detailPanel').classList.add('open');
+  await loadActivity(id);
+};
+
+async function loadActivity(jobId){
+  if(!currentUser)return;
+  const log=document.getElementById('d-activitylog');
+  log.innerHTML='<div style="font-size:12px;color:var(--c4)">Loading…</div>';
+  const snap=await getDocs(query(collection(db,`users/${currentUser.uid}/jobs/${jobId}/activity`),orderBy('ts','desc')));
+  if(snap.empty){log.innerHTML='<div style="font-size:12px;color:var(--c4)">No activity yet.</div>';return;}
+  log.innerHTML=snap.docs.map(d=>{
+    const data=d.data();
+    return`<div class="activity-item"><div class="activity-text">${data.text||''}</div><div class="activity-time">${fmtFull(data.ts)}</div></div>`;
+  }).join('');
+}
+
+window.addActivity=async()=>{
+  if(!currentUser||!openJobId)return;
+  const input=document.getElementById('activityInput');
+  const text=input.value.trim();
+  if(!text)return;
+  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{text,ts:serverTimestamp()});
+  input.value='';
+  await loadActivity(openJobId);
+};
+
+window.closeDetail=()=>{document.getElementById('detailPanel').classList.remove('open');openJobId=null;};
+
+window._changeStatus=async function(s){
+  if(!currentUser||!openJobId)return;
+  setSyncState('syncing');
+  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{status:s});
+  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{
+    text:`Status changed to "${SM[s]?.label}"`,ts:serverTimestamp()
+  });
+  await window._openDetail(openJobId);
+};
+
+window.deleteJob=async()=>{
+  if(!currentUser||!openJobId||!confirm('Delete this application?'))return;
+  setSyncState('syncing');
+  await deleteDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId));
+  window.closeDetail();
+};
+
+window.exportCSV=()=>{
+  if(!jobs.length){alert('No jobs to export.');return;}
+  const rows=[['Title','Company','Location','Status','Salary','Notes','Date']];
+  jobs.forEach(j=>rows.push([
+    j.title||'',j.company||'',j.location||'',j.status||'',j.salary||'',
+    (j.notes||'').replace(/"/g,'""'),
+    j.date?.toDate?j.date.toDate().toISOString().split('T')[0]:''
+  ]));
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='huntlog-export.csv';a.click();
+};
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){window.closeAdd();window.closeDetail();}});
+</script>
