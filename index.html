@@ -573,10 +573,6 @@ option{background:var(--c1)}
     </div>
     <div class="form-group"><label class="form-label">Recruiter name & email</label><input class="form-input" id="f-recruiter" placeholder="e.g. Sarah Cruz · sarah@company.com"/></div>
     <div class="form-group"><label class="form-label">Job posting URL</label><input class="form-input" id="f-url" type="url" placeholder="https://…"/></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Resume URL</label><input class="form-input" id="f-resumeUrl" type="url" placeholder="Google Drive, Notion, etc."/></div>
-      <div class="form-group"><label class="form-label">Resume version</label><input class="form-input" id="f-resumeVersion" placeholder="e.g. v3 · SWE tailored"/></div>
-    </div>
     <div class="form-group"><label class="form-label">Follow-up date</label><input class="form-input" id="f-followup" type="date"/></div>
     <div class="form-group">
       <label class="form-label">Tags <span style="color:var(--c4);font-weight:400;text-transform:none">— type & press Enter</span></label>
@@ -605,7 +601,6 @@ option{background:var(--c1)}
     <div class="detail-field"><div class="detail-field-label">Applied on</div><div class="detail-field-val" id="d-date"></div></div>
     <div class="detail-field" id="d-recruiter-wrap"><div class="detail-field-label">Recruiter</div><div class="detail-field-val" id="d-recruiter"></div></div>
     <div class="detail-field" id="d-url-wrap"><div class="detail-field-label">Job posting</div><div class="detail-field-val" id="d-url"></div></div>
-    <div class="detail-field" id="d-resume-wrap" style="display:none"><div class="detail-field-label">Resume sent</div><div class="detail-field-val" id="d-resume"></div></div>
     <div class="detail-field" id="d-followup-wrap"><div class="detail-field-label">Follow-up date</div><div class="detail-field-val" id="d-followup"></div></div>
     <div class="detail-field" id="d-tags-wrap"><div class="detail-field-label">Tags</div><div id="d-tags" class="job-tags-row" style="margin-top:6px"></div></div>
     <div class="detail-field"><div class="detail-field-label">Notes</div><div class="detail-field-val" id="d-notes"></div></div>
@@ -1120,7 +1115,7 @@ window.saveQuickAdd=async function(){
   const today=new Date();
   const dateTs=Timestamp.fromDate(new Date(today.getFullYear(),today.getMonth(),today.getDate()));
   const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),{
-    title,company,status,date:dateTs,location:'',salary:'',notes:'',url:'',tags:[],followupDate:null,recruiter:'',interviewRound:0,rejectReason:'',resumeUrl:'',resumeVersion:''
+    title,company,status,date:dateTs,location:'',salary:'',notes:'',url:'',tags:[],followupDate:null,recruiter:'',interviewRound:0,rejectReason:''
   });
   await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
     text:`Application added as "${SM[status]?.label}" via quick add`,ts:serverTimestamp()
@@ -1197,7 +1192,7 @@ window.openAdd=function(){
   document.getElementById('modalTitle').textContent='Add new application';
   document.getElementById('saveBtn').textContent='Save application';
   document.getElementById('dupWarning').classList.remove('visible');
-  ['f-title','f-company','f-location','f-salary','f-notes','f-url','f-followup','f-recruiter','f-resumeUrl','f-resumeVersion'].forEach(id=>{
+  ['f-title','f-company','f-location','f-salary','f-notes','f-url','f-followup','f-recruiter'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
   document.getElementById('f-status').value='applied';
@@ -1231,8 +1226,6 @@ window.openEdit=function(){
   document.getElementById('f-notes').value=j.notes||'';
   document.getElementById('f-url').value=j.url||'';
   document.getElementById('f-recruiter').value=j.recruiter||'';
-  document.getElementById('f-resumeUrl').value=j.resumeUrl||'';
-  document.getElementById('f-resumeVersion').value=j.resumeVersion||'';
   document.getElementById('f-status').value=j.status||'applied';
   document.getElementById('f-rejectreason').value=j.rejectReason||'';
   document.getElementById('f-date').value=toDateInput(j.date);
@@ -1268,8 +1261,6 @@ window.saveJob=async function(){
     notes:document.getElementById('f-notes').value.trim(),
     url:document.getElementById('f-url').value.trim(),
     recruiter:document.getElementById('f-recruiter').value.trim(),
-    resumeUrl:document.getElementById('f-resumeUrl').value.trim(),
-    resumeVersion:document.getElementById('f-resumeVersion').value.trim(),
     tags:modalTags,
     followupDate:followupTs,
     date:dateTs,
@@ -1312,13 +1303,6 @@ window._openDetail=async function(id){
     document.getElementById('d-url').innerHTML=`<a href="${j.url}" target="_blank" rel="noopener">${j.url}</a>`;
     urlWrap.style.display='block';
   }else{urlWrap.style.display='none';}
-  // Resume
-  const resumeWrap=document.getElementById('d-resume-wrap');
-  if(j.resumeUrl||j.resumeVersion){
-    const link=j.resumeUrl?`<a href="${j.resumeUrl}" target="_blank" rel="noopener">${j.resumeVersion||j.resumeUrl}</a>`:(j.resumeVersion||'');
-    document.getElementById('d-resume').innerHTML=link;
-    resumeWrap.style.display='block';
-  }else{resumeWrap.style.display='none';}
   // Follow-up
   const fuWrap=document.getElementById('d-followup-wrap');
   if(j.followupDate){
@@ -1414,57 +1398,18 @@ window.deleteJob=async function(){
 
 // ── ADMIN ──
 window.openAdmin=async function(){
-  if(!currentUser||!(await isAdmin(currentUser)))return;
+  if(!currentUser||currentUser.uid!==ADMIN_UID)return;
   document.getElementById('adminOverlay').classList.add('open');
   const body=document.getElementById('adminBody');
   body.innerHTML='<div class="admin-loading"><div class="spinner"></div> Loading users…</div>';
   try{
     const usersSnap=await getDocs(collection(db,'users'));
-    const rowData=await Promise.all(usersSnap.docs.map(async d=>{
+    const rows=await Promise.all(usersSnap.docs.map(async d=>{
       const u=d.data();const uid=d.id;
       const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
       const jobCount=jobsSnap.size;
       const lastLogin=u.lastLoginAt?.toDate?.()?u.lastLoginAt.toDate().toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
-      const statusCounts_u={applied:0,screening:0,interview:0,offer:0,rejected:0};
-      jobsSnap.docs.forEach(jd=>{const s=jd.data().status;if(statusCounts_u[s]!==undefined)statusCounts_u[s]++;});
-      const funnelTip=Object.entries(statusCounts_u).map(([s,v])=>`${SM[s]?.label||s}: ${v}`).join(' · ');
-      const isYou=uid===currentUser.uid;
-      const banned=u.banned?'<span style="color:var(--rejected);font-size:11px">BANNED</span>':'';
-      const jobRows=jobsSnap.docs.map(jd=>{
-        const jj=jd.data();
-        const days=daysSince(jj.date);
-        const daysStr=days!==null?`${days}d ago`:'';
-        return`<div class="admin-job-row"><strong>${jj.title||'?'}</strong> @ ${jj.company||'?'} <span class="job-status ${jj.status}" style="font-size:10px;padding:1px 7px">${SM[jj.status]?.label||jj.status}</span>${daysStr?` <span style="color:var(--c4);font-size:11px;font-family:'DM Mono',monospace">${daysStr}</span>`:''}</div>`;
-      }).join('')||'<div style="color:var(--c4);font-size:12px">No jobs.</div>';
-      const html=`<tr>
-        <td><div class="admin-user-cell"><img class="admin-avatar" src="${u.photoURL||''}" alt=""/><div><div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}${banned}</div><div class="admin-email">${u.email||''}</div></div></div></td>
-        <td><span class="ip-badge">${u.lastLoginIP||'—'}</span></td>
-        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${lastLogin}</td>
-        <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
-        <td>
-          <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')">View jobs</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="adminExportCSV('${uid}')" title="${funnelTip}">Export CSV</button>
-          ${!isYou?`<button class="admin-ban-btn" style="margin-left:4px" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'Unban':'Ban'}</button>`:''}
-        </td>
-      </tr>
-      <tr id="admin-jobs-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open">${jobRows}</div></td></tr>`;
-      return{html,counts:statusCounts_u,jobCount};
-    }));
-    const rows=rowData.map(r=>r.html);
-    const aggCounts={applied:0,screening:0,interview:0,offer:0,rejected:0};
-    let aggTotal=0;
-    rowData.forEach(r=>{Object.entries(r.counts).forEach(([s,v])=>{aggCounts[s]=(aggCounts[s]||0)+v;});aggTotal+=r.jobCount;});
-    const donutC={applied:'#3b82f6',screening:'#8b5cf6',interview:'#f59e0b',offer:'#10b981',rejected:'#ef4444'};
-    const funnelHtml=Object.entries(aggCounts).map(([s,v])=>{
-      const pct=aggTotal>0?Math.round((v/aggTotal)*100):0;
-      return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-        <div style="font-size:11px;color:${donutC[s]};width:80px;text-align:right">${SM[s]?.label||s}</div>
-        <div style="flex:1;background:var(--c3);border-radius:20px;height:8px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${donutC[s]};border-radius:20px"></div></div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:20px">${v}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:34px;text-align:right">${pct}%</div>
-      </div>`;
-    }).join('');
-    const totalUsers=usersSnap.size;
+      const isYou=uid===ADMIN_UID;
       const banned=u.banned?'<span style="color:var(--rejected);font-size:11px">BANNED</span>':'';
       const jobRows=jobsSnap.docs.map(jd=>{
         const jj=jd.data();
@@ -1479,16 +1424,11 @@ window.openAdmin=async function(){
         <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
         <td>
           <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')">View jobs</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="adminExportCSV('${uid}')" title="${funnelTip}">Export CSV</button>
           ${!isYou?`<button class="admin-ban-btn" style="margin-left:4px" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'Unban':'Ban'}</button>`:''}
         </td>
       </tr>
       <tr id="admin-jobs-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open">${jobRows}</div></td></tr>`;
     }));
-    // Aggregate funnel across all users
-    const totalUsers=usersSnap.size;
-    let aggCounts={applied:0,screening:0,interview:0,offer:0,rejected:0};
-    let aggTotal=0;
     body.innerHTML=`<table class="admin-table">
       <thead><tr><th>User</th><th>Last IP</th><th>Last Login</th><th>Jobs</th><th>Actions</th></tr></thead>
       <tbody>${rows.join('')}</tbody>
@@ -1508,43 +1448,15 @@ window.toggleBan=async function(uid,isBanned){
 };
 window.closeAdmin=()=>document.getElementById('adminOverlay').classList.remove('open');
 
-// Admin: export a specific user's jobs as CSV
-window.adminExportCSV=async function(uid){
-  try{
-    const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
-    if(!jobsSnap.size){alert('No jobs for this user.');return;}
-    const rows=[['Title','Company','Location','Status','Interview Round','Rejection Reason','Salary','Recruiter','URL','Tags','Follow-up','Notes','Resume URL','Resume Version','Date']];
-    jobsSnap.docs.forEach(jd=>{
-      const j=jd.data();
-      rows.push([
-        j.title||'',j.company||'',j.location||'',j.status||'',
-        j.interviewRound?ROUND_LABELS[j.interviewRound]||`Round ${j.interviewRound}`:'',
-        j.rejectReason?REJECT_REASONS[j.rejectReason]||j.rejectReason:'',
-        j.salary||'',j.recruiter||'',j.url||'',
-        (j.tags||[]).join('; '),
-        j.followupDate?fmt(j.followupDate):'',
-        (j.notes||'').replace(/"/g,'""'),
-        j.resumeUrl||'',j.resumeVersion||'',
-        j.date?.toDate?j.date.toDate().toISOString().split('T')[0]:''
-      ]);
-    });
-    const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-    const a=document.createElement('a');
-    a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    a.download=`huntlog-user-${uid.slice(0,8)}.csv`;a.click();
-  }catch(e){alert('Export failed: '+e.message);}
-};
-
 // ── EXPORT (updated with new fields) ──
 window.exportCSV=function(){
   if(!jobs.length){alert('No jobs to export.');return;}
-  const rows=[['Title','Company','Location','Status','Interview Round','Rejection Reason','Salary','Recruiter','URL','Resume URL','Resume Version','Tags','Follow-up','Notes','Date','Days Since']];
+  const rows=[['Title','Company','Location','Status','Interview Round','Rejection Reason','Salary','Recruiter','URL','Tags','Follow-up','Notes','Date','Days Since']];
   jobs.forEach(j=>rows.push([
     j.title||'',j.company||'',j.location||'',j.status||'',
     j.interviewRound?ROUND_LABELS[j.interviewRound]||`Round ${j.interviewRound}`:'',
     j.rejectReason?REJECT_REASONS[j.rejectReason]||j.rejectReason:'',
     j.salary||'',j.recruiter||'',j.url||'',
-    j.resumeUrl||'',j.resumeVersion||'',
     (j.tags||[]).join('; '),
     j.followupDate?fmt(j.followupDate):'',
     (j.notes||'').replace(/"/g,'""'),
@@ -1869,48 +1781,6 @@ window.confirmImport=async function(){
     if(file){document.getElementById('csvFileInput').files=e.dataTransfer.files;window.handleCSVFile(file);}
   });
 })();
-
-// ── PHASE 4: CLOUD FUNCTIONS (deploy separately via Firebase CLI) ──
-// These functions enhance HuntLog with server-side automation.
-// Deploy with: firebase deploy --only functions
-//
-// functions/index.js stubs:
-//
-// 1. FOLLOW-UP REMINDER EMAILS
-//    exports.sendFollowUpReminders = functions.pubsub
-//      .schedule('every 24 hours').onRun(async ctx => {
-//        const today = new Date(); today.setHours(0,0,0,0);
-//        const usersSnap = await admin.firestore().collection('users').get();
-//        for (const userDoc of usersSnap.docs) {
-//          const uid = userDoc.id; const userData = userDoc.data();
-//          if (!userData.email || userData.banned) continue;
-//          const jobsSnap = await admin.firestore()
-//            .collection(`users/${uid}/jobs`)
-//            .where('followupDate', '<=', admin.firestore.Timestamp.fromDate(today))
-//            .where('status', 'in', ['applied','screening']).get();
-//          if (!jobsSnap.empty) {
-//            // send email via SendGrid / Resend / nodemailer
-//          }
-//        }
-//      });
-//
-// 2. BAN ENFORCEMENT (block sign-in for banned users)
-//    exports.enforceUserBan = functions.auth.user().beforeSignIn(async (user) => {
-//      const doc = await admin.firestore().doc(`users/${user.uid}`).get();
-//      if (doc.exists && doc.data().banned) {
-//        throw new functions.auth.HttpsError('permission-denied','Your account has been suspended.');
-//      }
-//    });
-//
-// 3. SET ADMIN CUSTOM CLAIM (call once per admin user)
-//    exports.setAdminClaim = functions.https.onCall(async (data, ctx) => {
-//      if (!ctx.auth || ctx.auth.token.admin !== true) throw new Error('Unauthorized');
-//      await admin.auth().setCustomUserClaims(data.uid, { admin: true });
-//      return { success: true };
-//    });
-//
-// 4. STALE JOB DIGEST (weekly email summary)
-//    exports.weeklyDigest = functions.pubsub.schedule('every monday 08:00').onRun(...);
 
 // ── KEYBOARD SHORTCUTS ──
 document.addEventListener('keydown',e=>{
