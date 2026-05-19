@@ -5,413 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>HuntLog</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
-*{box-sizing:border-box;margin:0;padding:0}
-
-/* ── THEME VARIABLES ── */
-:root{
-  --c0:#0b0b0f;--c1:#13131a;--c2:#1c1c27;--c3:#26263a;--c4:#8585a0;--c5:#b5b5cc;--c6:#e8e8f5;
-  --applied:#3b82f6;--applied-bg:#0d1f3c;
-  --screen:#8b5cf6;--screen-bg:#1e0d3c;
-  --interview:#f59e0b;--interview-bg:#2d1f00;
-  --offer:#10b981;--offer-bg:#0d2d1f;
-  --rejected:#ef4444;--rejected-bg:#2d0d0d;
-  --accent:#6366f1;
-  --surface:#fff;--text:#0b0b0f;--sub:#555;
-  color-scheme:dark;
-}
-[data-theme="light"]{
-  --c0:#f4f4fb;--c1:#ffffff;--c2:#eeeef8;--c3:#d8d8ef;--c4:#8888aa;--c5:#555577;--c6:#0b0b0f;
-  --applied-bg:#dbeafe;--screen-bg:#ede9fe;--interview-bg:#fef3c7;--offer-bg:#d1fae5;--rejected-bg:#fee2e2;
-  color-scheme:light;
-}
-
-body{background:var(--c0);color:var(--c6);font-family:'Syne',sans-serif;min-height:100vh;transition:background .25s,color .25s}
-
-/* ── LOGIN ── */
-.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh}
-.login-card{background:var(--c1);border:.5px solid var(--c3);border-radius:20px;padding:3rem 2.5rem;text-align:center;max-width:360px;width:100%}
-.login-logo{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--c6);letter-spacing:-.02em;margin-bottom:.5rem}
-.login-logo span{color:var(--accent);font-style:italic}
-.login-sub{font-size:13px;color:var(--c4);margin-bottom:2rem;line-height:1.6}
-.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--c2);border:.5px solid var(--c3);border-radius:10px;padding:12px 20px;color:var(--c5);font-size:14px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.2s}
-.google-btn:hover{background:var(--c3);color:var(--c6)}
-.google-icon{width:18px;height:18px;flex-shrink:0}
-
-/* ── TOP BAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:8px}
-.logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--c6);letter-spacing:-.02em}
-.logo span{color:var(--accent);font-style:italic}
-.top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.user-avatar{width:32px;height:32px;border-radius:50%;border:.5px solid var(--c3);object-fit:cover;background:var(--c2)}
-.user-name{font-size:12px;color:var(--c4)}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:#10b981;flex-shrink:0}
-.sync-dot.syncing{background:#f59e0b;animation:pulse 1s infinite}
-.sync-dot.err{background:#ef4444}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.icon-btn{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:6px 10px;color:var(--c4);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;font-family:'Syne',sans-serif;transition:.15s}
-.icon-btn:hover{color:var(--c5);border-color:var(--c4)}
-.icon-btn.active-view{background:var(--accent);border-color:var(--accent);color:#fff}
-
-/* ── STATS ROW ── */
-.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:2rem}
-@media(max-width:600px){.stats-row{grid-template-columns:repeat(3,1fr)}.stat.s-offer{grid-column:span 1}.stat.s-all{grid-column:span 3}}
-@media(max-width:400px){.stats-row{grid-template-columns:1fr 1fr}}
-.stat{background:var(--c1);border:.5px solid var(--c3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.2s}
-.stat:hover{border-color:var(--c4);background:var(--c2)}
-.stat.active{border-width:1px}
-.stat-num{font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;line-height:1}
-.stat-label{font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
-.stat.s-all .stat-num{color:var(--c6)}.stat.s-all.active{border-color:var(--c5)}
-.stat.s-applied .stat-num{color:var(--applied)}.stat.s-applied.active{border-color:var(--applied)}
-.stat.s-screen .stat-num{color:var(--screen)}.stat.s-screen.active{border-color:var(--screen)}
-.stat.s-interview .stat-num{color:var(--interview)}.stat.s-interview.active{border-color:var(--interview)}
-.stat.s-offer .stat-num{color:var(--offer)}.stat.s-offer.active{border-color:var(--offer)}
-
-/* ── TOOLBAR ── */
-.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap}
-.search-wrap{flex:1;min-width:160px;position:relative}
-.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--c4);font-size:13px}
-.search-input{width:100%;background:var(--c1);border:.5px solid var(--c3);border-radius:8px;padding:9px 12px 9px 34px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s}
-.search-input::placeholder{color:var(--c4)}
-.search-input:focus{border-color:var(--accent);background:var(--c2)}
-.sort-select{background:var(--c1);border:.5px solid var(--c3);border-radius:8px;padding:9px 10px;font-size:12px;color:var(--c5);font-family:'Syne',sans-serif;outline:none;cursor:pointer}
-.sort-select:focus{border-color:var(--accent)}
-option{background:var(--c1)}
-.add-btn{background:var(--accent);border:none;border-radius:8px;padding:9px 18px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;white-space:nowrap;transition:.15s}
-.add-btn:hover{opacity:.9;transform:translateY(-1px)}
-
-/* ── QUICK ADD BAR ── */
-.quick-add-bar{display:flex;gap:8px;margin-bottom:1rem;background:var(--c1);border:.5px solid var(--accent);border-radius:10px;padding:10px 12px;align-items:center;flex-wrap:wrap}
-.quick-add-bar.hidden{display:none}
-.quick-input{background:var(--c2);border:.5px solid var(--c3);border-radius:7px;padding:7px 10px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s}
-.quick-input:focus{border-color:var(--accent)}
-.quick-input.qi-title{flex:2;min-width:120px}
-.quick-input.qi-company{flex:2;min-width:100px}
-.quick-select{background:var(--c2);border:.5px solid var(--c3);border-radius:7px;padding:7px 10px;font-size:12px;color:var(--c5);font-family:'Syne',sans-serif;outline:none;cursor:pointer}
-.quick-save-btn{background:var(--accent);border:none;border-radius:7px;padding:7px 14px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;white-space:nowrap}
-.quick-cancel-btn{background:transparent;border:none;padding:7px;color:var(--c4);cursor:pointer;font-size:13px}
-.quick-hint{font-size:11px;color:var(--c4);flex-basis:100%}
-
-/* ── BULK BAR ── */
-.bulk-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;background:var(--c2);border:.5px solid var(--c3);border-radius:10px;padding:10px 14px;flex-wrap:wrap}
-.bulk-bar.visible{display:flex}
-.bulk-info{font-size:13px;color:var(--c5);flex:1}
-.bulk-status-wrap{display:flex;gap:6px;flex-wrap:wrap}
-.bulk-status-btn{background:var(--c1);border:.5px solid var(--c3);border-radius:20px;padding:4px 12px;font-size:12px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
-.bulk-status-btn:hover{border-color:var(--c4);color:var(--c6)}
-.bulk-del-btn{background:transparent;border:.5px solid var(--rejected);border-radius:8px;padding:4px 12px;font-size:12px;color:var(--rejected);cursor:pointer;font-family:'Syne',sans-serif}
-.bulk-del-btn:hover{background:var(--rejected-bg)}
-.bulk-clear{background:transparent;border:none;padding:4px;color:var(--c4);cursor:pointer;font-size:13px}
-
-/* ── DUPLICATE WARNING ── */
-.dup-warning{background:#2d1f00;border:.5px solid var(--interview);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--interview);display:none;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.dup-warning.visible{display:flex}
-.dup-warning i{flex-shrink:0}
-
-/* ── JOB CARDS ── */
-.jobs-list{display:flex;flex-direction:column;gap:8px}
-.job-card{background:var(--c1);border:.5px solid var(--c3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.18s;position:relative;overflow:hidden}
-.job-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px}
-.job-card.applied::before{background:var(--applied)}
-.job-card.screening::before{background:var(--screen)}
-.job-card.interview::before{background:var(--interview)}
-.job-card.offer::before{background:var(--offer)}
-.job-card.rejected::before{background:var(--rejected)}
-.job-card:hover{border-color:var(--c4);background:var(--c2);transform:translateX(2px)}
-.job-card.selected{border-color:var(--accent);background:var(--c2)}
-.job-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
-.job-title{font-size:14px;font-weight:600;color:var(--c6);line-height:1.3;display:flex;align-items:center;gap:8px}
-.job-status{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
-.job-status.applied{color:var(--applied);background:var(--applied-bg)}
-.job-status.screening{color:var(--screen);background:var(--screen-bg)}
-.job-status.interview{color:var(--interview);background:var(--interview-bg)}
-.job-status.offer{color:var(--offer);background:var(--offer-bg)}
-.job-status.rejected{color:var(--rejected);background:var(--rejected-bg)}
-.job-company{font-size:13px;color:var(--c5);margin-bottom:6px}
-.job-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.job-tag{font-size:11px;color:var(--c4);display:flex;align-items:center;gap:4px}
-.job-tag i{font-size:11px}
-.job-tags-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
-.tag-chip{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;letter-spacing:.04em}
-.tag-priority{background:#2d1f00;color:#f59e0b}
-.tag-referral{background:#0d2d1f;color:#10b981}
-.tag-cold{background:#1e0d3c;color:#8b5cf6}
-.tag-custom{background:var(--c3);color:var(--c5)}
-.follow-up-badge{font-size:10px;color:#f59e0b;display:flex;align-items:center;gap:3px;margin-top:4px}
-.follow-up-badge.overdue{color:var(--rejected)}
-.cb-wrap{position:relative;width:16px;height:16px;flex-shrink:0}
-.cb-wrap input{position:absolute;opacity:0;width:0;height:0}
-.cb-mark{width:16px;height:16px;border:.5px solid var(--c3);border-radius:4px;background:var(--c2);display:flex;align-items:center;justify-content:center;transition:.15s}
-.cb-wrap input:checked ~ .cb-mark{background:var(--accent);border-color:var(--accent)}
-.cb-mark i{font-size:10px;color:#fff;display:none}
-.cb-wrap input:checked ~ .cb-mark i{display:block}
-
-/* days-since badge */
-.days-badge{font-size:10px;font-family:'DM Mono',monospace;color:var(--c4);background:var(--c2);border-radius:20px;padding:2px 7px;flex-shrink:0}
-.days-badge.stale{color:#f59e0b}
-.days-badge.very-stale{color:var(--rejected)}
-
-/* interview round badge */
-.round-badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--interview-bg);color:var(--interview);flex-shrink:0}
-
-/* rejection reason on card */
-.rejection-reason{font-size:11px;color:var(--rejected);opacity:.8;margin-top:3px;display:flex;align-items:center;gap:4px}
-
-/* ── KANBAN VIEW ── */
-.kanban-board{display:grid;grid-template-columns:repeat(5,minmax(200px,1fr));gap:12px;overflow-x:auto;padding-bottom:1rem}
-@media(max-width:900px){.kanban-board{grid-template-columns:repeat(3,minmax(180px,1fr))}}
-@media(max-width:600px){.kanban-board{grid-template-columns:repeat(2,minmax(160px,1fr))}}
-.kanban-col{background:var(--c1);border:.5px solid var(--c3);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:200px}
-.kanban-col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.kanban-col-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
-.kanban-col-title.applied{color:var(--applied)}
-.kanban-col-title.screening{color:var(--screen)}
-.kanban-col-title.interview{color:var(--interview)}
-.kanban-col-title.offer{color:var(--offer)}
-.kanban-col-title.rejected{color:var(--rejected)}
-.kanban-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)}
-.kanban-card{background:var(--c2);border:.5px solid var(--c3);border-radius:9px;padding:10px 12px;cursor:pointer;transition:.15s}
-.kanban-card:hover{border-color:var(--c4);transform:translateY(-1px)}
-.kanban-card-title{font-size:12px;font-weight:600;color:var(--c6);margin-bottom:2px;line-height:1.3}
-.kanban-card-co{font-size:11px;color:var(--c4)}
-.kanban-card-meta{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
-.kanban-card-days{font-size:10px;font-family:'DM Mono',monospace;color:var(--c4)}
-.kanban-card-days.stale{color:#f59e0b}
-.kanban-card-days.very-stale{color:var(--rejected)}
-.kanban-empty{font-size:11px;color:var(--c3);text-align:center;padding:1rem 0;font-style:italic}
-
-/* ── EMPTY STATE ── */
-.empty-state{text-align:center;padding:4rem 2rem;color:var(--c4)}
-.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.3}
-.empty-title{font-size:1rem;font-weight:600;color:var(--c5);margin-bottom:.5rem}
-.empty-sub{font-size:13px;line-height:1.6;max-width:280px;margin:0 auto 1.5rem}
-.empty-cta{background:var(--accent);border:none;border-radius:8px;padding:10px 20px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
-.no-results{text-align:center;padding:3rem;color:var(--c4);font-size:14px}
-.loading-state{text-align:center;padding:3rem;color:var(--c4);font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px}
-.spinner{width:16px;height:16px;border:2px solid var(--c3);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── ADD/EDIT MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:1rem}
-.modal-overlay.open{display:flex}
-.modal{background:var(--c1);border:.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:500px;max-height:90vh;overflow-y:auto}
-.modal-title{font-size:1.1rem;font-weight:600;margin-bottom:1.25rem;color:var(--c6)}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:480px){.form-row{grid-template-columns:1fr}}
-.form-group{margin-bottom:1rem}
-.form-label{font-size:12px;font-weight:600;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:block}
-.form-input,.form-select,.form-textarea{width:100%;background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s}
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
-.form-select{cursor:pointer}
-.form-textarea{resize:vertical;min-height:70px}
-.tags-input-wrap{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:6px 10px;min-height:40px;cursor:text}
-.tags-input-wrap:focus-within{border-color:var(--accent)}
-.tag-item{display:flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;background:var(--c3);color:var(--c5)}
-.tag-item button{background:none;border:none;color:inherit;cursor:pointer;font-size:12px;padding:0;line-height:1;opacity:.6}
-.tag-item button:hover{opacity:1}
-.tag-text-input{background:none;border:none;outline:none;font-family:'Syne',sans-serif;font-size:12px;color:var(--c6);min-width:80px;flex:1}
-.tag-text-input::placeholder{color:var(--c4)}
-.modal-actions{display:flex;gap:8px;margin-top:1.25rem}
-.btn-save{flex:1;background:var(--accent);border:none;border-radius:8px;padding:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
-.btn-save:hover{opacity:.9}
-.btn-cancel{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:10px 16px;color:var(--c4);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
-.btn-cancel:hover{border-color:var(--c5);color:var(--c5)}
-
-/* interview round section in modal */
-.round-section{display:none}
-.round-section.visible{display:block}
-.round-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.round-btn{background:var(--c2);border:.5px solid var(--c3);border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
-.round-btn.active{background:var(--interview-bg);border-color:var(--interview);color:var(--interview)}
-
-/* rejection reason section in modal */
-.reject-section{display:none}
-.reject-section.visible{display:block}
-
-/* ── DETAIL PANEL ── */
-.detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;justify-content:flex-end}
-.detail-overlay.open{display:flex}
-.detail-panel{background:var(--c1);border-left:.5px solid var(--c3);width:100%;max-width:440px;height:100vh;padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
-.detail-close{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:6px 10px;color:var(--c4);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;align-self:flex-start;font-family:'Syne',sans-serif}
-.detail-close:hover{color:var(--c5)}
-.detail-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.detail-role{font-family:'DM Serif Display',serif;font-size:1.35rem;color:var(--c6);line-height:1.2}
-.detail-co{font-size:13px;color:var(--c5);margin-top:2px}
-.edit-btn{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:6px 12px;color:var(--c4);font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0}
-.edit-btn:hover{color:var(--c5);border-color:var(--c4)}
-.detail-field{background:var(--c2);border-radius:10px;padding:11px 13px}
-.detail-field-label{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
-.detail-field-val{font-size:13px;color:var(--c5);white-space:pre-wrap}
-.detail-field-val a{color:var(--accent);text-decoration:none}
-.detail-field-val a:hover{text-decoration:underline}
-.status-change-label{font-size:11px;color:var(--c4);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
-.status-btns{display:flex;flex-wrap:wrap;gap:6px}
-.status-btn{background:var(--c2);border:.5px solid var(--c3);border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
-.status-btn.applied.active{color:var(--applied);border-color:var(--applied);background:var(--applied-bg)}
-.status-btn.screening.active{color:var(--screen);border-color:var(--screen);background:var(--screen-bg)}
-.status-btn.interview.active{color:var(--interview);border-color:var(--interview);background:var(--interview-bg)}
-.status-btn.offer.active{color:var(--offer);border-color:var(--offer);background:var(--offer-bg)}
-.status-btn.rejected.active{color:var(--rejected);border-color:var(--rejected);background:var(--rejected-bg)}
-.activity-section{}
-.activity-header{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
-.activity-log{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;margin-bottom:10px}
-.activity-item{background:var(--c2);border-radius:8px;padding:9px 12px}
-.activity-text{font-size:12px;color:var(--c5)}
-.activity-time{font-size:11px;color:var(--c4);margin-top:2px;font-family:'DM Mono',monospace}
-.activity-input-row{display:flex;gap:6px}
-.activity-input{flex:1;background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:8px 11px;font-size:12px;color:var(--c6);font-family:'Syne',sans-serif;outline:none}
-.activity-input:focus{border-color:var(--accent)}
-.activity-add-btn{background:var(--accent);border:none;border-radius:8px;padding:8px 12px;color:#fff;font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;white-space:nowrap}
-.del-btn{background:transparent;border:.5px solid #2d0d0d;border-radius:8px;padding:8px 14px;color:var(--rejected);font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:6px;transition:.15s}
-.del-btn:hover{background:var(--rejected-bg)}
-
-/* detail interview round section */
-.detail-round-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.detail-round-label{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em}
-
-/* rejection reason prompt in detail */
-.reject-prompt{background:var(--rejected-bg);border:.5px solid var(--rejected);border-radius:10px;padding:11px 13px}
-.reject-prompt-label{font-size:11px;color:var(--rejected);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;opacity:.8}
-.reject-reason-btns{display:flex;flex-wrap:wrap;gap:6px}
-.reject-reason-btn{background:var(--c2);border:.5px solid var(--c3);border-radius:20px;padding:4px 12px;font-size:11px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
-.reject-reason-btn:hover{border-color:var(--rejected);color:var(--rejected)}
-.reject-reason-btn.active{background:var(--rejected-bg);border-color:var(--rejected);color:var(--rejected)}
-
-/* ── ADMIN ── */
-.admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:1rem}
-.admin-overlay.open{display:flex}
-.admin-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:780px;max-height:90vh;overflow-y:auto}
-.admin-modal h2{font-size:1.1rem;font-weight:600;color:var(--c6);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
-.admin-modal h2 i{color:var(--accent)}
-.admin-table{width:100%;border-collapse:collapse;font-size:12px}
-.admin-table th{text-align:left;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;font-size:11px;padding:6px 10px;border-bottom:.5px solid var(--c3)}
-.admin-table td{padding:10px;border-bottom:.5px solid var(--c2);color:var(--c5);vertical-align:middle}
-.admin-table tr:last-child td{border-bottom:none}
-.admin-user-cell{display:flex;align-items:center;gap:8px}
-.admin-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:var(--c2);flex-shrink:0}
-.admin-name{color:var(--c6);font-weight:600}
-.admin-email{font-size:11px;color:var(--c4)}
-.ip-badge{background:var(--c2);border:.5px solid var(--c3);border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)}
-.admin-loading{text-align:center;padding:2rem;color:var(--c4);font-size:13px}
-.admin-close-btn{margin-top:1rem;background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:8px 16px;color:var(--c4);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif}
-.admin-close-btn:hover{color:var(--c5);border-color:var(--c5)}
-.you-badge{font-size:10px;background:var(--accent);color:#fff;border-radius:20px;padding:1px 7px;margin-left:4px;font-weight:600}
-.admin-expand-btn{background:transparent;border:.5px solid var(--c3);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--c4);cursor:pointer;font-family:'Syne',sans-serif}
-.admin-expand-btn:hover{border-color:var(--accent);color:var(--accent)}
-.admin-ban-btn{background:transparent;border:.5px solid var(--rejected);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--rejected);cursor:pointer;font-family:'Syne',sans-serif}
-.admin-ban-btn:hover{background:var(--rejected-bg)}
-.admin-job-list{background:var(--c2);border-radius:8px;padding:10px;margin-top:6px;display:none;font-size:12px}
-.admin-job-list.open{display:block}
-.admin-job-row{padding:5px 0;border-bottom:.5px solid var(--c3);color:var(--c5)}
-.admin-job-row:last-child{border-bottom:none}
-
-/* ── KEYBOARD SHORTCUT HINT ── */
-.kbd{display:inline-block;background:var(--c2);border:.5px solid var(--c3);border-radius:4px;padding:1px 5px;font-family:'DM Mono',monospace;font-size:10px;color:var(--c4)}
-
-/* ── ANALYTICS ── */
-.analytics-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:150;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto}
-.analytics-overlay.open{display:flex}
-.analytics-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:20px;padding:1.75rem;width:100%;max-width:860px;margin:auto;display:flex;flex-direction:column;gap:1.25rem}
-.analytics-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.analytics-title{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--c6);letter-spacing:-.02em;display:flex;align-items:center;gap:10px}
-.analytics-title i{color:var(--accent);font-size:1.1rem}
-.analytics-close-btn{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:6px 12px;color:var(--c4);font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:5px}
-.analytics-close-btn:hover{color:var(--c5);border-color:var(--c4)}
-/* KPI row */
-.analytics-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-@media(max-width:600px){.analytics-kpi-row{grid-template-columns:1fr 1fr}}
-.analytics-kpi{background:var(--c2);border:.5px solid var(--c3);border-radius:12px;padding:14px 16px}
-.analytics-kpi-val{font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;line-height:1;color:var(--c6)}
-.analytics-kpi-label{font-size:11px;color:var(--c4);margin-top:5px;text-transform:uppercase;letter-spacing:.06em}
-.analytics-kpi-sub{font-size:11px;color:var(--c4);margin-top:2px;font-family:'DM Mono',monospace}
-/* section */
-.analytics-section{background:var(--c2);border:.5px solid var(--c3);border-radius:14px;padding:16px}
-.analytics-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--c4);margin-bottom:12px}
-/* funnel */
-.funnel-rows{display:flex;flex-direction:column;gap:6px}
-.funnel-row{display:flex;align-items:center;gap:10px}
-.funnel-label{font-size:12px;color:var(--c5);width:90px;flex-shrink:0;text-align:right}
-.funnel-bar-wrap{flex:1;background:var(--c3);border-radius:20px;height:10px;overflow:hidden}
-.funnel-bar{height:100%;border-radius:20px;transition:width .4s cubic-bezier(.4,0,.2,1)}
-.funnel-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:24px;flex-shrink:0}
-.funnel-pct{font-family:'DM Mono',monospace;font-size:11px;width:38px;flex-shrink:0;text-align:right}
-/* response time chart */
-.resp-bars{display:flex;align-items:flex-end;gap:6px;height:80px}
-.resp-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.resp-bar{width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:2px;opacity:.8;transition:height .4s}
-.resp-bar-label{font-size:10px;color:var(--c4);text-align:center;white-space:nowrap;font-family:'DM Mono',monospace}
-/* rejection breakdown */
-.reject-rows{display:flex;flex-direction:column;gap:6px}
-.reject-row{display:flex;align-items:center;gap:10px}
-.reject-label{font-size:12px;color:var(--c5);flex:1}
-.reject-bar-wrap{width:100px;background:var(--c3);border-radius:20px;height:6px;flex-shrink:0}
-.reject-bar{height:100%;border-radius:20px;background:var(--rejected)}
-.reject-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:20px;text-align:right;flex-shrink:0}
-/* two col grid */
-.analytics-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:640px){.analytics-grid-2{grid-template-columns:1fr}}
-/* weekly activity */
-.weekly-bars{display:flex;align-items:flex-end;gap:4px;height:60px}
-.weekly-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
-.weekly-bar{width:100%;background:var(--applied);border-radius:3px 3px 0 0;min-height:1px;opacity:.75}
-.weekly-bar-label{font-size:9px;color:var(--c4);font-family:'DM Mono',monospace}
-/* status donut via conic-gradient */
-.donut-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.donut{width:80px;height:80px;border-radius:50%;flex-shrink:0}
-.donut-legend{display:flex;flex-direction:column;gap:5px}
-.donut-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--c5)}
-.donut-swatch{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-/* insight chips */
-.insights-row{display:flex;flex-wrap:wrap;gap:8px}
-.insight-chip{background:var(--c2);border:.5px solid var(--c3);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--c5);display:flex;align-items:center;gap:6px}
-.insight-chip i{font-size:11px}
-.insight-chip.good{border-color:var(--offer);color:var(--offer)}
-.insight-chip.warn{border-color:var(--interview);color:var(--interview)}
-.insight-chip.bad{border-color:var(--rejected);color:var(--rejected)}
-/* empty analytics */
-.analytics-empty{text-align:center;padding:2.5rem;color:var(--c4);font-size:13px}
-
-/* ── MISC ── */
-.app{display:flex;flex-direction:column;min-height:100vh;padding:1.5rem 1.25rem}
-@media(max-width:480px){.app{padding:1rem .75rem}}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
-.view-toggle{display:flex;gap:4px}
-
-/* ── EMAIL AUTH DIVIDER ── */
-.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--c4);font-size:12px}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:.5px;background:var(--c3)}
-.email-auth-form{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.email-auth-input{background:var(--c2);border:.5px solid var(--c3);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s;width:100%}
-.email-auth-input:focus{border-color:var(--accent)}
-.email-btn{background:var(--accent);border:none;border-radius:10px;padding:11px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
-.email-btn:hover{opacity:.88}
-.email-btn.secondary{background:transparent;border:.5px solid var(--c3);color:var(--c5)}
-.email-btn.secondary:hover{border-color:var(--c4);color:var(--c6)}
-.auth-error{font-size:12px;color:var(--rejected);text-align:center;min-height:16px}
-.forgot-link{font-size:12px;color:var(--c4);text-align:center;cursor:pointer;background:none;border:none;font-family:'Syne',sans-serif;margin-top:2px}
-.forgot-link:hover{color:var(--accent)}
-
-/* ── KANBAN DRAG ── */
-.kanban-card.dragging{opacity:.4;transform:scale(.97)}
-.kanban-col.drag-over{border-color:var(--accent);background:rgba(99,102,241,.06)}
-
-/* ── RESUME TRACKER (in form) ── */
-.resume-ver-wrap{display:flex;gap:6px;align-items:center}
-.resume-ver-badge{font-family:'DM Mono',monospace;font-size:11px;background:var(--c3);color:var(--c5);border-radius:20px;padding:2px 10px;display:inline-block}
-
-/* ── IMPORT CSV ── */
-.import-drop{border:1.5px dashed var(--c3);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.2s;color:var(--c4);font-size:13px}
-.import-drop:hover,.import-drop.drag-over{border-color:var(--accent);color:var(--accent)}
-.import-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;align-items:center;justify-content:center;padding:1rem}
-.import-modal-overlay.open{display:flex}
-.import-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:440px}
-.import-modal h3{font-size:1rem;font-weight:600;color:var(--c6);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
-.import-preview{max-height:180px;overflow-y:auto;margin:12px 0;font-size:12px;color:var(--c5)}
-.import-preview-row{padding:4px 0;border-bottom:.5px solid var(--c2)}
-.import-actions{display:flex;gap:8px;margin-top:1rem}
-</style>
+<link rel="manifest" id="pwaManifest"/>
+<meta name="theme-color" content="#0b0b0f"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="HuntLog"/>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
@@ -446,17 +46,26 @@ option{background:var(--c1)}
       <div class="sync-dot syncing" id="syncDot"></div>
       <img class="user-avatar" id="userAvatar" src="" alt="avatar"/>
       <span class="user-name" id="userName"></span>
-      <!-- view toggle -->
       <div class="view-toggle">
         <button class="icon-btn active-view" id="listViewBtn" onclick="setView('list')" title="List view"><i class="fa-solid fa-list"></i></button>
         <button class="icon-btn" id="kanbanViewBtn" onclick="setView('kanban')" title="Kanban view"><i class="fa-solid fa-table-columns"></i></button>
       </div>
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme (T)" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
       <button class="icon-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> CSV</button>
+      <button class="icon-btn" onclick="openImport()"><i class="fa-solid fa-upload"></i> Import</button>
       <button class="icon-btn" onclick="openAnalytics()" title="Analytics (A)"><i class="fa-solid fa-chart-line"></i></button>
+      <button class="icon-btn" onclick="openAIAssist()" title="AI writing assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
       <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
       <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
     </div>
+  </div>
+
+  <!-- PWA Install Banner -->
+  <div class="pwa-banner" id="pwaBanner">
+    <i class="fa-solid fa-mobile-screen" style="color:var(--accent);font-size:1.1rem;flex-shrink:0"></i>
+    <span class="pwa-banner-text"><strong>Install HuntLog</strong> — add to your home screen for quick access and push reminders</span>
+    <button class="pwa-install-btn" onclick="pwaTriggerInstall()"><i class="fa-solid fa-download"></i> Install</button>
+    <button class="pwa-dismiss-btn" onclick="pwaDismiss()" title="Dismiss"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
   <div class="stats-row">
@@ -518,10 +127,7 @@ option{background:var(--c1)}
 <div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAdd()">
   <div class="modal">
     <div class="modal-title" id="modalTitle">Add new application</div>
-
-    <!-- duplicate warning -->
     <div class="dup-warning" id="dupWarning"><i class="fa-solid fa-triangle-exclamation"></i><span id="dupWarningText"></span></div>
-
     <div class="form-row">
       <div class="form-group"><label class="form-label">Job title *</label><input class="form-input" id="f-title" placeholder="e.g. Senior Product Designer" oninput="checkDuplicate()"/></div>
       <div class="form-group"><label class="form-label">Company *</label><input class="form-input" id="f-company" placeholder="e.g. Acme Corp" oninput="checkDuplicate()"/></div>
@@ -539,8 +145,6 @@ option{background:var(--c1)}
         </select>
       </div>
     </div>
-
-    <!-- Interview round section (shown only when status=interview) -->
     <div class="form-group round-section" id="roundSection">
       <label class="form-label">Interview round</label>
       <div class="round-btns" id="roundBtns">
@@ -550,8 +154,6 @@ option{background:var(--c1)}
         <button type="button" class="round-btn" onclick="selectRound(4)">Offer Stage</button>
       </div>
     </div>
-
-    <!-- Rejection reason section (shown only when status=rejected) -->
     <div class="form-group reject-section" id="rejectSection">
       <label class="form-label">Rejection reason</label>
       <select class="form-select" id="f-rejectreason">
@@ -565,21 +167,35 @@ option{background:var(--c1)}
         <option value="other">Other</option>
       </select>
     </div>
-
     <div class="form-row">
       <div class="form-group"><label class="form-label">Salary range</label><input class="form-input" id="f-salary" placeholder="e.g. ₱80k–120k / yr"/></div>
       <div class="form-group"><label class="form-label">Applied date</label><input class="form-input" id="f-date" type="date"/></div>
     </div>
-    <div class="form-group"><label class="form-label">Recruiter name & email</label><input class="form-input" id="f-recruiter" placeholder="e.g. Sarah Cruz · sarah@company.com"/></div>
+    <div class="form-group"><label class="form-label">Recruiter name &amp; email</label><input class="form-input" id="f-recruiter" placeholder="e.g. Sarah Cruz · sarah@company.com"/></div>
     <div class="form-group"><label class="form-label">Job posting URL</label><input class="form-input" id="f-url" type="url" placeholder="https://…"/></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Resume URL</label><input class="form-input" id="f-resumeUrl" type="url" placeholder="Google Drive, Notion, etc."/></div>
+      <div class="form-group"><label class="form-label">Resume version</label><input class="form-input" id="f-resumeVersion" placeholder="e.g. v3 · SWE tailored"/></div>
+    </div>
     <div class="form-group"><label class="form-label">Follow-up date</label><input class="form-input" id="f-followup" type="date"/></div>
     <div class="form-group">
-      <label class="form-label">Tags <span style="color:var(--c4);font-weight:400;text-transform:none">— type & press Enter</span></label>
+      <label class="form-label">Tags <span style="color:var(--c4);font-weight:400;text-transform:none">— type &amp; press Enter</span></label>
       <div class="tags-input-wrap" id="tagsWrap" onclick="document.getElementById('tagInput').focus()">
         <input class="tag-text-input" id="tagInput" placeholder="priority, referral, cold apply…" onkeydown="handleTagInput(event)"/>
       </div>
     </div>
     <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, deadlines, impressions…"></textarea></div>
+    <div class="form-group">
+      <label class="form-label">Fit score <span style="color:var(--c4);font-weight:400;text-transform:none">— how well does this role match your goals?</span></label>
+      <div class="match-score-wrap">
+        <button type="button" class="match-star" data-star="1" onclick="setMatchScore(1)">★</button>
+        <button type="button" class="match-star" data-star="2" onclick="setMatchScore(2)">★</button>
+        <button type="button" class="match-star" data-star="3" onclick="setMatchScore(3)">★</button>
+        <button type="button" class="match-star" data-star="4" onclick="setMatchScore(4)">★</button>
+        <button type="button" class="match-star" data-star="5" onclick="setMatchScore(5)">★</button>
+        <span class="match-score-label" id="matchScoreLabel">Not rated</span>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeAdd()">Cancel</button>
       <button class="btn-save" id="saveBtn" onclick="saveJob()">Save application</button>
@@ -593,22 +209,24 @@ option{background:var(--c1)}
     <button class="detail-close" onclick="closeDetail()"><i class="fa-solid fa-xmark"></i> Close</button>
     <div class="detail-header">
       <div><div class="detail-role" id="d-title"></div><div class="detail-co" id="d-company"></div></div>
-      <button class="edit-btn" onclick="openEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button class="edit-btn" onclick="openAIAssist(openJobId)" title="AI writing assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
+        <button class="edit-btn" onclick="openEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
+      </div>
     </div>
     <div class="detail-field"><div class="detail-field-label">Location</div><div class="detail-field-val" id="d-location"></div></div>
     <div class="detail-field"><div class="detail-field-label">Salary</div><div class="detail-field-val" id="d-salary"></div></div>
     <div class="detail-field"><div class="detail-field-label">Applied on</div><div class="detail-field-val" id="d-date"></div></div>
     <div class="detail-field" id="d-recruiter-wrap"><div class="detail-field-label">Recruiter</div><div class="detail-field-val" id="d-recruiter"></div></div>
     <div class="detail-field" id="d-url-wrap"><div class="detail-field-label">Job posting</div><div class="detail-field-val" id="d-url"></div></div>
+    <div class="detail-field" id="d-resume-wrap" style="display:none"><div class="detail-field-label">Resume sent</div><div class="detail-field-val" id="d-resume"></div></div>
     <div class="detail-field" id="d-followup-wrap"><div class="detail-field-label">Follow-up date</div><div class="detail-field-val" id="d-followup"></div></div>
     <div class="detail-field" id="d-tags-wrap"><div class="detail-field-label">Tags</div><div id="d-tags" class="job-tags-row" style="margin-top:6px"></div></div>
     <div class="detail-field"><div class="detail-field-label">Notes</div><div class="detail-field-val" id="d-notes"></div></div>
-    <!-- interview round detail -->
     <div class="detail-field" id="d-round-wrap" style="display:none">
       <div class="detail-field-label">Interview stage</div>
       <div class="detail-round-row" id="d-round-btns"></div>
     </div>
-    <!-- rejection reason prompt / display -->
     <div class="reject-prompt" id="d-reject-wrap" style="display:none">
       <div class="reject-prompt-label">Why was this rejected?</div>
       <div class="reject-reason-btns" id="d-reject-btns"></div>
@@ -640,6 +258,24 @@ option{background:var(--c1)}
   </div>
 </div>
 
+<!-- IMPORT CSV MODAL -->
+<div class="import-modal-overlay" id="importModal" onclick="if(event.target===this)closeImport()">
+  <div class="import-modal">
+    <h3><i class="fa-solid fa-file-csv" style="color:var(--accent)"></i> Import from CSV</h3>
+    <p style="font-size:12px;color:var(--c4);margin-bottom:12px">Supports LinkedIn, Huntr, or any CSV with columns: title, company, status, date, location, salary, notes, url.</p>
+    <div class="import-drop" id="importDrop" onclick="document.getElementById('csvFileInput').click()">
+      <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
+      Drop your CSV here or click to browse
+      <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVFile(this.files[0])"/>
+    </div>
+    <div class="import-preview" id="importPreview"></div>
+    <div class="import-actions">
+      <button class="btn-cancel" onclick="closeImport()">Cancel</button>
+      <button class="btn-save" id="importConfirmBtn" style="display:none" onclick="confirmImport()">Import jobs</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADMIN OVERLAY -->
 <div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
   <div class="admin-modal">
@@ -651,964 +287,47 @@ option{background:var(--c1)}
   </div>
 </div>
 
-<script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
-import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
-import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
-
-const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
-const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
-const fbApp=initializeApp(cfg);
-const auth=getAuth(fbApp);
-const db=getFirestore(fbApp);
-
-const SM={applied:{label:'Applied'},screening:{label:'Screening'},interview:{label:'Interview'},offer:{label:'Offer'},rejected:{label:'Rejected'}};
-const REJECT_REASONS={no_response:'No response',skills_gap:'Skills gap',salary_mismatch:'Salary mismatch',position_filled:'Position filled',culture_fit:'Culture fit',withdrew:'I withdrew',other:'Other'};
-const ROUND_LABELS={1:'Round 1 · Phone Screen',2:'Round 2 · Technical',3:'Round 3 · Final',4:'Offer Stage'};
-let jobs=[],currentFilter='all',currentSearch='',currentSort='date-desc',openJobId=null,unsubJobs=null,currentUser=null;
-let selectedIds=new Set();
-let editingJobId=null;
-let modalTags=[];
-let currentRound=0; // 0 = not set
-let currentView='list'; // 'list' or 'kanban'
-
-// ── THEME ──
-function applyTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  const btn=document.getElementById('themeBtn');
-  if(btn)btn.innerHTML=t==='light'?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
-  localStorage.setItem('theme',t);
-}
-window.toggleTheme=()=>{
-  const current=document.documentElement.getAttribute('data-theme')||'dark';
-  applyTheme(current==='dark'?'light':'dark');
-};
-applyTheme(localStorage.getItem('theme')||'dark');
-
-// ── SYNC ──
-function setSyncState(s){
-  const d=document.getElementById('syncDot');
-  d.className='sync-dot'+(s==='syncing'?' syncing':s==='err'?' err':'');
-}
-
-// ── FORMATTING ──
-function fmt(ts){
-  if(!ts)return'—';
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return'—';
-  return d.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
-}
-function fmtFull(ts){
-  if(!ts)return'';
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return'';
-  return d.toLocaleString('en-PH',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-}
-function parseLocalDate(s){
-  if(!s)return null;
-  const[y,m,d]=s.split('-').map(Number);
-  return new Date(y,m-1,d);
-}
-function toDateInput(ts){
-  if(!ts)return'';
-  const d=ts.toDate?ts.toDate():(ts instanceof Date?ts:new Date(ts));
-  if(isNaN(d))return'';
-  return d.toISOString().split('T')[0];
-}
-function fmtFollowup(ts){
-  if(!ts)return null;
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return null;
-  const now=new Date();now.setHours(0,0,0,0);
-  d.setHours(0,0,0,0);
-  const diff=Math.round((d-now)/(1000*60*60*24));
-  if(diff<0)return{label:`Overdue by ${-diff}d`,overdue:true};
-  if(diff===0)return{label:'Follow up today',overdue:true};
-  return{label:`Follow up in ${diff}d`,overdue:false};
-}
-
-// ── DAYS SINCE ──
-function daysSince(ts){
-  if(!ts)return null;
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return null;
-  const now=new Date();now.setHours(0,0,0,0);
-  d.setHours(0,0,0,0);
-  return Math.round((now-d)/(1000*60*60*24));
-}
-function daysBadgeHtml(ts){
-  const n=daysSince(ts);
-  if(n===null)return'';
-  const cls=n>30?'very-stale':n>14?'stale':'';
-  const label=n===0?'today':n===1?'1d ago':`${n}d ago`;
-  return`<span class="days-badge ${cls}">${label}</span>`;
-}
-
-// ── COUNTS ──
-function updateCounts(){
-  document.getElementById('cnt-all').textContent=jobs.length;
-  ['applied','screening','interview','offer'].forEach(s=>{
-    const el=document.getElementById('cnt-'+(s==='screening'?'screen':s));
-    if(el)el.textContent=jobs.filter(j=>j.status===s).length;
-  });
-}
-
-// ── SORT ──
-function sortedJobs(arr){
-  const a=[...arr];
-  switch(currentSort){
-    case'date-asc':return a.sort((x,y)=>tsMs(x.date)-tsMs(y.date));
-    case'company-asc':return a.sort((x,y)=>(x.company||'').localeCompare(y.company||''));
-    case'company-desc':return a.sort((x,y)=>(y.company||'').localeCompare(x.company||''));
-    case'title-asc':return a.sort((x,y)=>(x.title||'').localeCompare(y.title||''));
-    case'status':return a.sort((x,y)=>Object.keys(SM).indexOf(x.status)-Object.keys(SM).indexOf(y.status));
-    case'salary-desc':return a.sort((x,y)=>parseSalary(y.salary)-parseSalary(x.salary));
-    case'stale':return a.sort((x,y)=>tsMs(x.date)-tsMs(y.date)); // oldest first = most stale
-    default:return a.sort((x,y)=>tsMs(y.date)-tsMs(x.date));
-  }
-}
-function tsMs(ts){if(!ts)return 0;const d=ts.toDate?ts.toDate():new Date(ts);return isNaN(d)?0:d.getTime();}
-function parseSalary(s){if(!s)return 0;const m=s.match(/[\d,]+/);return m?parseInt(m[0].replace(/,/g,''),10):0;}
-
-// ── TAG CHIP HTML ──
-const TAG_COLORS={priority:'tag-priority',referral:'tag-referral','cold apply':'tag-cold','cold':'tag-cold'};
-function tagChipHtml(tag){const cls=TAG_COLORS[tag.toLowerCase()]||'tag-custom';return`<span class="tag-chip ${cls}">${tag}</span>`;}
-
-// ── VIEW TOGGLE ──
-window.setView=function(v){
-  currentView=v;
-  localStorage.setItem('view',v);
-  document.getElementById('listViewBtn').classList.toggle('active-view',v==='list');
-  document.getElementById('kanbanViewBtn').classList.toggle('active-view',v==='kanban');
-  // sort select: hide in kanban
-  document.getElementById('sortSelect').style.display=v==='kanban'?'none':'';
-  render();
-};
-// restore saved view
-const savedView=localStorage.getItem('view')||'list';
-// will call setView after render is defined
-
-// ── RENDER ──
-function render(){
-  updateCounts();
-  const q=currentSearch.toLowerCase();
-  let visible=jobs.filter(j=>{
-    const mf=currentFilter==='all'||j.status===currentFilter;
-    // search: title, company, location, tags, notes, recruiter
-    const ms=!q||(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.location||'').toLowerCase().includes(q)||(j.tags||[]).some(t=>t.toLowerCase().includes(q))||(j.notes||'').toLowerCase().includes(q)||(j.recruiter||'').toLowerCase().includes(q);
-    return mf&&ms;
-  });
-  visible=sortedJobs(visible);
-
-  if(jobs.length===0){
-    document.getElementById('jobsList').innerHTML=`
-      <div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <div class="empty-title">No applications yet</div>
-        <div class="empty-sub">Start tracking your job search by adding your first application. Every journey starts somewhere.</div>
-        <button class="empty-cta" onclick="openAdd()">Add your first job</button>
-      </div>`;
-    document.getElementById('noResults').style.display='none';
-    return;
-  }
-
-  if(currentView==='kanban'){
-    renderKanban(visible);
-  } else {
-    renderList(visible);
-  }
-}
-
-function renderList(visible){
-  const container=document.getElementById('jobsList');
-  container.className='jobs-list';
-  container.innerHTML=visible.map(j=>{
-    const fu=j.followupDate?fmtFollowup(j.followupDate):null;
-    const tags=(j.tags||[]).map(tagChipHtml).join('');
-    const isSelected=selectedIds.has(j.id);
-    const roundHtml=j.status==='interview'&&j.interviewRound?`<span class="round-badge">${ROUND_LABELS[j.interviewRound]||`Round ${j.interviewRound}`}</span>`:'';
-    const rejectHtml=j.status==='rejected'&&j.rejectReason?`<div class="rejection-reason"><i class="fa-solid fa-circle-xmark"></i>${REJECT_REASONS[j.rejectReason]||j.rejectReason}</div>`:'';
-    return`<div class="job-card ${j.status}${isSelected?' selected':''}" onclick="window._cardClick(event,'${j.id}')">
-      <div class="job-top">
-        <div class="job-title">
-          <label class="cb-wrap" onclick="event.stopPropagation()">
-            <input type="checkbox" ${isSelected?'checked':''} onchange="window._toggleSelect('${j.id}',this.checked)"/>
-            <div class="cb-mark"><i class="fa-solid fa-check"></i></div>
-          </label>
-          ${j.title||''}
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-          ${daysBadgeHtml(j.date)}
-          <div class="job-status ${j.status}">${SM[j.status]?.label||j.status}</div>
-        </div>
-      </div>
-      <div class="job-company">${j.company||''}</div>
-      ${roundHtml?`<div style="margin-bottom:4px">${roundHtml}</div>`:''}
-      <div class="job-meta">
-        ${j.location?`<span class="job-tag"><i class="fa-solid fa-location-dot"></i>${j.location}</span>`:''}
-        ${j.salary?`<span class="job-tag"><i class="fa-solid fa-peso-sign"></i>${j.salary}</span>`:''}
-        <span class="job-tag"><i class="fa-solid fa-calendar"></i>${fmt(j.date)}</span>
-        ${j.url?`<span class="job-tag"><i class="fa-solid fa-link"></i>Link</span>`:''}
-        ${j.recruiter?`<span class="job-tag"><i class="fa-solid fa-user-tie"></i>${j.recruiter.split('·')[0].trim()}</span>`:''}
-      </div>
-      ${tags?`<div class="job-tags-row">${tags}</div>`:''}
-      ${rejectHtml}
-      ${fu?`<div class="follow-up-badge${fu.overdue?' overdue':''}"><i class="fa-solid fa-bell"></i>${fu.label}</div>`:''}
-    </div>`;
-  }).join('');
-  document.getElementById('noResults').style.display=visible.length?'none':'block';
-}
-
-function renderKanban(visible){
-  const container=document.getElementById('jobsList');
-  container.className='';
-  const cols=Object.keys(SM);
-  const byStatus={};
-  cols.forEach(s=>{byStatus[s]=[];});
-  visible.forEach(j=>{if(byStatus[j.status])byStatus[j.status].push(j);});
-  container.innerHTML=`<div class="kanban-board">${cols.map(s=>{
-    const cards=byStatus[s];
-    const cardsHtml=cards.length?cards.map(j=>{
-      const n=daysSince(j.date);
-      const daysClass=n>30?'very-stale':n>14?'stale':'';
-      const daysLabel=n===null?'':(n===0?'today':n===1?'1d ago':`${n}d ago`);
-      return`<div class="kanban-card" onclick="window._openDetail('${j.id}')">
-        <div class="kanban-card-title">${j.title||''}</div>
-        <div class="kanban-card-co">${j.company||''}</div>
-        ${j.status==='interview'&&j.interviewRound?`<div style="margin-top:4px"><span class="round-badge" style="font-size:9px;padding:1px 6px">${ROUND_LABELS[j.interviewRound]||`R${j.interviewRound}`}</span></div>`:''}
-        <div class="kanban-card-meta">
-          <div class="kanban-card-days ${daysClass}">${daysLabel}</div>
-          ${(j.tags||[]).length?`<span class="tag-chip tag-custom" style="font-size:9px">${j.tags[0]}</span>`:''}
-        </div>
-      </div>`;
-    }).join(''):`<div class="kanban-empty">empty</div>`;
-    return`<div class="kanban-col">
-      <div class="kanban-col-header">
-        <span class="kanban-col-title ${s}">${SM[s].label}</span>
-        <span class="kanban-count">${cards.length}</span>
-      </div>
-      ${cardsHtml}
-    </div>`;
-  }).join('')}</div>`;
-  document.getElementById('noResults').style.display='none';
-}
-
-function updateBulkBar(){
-  const bar=document.getElementById('bulkBar');
-  const n=selectedIds.size;
-  if(n===0){bar.classList.remove('visible');return;}
-  bar.classList.add('visible');
-  document.getElementById('bulkInfo').textContent=`${n} selected`;
-  document.getElementById('bulkStatusWrap').innerHTML=Object.entries(SM).map(([k,v])=>
-    `<button class="bulk-status-btn" onclick="bulkChangeStatus('${k}')">${v.label}</button>`
-  ).join('');
-}
-
-window._cardClick=function(e,id){
-  if(e.target.closest('.cb-wrap'))return;
-  window._openDetail(id);
-};
-window._toggleSelect=function(id,checked){
-  if(checked)selectedIds.add(id);else selectedIds.delete(id);
-  updateBulkBar();render();
-};
-window.clearSelection=function(){selectedIds.clear();updateBulkBar();render();};
-window.bulkChangeStatus=async function(s){
-  if(!currentUser||selectedIds.size===0)return;
-  if(!confirm(`Change ${selectedIds.size} jobs to "${SM[s]?.label}"?`))return;
-  setSyncState('syncing');
-  const batch=writeBatch(db);
-  selectedIds.forEach(id=>{batch.update(doc(db,`users/${currentUser.uid}/jobs`,id),{status:s});});
-  await batch.commit();
-  selectedIds.clear();updateBulkBar();
-};
-window.bulkDelete=async function(){
-  if(!currentUser||selectedIds.size===0)return;
-  if(!confirm(`Delete ${selectedIds.size} application(s)?`))return;
-  setSyncState('syncing');
-  const batch=writeBatch(db);
-  selectedIds.forEach(id=>{batch.delete(doc(db,`users/${currentUser.uid}/jobs`,id));});
-  await batch.commit();
-  selectedIds.clear();updateBulkBar();
-};
-
-// ── SUBSCRIBE ──
-function subscribeJobs(uid){
-  if(unsubJobs)unsubJobs();
-  const q2=query(collection(db,`users/${uid}/jobs`),orderBy('date','desc'));
-  unsubJobs=onSnapshot(q2,snap=>{
-    jobs=snap.docs.map(d=>({id:d.id,...d.data()}));
-    setSyncState('ok');render();
-  },()=>setSyncState('err'));
-}
-
-// ── AUTH ──
-onAuthStateChanged(auth,user=>{
-  currentUser=user;
-  if(user){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('mainApp').style.display='flex';
-    document.getElementById('userAvatar').src=user.photoURL||'';
-    document.getElementById('userName').textContent=user.displayName?.split(' ')[0]||'';
-    setSyncState('syncing');
-    subscribeJobs(user.uid);
-    document.getElementById('adminBtn').style.display=user.uid===ADMIN_UID?'flex':'none';
-  }else{
-    document.getElementById('loginScreen').style.display='flex';
-    document.getElementById('mainApp').style.display='none';
-    if(unsubJobs)unsubJobs();
-    jobs=[];
-  }
-});
-
-async function getClientIP(){try{const r=await fetch('https://api.ipify.org?format=json');const d=await r.json();return d.ip||'unknown';}catch{return'unknown';}}
-
-window.signInGoogle=async()=>{
-  try{
-    const result=await signInWithPopup(auth,new GoogleAuthProvider());
-    const user=result.user;
-    const ip=await getClientIP();
-    await setDoc(doc(db,'users',user.uid),{
-      displayName:user.displayName||'',email:user.email||'',photoURL:user.photoURL||'',
-      lastLoginIP:ip,lastLoginAt:serverTimestamp(),banned:false
-    },{merge:true});
-    const snap=await getDoc(doc(db,'users',user.uid));
-    if(snap.data()?.banned){await signOut(auth);alert('Your account has been suspended.');return;}
-  }catch(e){alert('Sign-in failed: '+e.message);}
-};
-window.signOutUser=()=>signOut(auth);
-
-window.filterStat=function(el,f){
-  currentFilter=f;
-  document.querySelectorAll('.stat').forEach(s=>s.classList.remove('active'));
-  el.classList.add('active');render();
-};
-window.onSearch=function(v){currentSearch=v;render();};
-window.onSort=function(v){currentSort=v;render();};
-
-// ── QUICK ADD ──
-let quickAddOpen=false;
-window.toggleQuickAdd=function(){
-  quickAddOpen=!quickAddOpen;
-  document.getElementById('quickAddBar').classList.toggle('hidden',!quickAddOpen);
-  document.getElementById('quickAddBtn').classList.toggle('active-view',quickAddOpen);
-  if(quickAddOpen){document.getElementById('qa-title').focus();}
-};
-window.qaKeydown=function(e){
-  if(e.key==='Enter')saveQuickAdd();
-  if(e.key==='Escape'){toggleQuickAdd();}
-};
-window.saveQuickAdd=async function(){
-  if(!currentUser)return;
-  const title=document.getElementById('qa-title').value.trim();
-  const company=document.getElementById('qa-company').value.trim();
-  if(!title||!company){document.getElementById('qa-title').focus();return;}
-  // duplicate check
-  const dup=jobs.find(j=>j.title.toLowerCase()===title.toLowerCase()&&j.company.toLowerCase()===company.toLowerCase());
-  if(dup&&!confirm(`"${title}" at ${company} already exists. Add anyway?`))return;
-  setSyncState('syncing');
-  const status=document.getElementById('qa-status').value;
-  const today=new Date();
-  const dateTs=Timestamp.fromDate(new Date(today.getFullYear(),today.getMonth(),today.getDate()));
-  const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),{
-    title,company,status,date:dateTs,location:'',salary:'',notes:'',url:'',tags:[],followupDate:null,recruiter:'',interviewRound:0,rejectReason:''
-  });
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-    text:`Application added as "${SM[status]?.label}" via quick add`,ts:serverTimestamp()
-  });
-  // clear fields, keep open for next entry
-  document.getElementById('qa-title').value='';
-  document.getElementById('qa-company').value='';
-  document.getElementById('qa-title').focus();
-};
-
-// ── TAG INPUT ──
-window.handleTagInput=function(e){
-  if(e.key==='Enter'||e.key===','){
-    e.preventDefault();
-    const val=e.target.value.trim().replace(/,$/,'');
-    if(val&&!modalTags.includes(val)){
-      modalTags.push(val);
-      renderModalTags();
-    }
-    e.target.value='';
-  }
-};
-function renderModalTags(){
-  const wrap=document.getElementById('tagsWrap');
-  const input=document.getElementById('tagInput');
-  wrap.querySelectorAll('.tag-item').forEach(t=>t.remove());
-  modalTags.forEach((tag,i)=>{
-    const chip=document.createElement('span');
-    chip.className='tag-item';
-    chip.innerHTML=`${tag}<button onclick="removeTag(${i})" type="button">&times;</button>`;
-    wrap.insertBefore(chip,input);
-  });
-}
-window.removeTag=function(i){modalTags.splice(i,1);renderModalTags();};
-
-// ── STATUS CHANGE IN MODAL ──
-window.onStatusChange=function(){
-  const s=document.getElementById('f-status').value;
-  document.getElementById('roundSection').classList.toggle('visible',s==='interview');
-  document.getElementById('rejectSection').classList.toggle('visible',s==='rejected');
-};
-
-// ── INTERVIEW ROUND ──
-window.selectRound=function(r){
-  currentRound=r;
-  document.querySelectorAll('.round-btn').forEach((b,i)=>b.classList.toggle('active',i+1===r));
-};
-function renderRoundBtns(selected){
-  currentRound=selected||0;
-  document.querySelectorAll('.round-btn').forEach((b,i)=>b.classList.toggle('active',i+1===selected));
-}
-
-// ── DUPLICATE CHECK ──
-window.checkDuplicate=function(){
-  if(editingJobId)return; // skip when editing
-  const title=(document.getElementById('f-title').value||'').trim().toLowerCase();
-  const company=(document.getElementById('f-company').value||'').trim().toLowerCase();
-  if(!title||!company){document.getElementById('dupWarning').classList.remove('visible');return;}
-  const dup=jobs.find(j=>j.title.toLowerCase()===title&&j.company.toLowerCase()===company);
-  const warn=document.getElementById('dupWarning');
-  if(dup){
-    document.getElementById('dupWarningText').textContent=`Possible duplicate: "${dup.title}" at ${dup.company} (${SM[dup.status]?.label})`;
-    warn.classList.add('visible');
-  }else{
-    warn.classList.remove('visible');
-  }
-};
-
-// ── ADD / EDIT MODAL ──
-window.openAdd=function(){
-  editingJobId=null;
-  modalTags=[];
-  currentRound=0;
-  document.getElementById('modalTitle').textContent='Add new application';
-  document.getElementById('saveBtn').textContent='Save application';
-  document.getElementById('dupWarning').classList.remove('visible');
-  ['f-title','f-company','f-location','f-salary','f-notes','f-url','f-followup','f-recruiter'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  document.getElementById('f-status').value='applied';
-  document.getElementById('f-rejectreason').value='';
-  document.getElementById('roundSection').classList.remove('visible');
-  document.getElementById('rejectSection').classList.remove('visible');
-  renderRoundBtns(0);
-  const today=new Date();
-  document.getElementById('f-date').value=today.toISOString().split('T')[0];
-  renderModalTags();
-  document.getElementById('addModal').classList.add('open');
-  setTimeout(()=>document.getElementById('f-title').focus(),50);
-};
-window.closeAdd=function(){
-  document.getElementById('addModal').classList.remove('open');
-  editingJobId=null;modalTags=[];currentRound=0;
-};
-window.openEdit=function(){
-  if(!openJobId)return;
-  const j=jobs.find(x=>x.id===openJobId);if(!j)return;
-  editingJobId=openJobId;
-  modalTags=[...(j.tags||[])];
-  currentRound=j.interviewRound||0;
-  document.getElementById('modalTitle').textContent='Edit application';
-  document.getElementById('saveBtn').textContent='Save changes';
-  document.getElementById('dupWarning').classList.remove('visible');
-  document.getElementById('f-title').value=j.title||'';
-  document.getElementById('f-company').value=j.company||'';
-  document.getElementById('f-location').value=j.location||'';
-  document.getElementById('f-salary').value=j.salary||'';
-  document.getElementById('f-notes').value=j.notes||'';
-  document.getElementById('f-url').value=j.url||'';
-  document.getElementById('f-recruiter').value=j.recruiter||'';
-  document.getElementById('f-status').value=j.status||'applied';
-  document.getElementById('f-rejectreason').value=j.rejectReason||'';
-  document.getElementById('f-date').value=toDateInput(j.date);
-  document.getElementById('f-followup').value=toDateInput(j.followupDate);
-  document.getElementById('roundSection').classList.toggle('visible',j.status==='interview');
-  document.getElementById('rejectSection').classList.toggle('visible',j.status==='rejected');
-  renderRoundBtns(currentRound);
-  renderModalTags();
-  document.getElementById('addModal').classList.add('open');
-};
-
-window.saveJob=async function(){
-  if(!currentUser)return;
-  const title=document.getElementById('f-title').value.trim();
-  const company=document.getElementById('f-company').value.trim();
-  if(!title||!company){alert('Please enter a job title and company.');return;}
-  // duplicate guard on new entries
-  if(!editingJobId){
-    const dup=jobs.find(j=>j.title.toLowerCase()===title.toLowerCase()&&j.company.toLowerCase()===company.toLowerCase());
-    if(dup&&!confirm(`"${title}" at ${company} already exists. Save anyway?`))return;
-  }
-  setSyncState('syncing');
-  const status=document.getElementById('f-status').value;
-  const dateVal=document.getElementById('f-date').value;
-  const followupVal=document.getElementById('f-followup').value;
-  const dateTs=dateVal?Timestamp.fromDate(parseLocalDate(dateVal)):serverTimestamp();
-  const followupTs=followupVal?Timestamp.fromDate(parseLocalDate(followupVal)):null;
-  const data={
-    title,company,
-    location:document.getElementById('f-location').value.trim(),
-    status,
-    salary:document.getElementById('f-salary').value.trim(),
-    notes:document.getElementById('f-notes').value.trim(),
-    url:document.getElementById('f-url').value.trim(),
-    recruiter:document.getElementById('f-recruiter').value.trim(),
-    tags:modalTags,
-    followupDate:followupTs,
-    date:dateTs,
-    interviewRound:status==='interview'?currentRound:0,
-    rejectReason:status==='rejected'?(document.getElementById('f-rejectreason').value||''):''
-  };
-  if(editingJobId){
-    await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,editingJobId),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${editingJobId}/activity`),{
-      text:'Application details updated',ts:serverTimestamp()
-    });
-    window.closeAdd();
-    await window._openDetail(editingJobId);
-  }else{
-    const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-      text:`Application added as "${SM[status]?.label}"`,ts:serverTimestamp()
-    });
-    window.closeAdd();
-  }
-};
-
-// ── DETAIL PANEL ──
-window._openDetail=async function(id){
-  openJobId=id;
-  const j=jobs.find(x=>x.id===id);if(!j)return;
-  document.getElementById('d-title').textContent=j.title||'';
-  document.getElementById('d-company').textContent=j.company||'';
-  document.getElementById('d-location').textContent=j.location||'—';
-  document.getElementById('d-salary').textContent=j.salary||'—';
-  document.getElementById('d-notes').textContent=j.notes||'No notes.';
-  document.getElementById('d-date').textContent=`${fmt(j.date)} — ${daysBadgeHtml(j.date).replace(/<[^>]+>/g,'')}`;
-  // Recruiter
-  const recWrap=document.getElementById('d-recruiter-wrap');
-  if(j.recruiter){document.getElementById('d-recruiter').textContent=j.recruiter;recWrap.style.display='block';}
-  else{recWrap.style.display='none';}
-  // URL
-  const urlWrap=document.getElementById('d-url-wrap');
-  if(j.url){
-    document.getElementById('d-url').innerHTML=`<a href="${j.url}" target="_blank" rel="noopener">${j.url}</a>`;
-    urlWrap.style.display='block';
-  }else{urlWrap.style.display='none';}
-  // Follow-up
-  const fuWrap=document.getElementById('d-followup-wrap');
-  if(j.followupDate){
-    const fu=fmtFollowup(j.followupDate);
-    const base=fmt(j.followupDate);
-    document.getElementById('d-followup').textContent=fu?`${base} — ${fu.label}`:base;
-    fuWrap.style.display='block';
-  }else{fuWrap.style.display='none';}
-  // Tags
-  const tagsWrap=document.getElementById('d-tags-wrap');
-  if(j.tags&&j.tags.length){
-    document.getElementById('d-tags').innerHTML=j.tags.map(tagChipHtml).join('');
-    tagsWrap.style.display='block';
-  }else{tagsWrap.style.display='none';}
-  // Interview round
-  const roundWrap=document.getElementById('d-round-wrap');
-  if(j.status==='interview'){
-    const btns=document.getElementById('d-round-btns');
-    btns.innerHTML=[1,2,3,4].map(r=>`<button class="round-btn${j.interviewRound===r?' active':''}" onclick="window._setRound(${r})">${ROUND_LABELS[r]}</button>`).join('');
-    roundWrap.style.display='block';
-  }else{roundWrap.style.display='none';}
-  // Rejection reason
-  const rejWrap=document.getElementById('d-reject-wrap');
-  if(j.status==='rejected'){
-    const btns=document.getElementById('d-reject-btns');
-    btns.innerHTML=Object.entries(REJECT_REASONS).map(([k,v])=>
-      `<button class="reject-reason-btn${j.rejectReason===k?' active':''}" onclick="window._setRejectReason('${k}')">${v}</button>`
-    ).join('');
-    rejWrap.style.display='block';
-  }else{rejWrap.style.display='none';}
-  // Status buttons
-  document.getElementById('d-statusbtns').innerHTML=Object.entries(SM).map(([k,v])=>
-    `<button class="status-btn ${k} ${j.status===k?'active':''}" onclick="window._changeStatus('${k}')">${v.label}</button>`
-  ).join('');
-  document.getElementById('detailPanel').classList.add('open');
-  await loadActivity(id);
-};
-
-// set interview round from detail panel
-window._setRound=async function(r){
-  if(!currentUser||!openJobId)return;
-  setSyncState('syncing');
-  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{interviewRound:r});
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{
-    text:`Interview stage set to: ${ROUND_LABELS[r]||`Round ${r}`}`,ts:serverTimestamp()
-  });
-  await window._openDetail(openJobId);
-};
-
-// set rejection reason from detail panel
-window._setRejectReason=async function(reason){
-  if(!currentUser||!openJobId)return;
-  setSyncState('syncing');
-  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{rejectReason:reason});
-  await window._openDetail(openJobId);
-};
-
-async function loadActivity(jobId){
-  if(!currentUser)return;
-  const log=document.getElementById('d-activitylog');
-  log.innerHTML='<div style="font-size:12px;color:var(--c4)">Loading…</div>';
-  const snap=await getDocs(query(collection(db,`users/${currentUser.uid}/jobs/${jobId}/activity`),orderBy('ts','desc')));
-  if(snap.empty){log.innerHTML='<div style="font-size:12px;color:var(--c4)">No activity yet.</div>';return;}
-  log.innerHTML=snap.docs.map(d=>{
-    const data=d.data();
-    return`<div class="activity-item"><div class="activity-text">${data.text||''}</div><div class="activity-time">${fmtFull(data.ts)}</div></div>`;
-  }).join('');
-}
-
-window.addActivity=async function(){
-  if(!currentUser||!openJobId)return;
-  const input=document.getElementById('activityInput');
-  const text=input.value.trim();if(!text)return;
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{text,ts:serverTimestamp()});
-  input.value='';await loadActivity(openJobId);
-};
-window.closeDetail=function(){document.getElementById('detailPanel').classList.remove('open');openJobId=null;};
-window._changeStatus=async function(s){
-  if(!currentUser||!openJobId)return;
-  setSyncState('syncing');
-  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{status:s});
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{
-    text:`Status changed to "${SM[s]?.label}"`,ts:serverTimestamp()
-  });
-  await window._openDetail(openJobId);
-};
-window.deleteJob=async function(){
-  if(!currentUser||!openJobId||!confirm('Delete this application?'))return;
-  setSyncState('syncing');
-  await deleteDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId));
-  window.closeDetail();
-};
-
-// ── ADMIN ──
-window.openAdmin=async function(){
-  if(!currentUser||currentUser.uid!==ADMIN_UID)return;
-  document.getElementById('adminOverlay').classList.add('open');
-  const body=document.getElementById('adminBody');
-  body.innerHTML='<div class="admin-loading"><div class="spinner"></div> Loading users…</div>';
-  try{
-    const usersSnap=await getDocs(collection(db,'users'));
-    const rows=await Promise.all(usersSnap.docs.map(async d=>{
-      const u=d.data();const uid=d.id;
-      const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
-      const jobCount=jobsSnap.size;
-      const lastLogin=u.lastLoginAt?.toDate?.()?u.lastLoginAt.toDate().toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
-      const isYou=uid===ADMIN_UID;
-      const banned=u.banned?'<span style="color:var(--rejected);font-size:11px">BANNED</span>':'';
-      const jobRows=jobsSnap.docs.map(jd=>{
-        const jj=jd.data();
-        const days=daysSince(jj.date);
-        const daysStr=days!==null?`${days}d ago`:'';
-        return`<div class="admin-job-row"><strong>${jj.title||'?'}</strong> @ ${jj.company||'?'} <span class="job-status ${jj.status}" style="font-size:10px;padding:1px 7px">${SM[jj.status]?.label||jj.status}</span>${daysStr?` <span style="color:var(--c4);font-size:11px;font-family:'DM Mono',monospace">${daysStr}</span>`:''}</div>`;
-      }).join('')||'<div style="color:var(--c4);font-size:12px">No jobs.</div>';
-      return`<tr>
-        <td><div class="admin-user-cell"><img class="admin-avatar" src="${u.photoURL||''}" alt=""/><div><div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}${banned}</div><div class="admin-email">${u.email||''}</div></div></div></td>
-        <td><span class="ip-badge">${u.lastLoginIP||'—'}</span></td>
-        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${lastLogin}</td>
-        <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
-        <td>
-          <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')">View jobs</button>
-          ${!isYou?`<button class="admin-ban-btn" style="margin-left:4px" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'Unban':'Ban'}</button>`:''}
-        </td>
-      </tr>
-      <tr id="admin-jobs-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open">${jobRows}</div></td></tr>`;
-    }));
-    body.innerHTML=`<table class="admin-table">
-      <thead><tr><th>User</th><th>Last IP</th><th>Last Login</th><th>Jobs</th><th>Actions</th></tr></thead>
-      <tbody>${rows.join('')}</tbody>
-    </table>`;
-  }catch(e){
-    body.innerHTML=`<div class="admin-loading" style="color:var(--rejected)">Error: ${e.message}</div>`;
-  }
-};
-window.toggleAdminJobs=function(uid){
-  const row=document.getElementById(`admin-jobs-${uid}`);
-  if(row)row.style.display=row.style.display==='none'?'table-row':'none';
-};
-window.toggleBan=async function(uid,isBanned){
-  if(!confirm(isBanned?`Unban this user?`:`Ban this user? They won't be able to sign in.`))return;
-  await setDoc(doc(db,'users',uid),{banned:!isBanned},{merge:true});
-  await window.openAdmin();
-};
-window.closeAdmin=()=>document.getElementById('adminOverlay').classList.remove('open');
-
-// ── EXPORT (updated with new fields) ──
-window.exportCSV=function(){
-  if(!jobs.length){alert('No jobs to export.');return;}
-  const rows=[['Title','Company','Location','Status','Interview Round','Rejection Reason','Salary','Recruiter','URL','Tags','Follow-up','Notes','Date','Days Since']];
-  jobs.forEach(j=>rows.push([
-    j.title||'',j.company||'',j.location||'',j.status||'',
-    j.interviewRound?ROUND_LABELS[j.interviewRound]||`Round ${j.interviewRound}`:'',
-    j.rejectReason?REJECT_REASONS[j.rejectReason]||j.rejectReason:'',
-    j.salary||'',j.recruiter||'',j.url||'',
-    (j.tags||[]).join('; '),
-    j.followupDate?fmt(j.followupDate):'',
-    (j.notes||'').replace(/"/g,'""'),
-    j.date?.toDate?j.date.toDate().toISOString().split('T')[0]:'',
-    daysSince(j.date)??''
-  ]));
-  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='huntlog-export.csv';a.click();
-};
-
-// ── ANALYTICS ──
-const REJECT_REASONS_ANALYTICS={no_response:'No response',skills_gap:'Skills gap',salary_mismatch:'Salary mismatch',position_filled:'Pos. filled',culture_fit:'Culture fit',withdrew:'Withdrew',other:'Other'};
-
-window.openAnalytics=function(){
-  document.getElementById('analyticsOverlay').classList.add('open');
-  renderAnalytics();
-};
-window.closeAnalytics=function(){
-  document.getElementById('analyticsOverlay').classList.remove('open');
-};
-
-function renderAnalytics(){
-  const body=document.getElementById('analyticsBody');
-  if(!jobs.length){body.innerHTML='<div class="analytics-empty">No data yet — add some applications first.</div>';return;}
-
-  // --- KPIs ---
-  const total=jobs.length;
-  const offers=jobs.filter(j=>j.status==='offer').length;
-  const rejected=jobs.filter(j=>j.status==='rejected').length;
-  const interviews=jobs.filter(j=>j.status==='interview'||j.status==='offer').length;
-  const screenings=jobs.filter(j=>j.status==='screening'||j.status==='interview'||j.status==='offer').length;
-
-  const successRate=total>0?Math.round((offers/total)*100):0;
-  const interviewRate=total>0?Math.round((interviews/total)*100):0;
-  const screenRate=total>0?Math.round((screenings/total)*100):0;
-  const rejRate=total>0?Math.round((rejected/total)*100):0;
-
-  // avg response time: days from applied to first status change (approximation via daysSince)
-  // We use: for offers+interviews, avg days since apply date
-  const responded=jobs.filter(j=>j.status!=='applied'&&j.date);
-  const avgResponse=responded.length>0
-    ?Math.round(responded.reduce((acc,j)=>{
-        const n=daysSince(j.date);return acc+(n??0);
-      },0)/responded.length)
-    :null;
-
-  // stalest active jobs
-  const active=jobs.filter(j=>j.status==='applied'||j.status==='screening');
-  const avgStale=active.length>0
-    ?Math.round(active.reduce((acc,j)=>acc+(daysSince(j.date)??0),0)/active.length)
-    :null;
-
-  // weekly activity (last 8 weeks)
-  const now=new Date();now.setHours(0,0,0,0);
-  const weekBuckets=Array(8).fill(0);
-  jobs.forEach(j=>{
-    const d=j.date?.toDate?j.date.toDate():(j.date?new Date(j.date):null);
-    if(!d||isNaN(d))return;
-    const diffDays=Math.floor((now-d)/(1000*60*60*24));
-    const week=Math.floor(diffDays/7);
-    if(week>=0&&week<8)weekBuckets[week]++;
-  });
-  const weekLabels=['now','1w','2w','3w','4w','5w','6w','7w'];
-  const maxWeek=Math.max(...weekBuckets,1);
-
-  // funnel
-  const statusCounts={applied:0,screening:0,interview:0,offer:0,rejected:0};
-  jobs.forEach(j=>{if(statusCounts[j.status]!==undefined)statusCounts[j.status]++;});
-
-  // rejection reasons
-  const rejectBreakdown={};
-  jobs.filter(j=>j.status==='rejected').forEach(j=>{
-    const r=j.rejectReason||'unknown';
-    rejectBreakdown[r]=(rejectBreakdown[r]||0)+1;
-  });
-  const rejectEntries=Object.entries(rejectBreakdown).sort((a,b)=>b[1]-a[1]);
-  const maxReject=rejectEntries.length>0?rejectEntries[0][1]:1;
-
-  // tags frequency
-  const tagFreq={};
-  jobs.forEach(j=>(j.tags||[]).forEach(t=>{tagFreq[t]=(tagFreq[t]||0)+1;}));
-  const topTags=Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
-  // status donut via conic-gradient
-  const donutColors={applied:'#3b82f6',screening:'#8b5cf6',interview:'#f59e0b',offer:'#10b981',rejected:'#ef4444'};
-  const donutSegments=Object.entries(statusCounts).filter(([,v])=>v>0);
-  let cumulPct=0;
-  const conicParts=donutSegments.map(([s,v])=>{
-    const pct=(v/total)*100;
-    const part=`${donutColors[s]} ${cumulPct}% ${cumulPct+pct}%`;
-    cumulPct+=pct;
-    return part;
-  });
-
-  // insights
-  const insights=[];
-  if(successRate>=10)insights.push({cls:'good',icon:'fa-trophy',text:`${successRate}% offer rate — solid pipeline`});
-  else if(total>=5&&successRate===0)insights.push({cls:'warn',icon:'fa-triangle-exclamation',text:'No offers yet — keep pushing'});
-  if(interviewRate>=30)insights.push({cls:'good',icon:'fa-comments',text:`${interviewRate}% interview rate — strong signal`});
-  if(avgStale!==null&&avgStale>21)insights.push({cls:'bad',icon:'fa-clock',text:`Avg ${avgStale}d without update — follow up?`});
-  if(rejectBreakdown['no_response']>=3)insights.push({cls:'warn',icon:'fa-ghost',text:`${rejectBreakdown['no_response']} ghosted — diversify channels`});
-  if(topTags.length&&topTags[0][0]==='cold apply'&&topTags[0][1]>5)insights.push({cls:'warn',icon:'fa-ice-cream',text:'Mostly cold outreach — try referrals'});
-  if(avgResponse!==null&&avgResponse<14)insights.push({cls:'good',icon:'fa-bolt',text:`Avg ${avgResponse}d to hear back — fast pipeline`});
-
-  body.innerHTML=`
-    <!-- KPIs -->
-    <div class="analytics-kpi-row">
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--offer)">${successRate}%</div>
-        <div class="analytics-kpi-label">Offer rate</div>
-        <div class="analytics-kpi-sub">${offers} of ${total}</div>
-      </div>
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--interview)">${interviewRate}%</div>
-        <div class="analytics-kpi-label">Interview rate</div>
-        <div class="analytics-kpi-sub">${interviews} reached</div>
-      </div>
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--screen)">${screenRate}%</div>
-        <div class="analytics-kpi-label">Screen rate</div>
-        <div class="analytics-kpi-sub">${screenings} reached</div>
-      </div>
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--rejected)">${rejRate}%</div>
-        <div class="analytics-kpi-label">Rejection rate</div>
-        <div class="analytics-kpi-sub">${rejected} total</div>
-      </div>
+<!-- AI WRITING ASSISTANT MODAL -->
+<div class="ai-overlay" id="aiModal" onclick="if(event.target===this)closeAIAssist()">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div class="ai-modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Writing Assistant</div>
+      <button class="detail-close" onclick="closeAIAssist()"><i class="fa-solid fa-xmark"></i> Close</button>
     </div>
-
-    ${insights.length?`
-    <!-- Insights -->
-    <div class="analytics-section">
-      <div class="analytics-section-title"><i class="fa-solid fa-lightbulb"></i> Insights</div>
-      <div class="insights-row">
-        ${insights.map(ins=>`<div class="insight-chip ${ins.cls}"><i class="fa-solid ${ins.icon}"></i>${ins.text}</div>`).join('')}
-      </div>
-    </div>`:'' }
-
-    <!-- Funnel + Donut -->
-    <div class="analytics-grid-2">
-      <div class="analytics-section">
-        <div class="analytics-section-title">Pipeline funnel</div>
-        <div class="funnel-rows">
-          ${Object.entries(statusCounts).map(([s,v])=>{
-            const pct=total>0?Math.round((v/total)*100):0;
-            const barColor=donutColors[s]||'var(--accent)';
-            return`<div class="funnel-row">
-              <div class="funnel-label" style="color:${barColor}">${SM[s]?.label||s}</div>
-              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${pct}%;background:${barColor}"></div></div>
-              <div class="funnel-count">${v}</div>
-              <div class="funnel-pct" style="color:${barColor}">${pct}%</div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-
-      <div class="analytics-section">
-        <div class="analytics-section-title">Distribution</div>
-        <div class="donut-wrap">
-          <div class="donut" style="background:conic-gradient(${conicParts.join(',')})"></div>
-          <div class="donut-legend">
-            ${donutSegments.map(([s,v])=>`
-              <div class="donut-legend-item">
-                <div class="donut-swatch" style="background:${donutColors[s]}"></div>
-                <span>${SM[s]?.label||s} <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${v}</span></span>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
+    <div class="ai-mode-tabs">
+      <button class="ai-mode-tab active" id="aiTabCover" onclick="setAIMode('cover')"><i class="fa-solid fa-file-lines"></i> Cover letter</button>
+      <button class="ai-mode-tab" id="aiTabSummary" onclick="setAIMode('summary')"><i class="fa-solid fa-align-left"></i> Tailored summary</button>
+      <button class="ai-mode-tab" id="aiTabPrep" onclick="setAIMode('prep')"><i class="fa-solid fa-comments"></i> Interview prep</button>
     </div>
-
-    <!-- Weekly activity + avg response -->
-    <div class="analytics-grid-2">
-      <div class="analytics-section">
-        <div class="analytics-section-title">Weekly applications (last 8 weeks)</div>
-        <div class="weekly-bars">
-          ${[...weekBuckets].reverse().map((v,i)=>`
-            <div class="weekly-bar-col">
-              <div class="weekly-bar" style="height:${Math.round((v/maxWeek)*50)+2}px;opacity:${.4+.6*(v/maxWeek)}"></div>
-              <div class="weekly-bar-label">${weekLabels[[...weekBuckets].length-1-i]}</div>
-            </div>`).join('')}
-        </div>
-      </div>
-      <div class="analytics-section">
-        <div class="analytics-section-title">Response timing</div>
-        ${avgResponse!==null?`
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div>
-              <div style="font-family:'DM Mono',monospace;font-size:2rem;color:var(--c6);line-height:1">${avgResponse}</div>
-              <div style="font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em">avg days to status change</div>
-            </div>
-            ${avgStale!==null?`<div>
-              <div style="font-family:'DM Mono',monospace;font-size:1.4rem;color:${avgStale>21?'var(--rejected)':'var(--c5)'};line-height:1">${avgStale}</div>
-              <div style="font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em">avg days stale (active jobs)</div>
-            </div>`:''}
-          </div>`:'<div style="color:var(--c4);font-size:12px">Not enough data yet.</div>'}
-      </div>
+    <div>
+      <label class="form-label">Job description <span style="color:var(--c4);font-weight:400;text-transform:none">— paste the full JD</span></label>
+      <textarea class="ai-jd-textarea" id="aiJDInput" placeholder="Paste the full job description here…"></textarea>
     </div>
-
-    <!-- Rejection reasons + Top tags -->
-    <div class="analytics-grid-2">
-      ${rejectEntries.length?`
-      <div class="analytics-section">
-        <div class="analytics-section-title">Rejection breakdown</div>
-        <div class="reject-rows">
-          ${rejectEntries.map(([k,v])=>`
-            <div class="reject-row">
-              <div class="reject-label">${REJECT_REASONS_ANALYTICS[k]||k}</div>
-              <div class="reject-bar-wrap"><div class="reject-bar" style="width:${Math.round((v/maxReject)*100)}%"></div></div>
-              <div class="reject-count">${v}</div>
-            </div>`).join('')}
-        </div>
-      </div>`:`<div class="analytics-section"><div class="analytics-section-title">Rejection breakdown</div><div style="color:var(--c4);font-size:12px">No rejections recorded yet.</div></div>`}
-
-      <div class="analytics-section">
-        <div class="analytics-section-title">Top tags</div>
-        ${topTags.length?`<div class="reject-rows">
-          ${topTags.map(([t,v])=>`
-            <div class="reject-row">
-              <div class="reject-label">${t}</div>
-              <div class="reject-bar-wrap"><div class="reject-bar" style="width:${Math.round((v/topTags[0][1])*100)}%;background:var(--accent)"></div></div>
-              <div class="reject-count">${v}</div>
-            </div>`).join('')}
-        </div>`:'<div style="color:var(--c4);font-size:12px">No tags used yet.</div>'}
-      </div>
+    <div class="ai-resume-note" id="aiResumeNote">
+      <i class="fa-solid fa-circle-info"></i>
+      <span id="aiResumeNoteText">Tip: add your resume URL in the job form so the AI can reference it.</span>
     </div>
-  `;
-}
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <button class="ai-generate-btn" id="aiGenerateBtn" onclick="runAIAssist()">
+        <i class="fa-solid fa-sparkles"></i> Generate
+      </button>
+      <span style="font-size:12px;color:var(--c4)" id="aiJobContext"></span>
+    </div>
+    <div class="ai-output-wrap" id="aiOutputWrap">
+      <div class="ai-output-label">
+        <span id="aiOutputLabel">Generated cover letter</span>
+        <button class="ai-copy-btn" id="aiCopyBtn" onclick="copyAIOutput()"><i class="fa-solid fa-copy"></i> Copy</button>
+      </div>
+      <div class="ai-output" id="aiOutput"></div>
+    </div>
+  </div>
+</div>
 
-// ── KEYBOARD SHORTCUTS ──
-document.addEventListener('keydown',e=>{
-  const tag=document.activeElement.tagName.toLowerCase();
-  const inInput=tag==='input'||tag==='textarea'||tag==='select';
+<!-- PWA setup (plain script, no module) -->
+<script src="pwa.js"></script>
 
-  if(e.key==='Escape'){
-    window.closeAdd();window.closeDetail();window.closeAdmin();window.closeAnalytics();
-    if(quickAddOpen)toggleQuickAdd();
-    return;
-  }
-  if(inInput)return; // don't fire shortcuts when typing
+<!-- Firebase app (ES module) -->
+<script type="module" src="app.js"></script>
 
-  switch(e.key){
-    case'n':case'N':e.preventDefault();window.openAdd();break;
-    case'q':case'Q':e.preventDefault();window.toggleQuickAdd();break;
-    case'/':e.preventDefault();document.getElementById('searchInput').focus();break;
-    case't':case'T':window.toggleTheme();break;
-    case'l':case'L':window.setView('list');break;
-    case'k':case'K':window.setView('kanban');break;
-    case'a':case'A':window.openAnalytics();break;
-  }
-});
-
-// restore view after everything is defined
-window.setView(savedView);
-</script>
 </body>
 </html>
