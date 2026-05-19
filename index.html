@@ -1,4 +1,3 @@
-
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -155,6 +154,7 @@ option{background:var(--c1)}
       <img class="user-avatar" id="userAvatar" src="" alt="avatar" />
       <span class="user-name" id="userName"></span>
       <button class="icon-btn" onclick="exportCSV()"><i class="ti ti-download" aria-hidden="true"></i> CSV</button>
+      <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="ti ti-shield" aria-hidden="true"></i> Admin</button>
       <button class="icon-btn" onclick="signOutUser()"><i class="ti ti-logout" aria-hidden="true"></i> Sign out</button>
     </div>
   </div>
@@ -231,7 +231,7 @@ option{background:var(--c1)}
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
 import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
-import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
 
 const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
 const fbApp=initializeApp(cfg);
@@ -304,6 +304,7 @@ onAuthStateChanged(auth,user=>{
     document.getElementById('userName').textContent=user.displayName?.split(' ')[0]||'';
     setSyncState('syncing');
     subscribeJobs(user.uid);
+    document.getElementById('adminBtn').style.display=user.uid===ADMIN_UID?'flex':'none';
   }else{
     document.getElementById('loginScreen').style.display='flex';
     document.getElementById('mainApp').style.display='none';
@@ -312,8 +313,26 @@ onAuthStateChanged(auth,user=>{
   }
 });
 
+const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
+
+async function getClientIP(){
+  try{const r=await fetch('https://api.ipify.org?format=json');const d=await r.json();return d.ip||'unknown';}
+  catch{return'unknown';}
+}
+
 window.signInGoogle=async()=>{
-  try{await signInWithPopup(auth,new GoogleAuthProvider());}catch(e){alert('Sign-in failed: '+e.message);}
+  try{
+    const result=await signInWithPopup(auth,new GoogleAuthProvider());
+    const user=result.user;
+    const ip=await getClientIP();
+    await setDoc(doc(db,'users',user.uid),{
+      displayName:user.displayName||'',
+      email:user.email||'',
+      photoURL:user.photoURL||'',
+      lastLoginIP:ip,
+      lastLoginAt:serverTimestamp()
+    },{merge:true});
+  }catch(e){alert('Sign-in failed: '+e.message);}
 };
 window.signOutUser=()=>signOut(auth);
 
@@ -410,6 +429,37 @@ window.deleteJob=async()=>{
   window.closeDetail();
 };
 
+window.openAdmin=async()=>{
+  if(!currentUser||currentUser.uid!==ADMIN_UID)return;
+  document.getElementById('adminOverlay').classList.add('open');
+  const body=document.getElementById('adminBody');
+  body.innerHTML='<div class="admin-loading"><div class="spinner"></div> Loading users…</div>';
+  try{
+    const usersSnap=await getDocs(collection(db,'users'));
+    const rows=await Promise.all(usersSnap.docs.map(async d=>{
+      const u=d.data();
+      const uid=d.id;
+      const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
+      const jobCount=jobsSnap.size;
+      const lastLogin=u.lastLoginAt?.toDate?.()?u.lastLoginAt.toDate().toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
+      const isYou=uid===ADMIN_UID;
+      return`<tr>
+        <td><img class="admin-avatar" src="${u.photoURL||''}" alt="" /><div><div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}</div><div class="admin-email">${u.email||''}</div></div></td>
+        <td><span class="ip-badge">${u.lastLoginIP||'—'}</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${lastLogin}</td>
+        <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
+      </tr>`;
+    }));
+    body.innerHTML=`<table class="admin-table">
+      <thead><tr><th>User</th><th>Last IP</th><th>Last Login</th><th>Jobs</th></tr></thead>
+      <tbody>${rows.join('')}</tbody>
+    </table>`;
+  }catch(e){
+    body.innerHTML=`<div class="admin-loading" style="color:var(--rejected)">Error loading users: ${e.message}</div>`;
+  }
+};
+window.closeAdmin=()=>document.getElementById('adminOverlay').classList.remove('open');
+
 window.exportCSV=()=>{
   if(!jobs.length){alert('No jobs to export.');return;}
   const rows=[['Title','Company','Location','Status','Salary','Notes','Date']];
@@ -426,3 +476,32 @@ window.exportCSV=()=>{
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){window.closeAdd();window.closeDetail();}});
 </script>
+
+<style>
+.admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.admin-overlay.open{display:flex}
+.admin-modal{background:var(--c1);border:0.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:680px;max-height:90vh;overflow-y:auto}
+.admin-modal h2{font-size:1.1rem;font-weight:600;color:var(--c6);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.admin-modal h2 i{color:var(--accent)}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px}
+.admin-table th{text-align:left;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;font-size:11px;padding:6px 10px;border-bottom:0.5px solid var(--c3)}
+.admin-table td{padding:10px;border-bottom:0.5px solid var(--c2);color:var(--c5);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table td:first-child{display:flex;align-items:center;gap:8px}
+.admin-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:var(--c2);flex-shrink:0}
+.admin-name{color:var(--c6);font-weight:600}
+.admin-email{font-size:11px;color:var(--c4)}
+.ip-badge{background:var(--c2);border:0.5px solid var(--c3);border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)}
+.admin-loading{text-align:center;padding:2rem;color:var(--c4);font-size:13px}
+.admin-close-btn{margin-top:1rem;background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:8px 16px;color:var(--c4);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif}
+.admin-close-btn:hover{color:var(--c5);border-color:var(--c5)}
+.you-badge{font-size:10px;background:var(--accent);color:#fff;border-radius:20px;padding:1px 7px;margin-left:4px;font-weight:600}
+</style>
+
+<div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
+  <div class="admin-modal">
+    <h2><i class="ti ti-shield"></i> Admin — All Users</h2>
+    <div id="adminBody" class="admin-loading"><div class="spinner"></div> Loading users…</div>
+    <div style="margin-top:1rem"><button class="admin-close-btn" onclick="closeAdmin()">Close</button></div>
+  </div>
+</div>
