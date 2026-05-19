@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>HuntLog</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<link rel="manifest" id="pwaManifest"/>
+<meta name="theme-color" content="#0b0b0f"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="HuntLog"/>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -106,7 +112,7 @@ option{background:var(--c1)}
 .bulk-clear{background:transparent;border:none;padding:4px;color:var(--c4);cursor:pointer;font-size:13px}
 
 /* ── DUPLICATE WARNING ── */
-.dup-warning{background:#2d1f00;border:.5px solid var(--interview);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--interview);display:none;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dup-warning{background:#2d1f00;border:.5px solid var(--interview);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--interview);display:none;margin-bottom:8px;align-items:center;gap:8px}
 .dup-warning.visible{display:flex}
 .dup-warning i{flex-shrink:0}
 
@@ -404,6 +410,47 @@ option{background:var(--c1)}
 .resume-ver-wrap{display:flex;gap:6px;align-items:center}
 .resume-ver-badge{font-family:'DM Mono',monospace;font-size:11px;background:var(--c3);color:var(--c5);border-radius:20px;padding:2px 10px;display:inline-block}
 
+/* ── PWA INSTALL BANNER ── */
+.pwa-banner{display:none;align-items:center;gap:10px;background:var(--c2);border:.5px solid var(--accent);border-radius:10px;padding:10px 14px;margin-bottom:1rem;flex-wrap:wrap}
+.pwa-banner.visible{display:flex}
+.pwa-banner-text{flex:1;font-size:13px;color:var(--c5)}
+.pwa-banner-text strong{color:var(--c6)}
+.pwa-install-btn{background:var(--accent);border:none;border-radius:8px;padding:7px 14px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;white-space:nowrap}
+.pwa-dismiss-btn{background:transparent;border:none;padding:4px;color:var(--c4);cursor:pointer;font-size:13px}
+
+/* ── AI WRITING ASSISTANT ── */
+.ai-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.ai-overlay.open{display:flex}
+.ai-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.ai-modal-header{display:flex;align-items:center;justify-content:space-between}
+.ai-modal-title{font-size:1.05rem;font-weight:600;color:var(--c6);display:flex;align-items:center;gap:8px}
+.ai-modal-title i{color:var(--accent)}
+.ai-mode-tabs{display:flex;gap:6px}
+.ai-mode-tab{background:var(--c2);border:.5px solid var(--c3);border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
+.ai-mode-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.ai-jd-textarea{width:100%;background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;resize:vertical;min-height:130px;transition:.2s}
+.ai-jd-textarea:focus{border-color:var(--accent)}
+.ai-resume-note{font-size:12px;color:var(--c4);display:flex;align-items:center;gap:6px}
+.ai-resume-note a{color:var(--accent)}
+.ai-generate-btn{background:var(--accent);border:none;border-radius:8px;padding:10px 20px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:8px;transition:.15s;align-self:flex-start}
+.ai-generate-btn:disabled{opacity:.5;cursor:not-allowed}
+.ai-output-wrap{display:none;flex-direction:column;gap:8px}
+.ai-output-wrap.visible{display:flex}
+.ai-output-label{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;justify-content:space-between}
+.ai-output{background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:12px;font-size:13px;color:var(--c5);line-height:1.7;white-space:pre-wrap;max-height:320px;overflow-y:auto}
+.ai-copy-btn{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:5px 12px;color:var(--c4);font-size:11px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:5px;transition:.15s}
+.ai-copy-btn:hover{border-color:var(--accent);color:var(--accent)}
+.ai-copy-btn.copied{border-color:var(--offer);color:var(--offer)}
+.ai-spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+
+/* ── MATCH SCORE (fit rating) ── */
+.match-score-wrap{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.match-star{background:none;border:none;font-size:18px;cursor:pointer;color:var(--c3);padding:0 1px;line-height:1;transition:.1s}
+.match-star.lit{color:#f59e0b}
+.match-star:hover{transform:scale(1.15)}
+.match-score-label{font-size:11px;color:var(--c4);margin-left:4px}
+.card-match-score{font-size:11px;color:#f59e0b;display:flex;align-items:center;gap:2px}
+
 /* ── IMPORT CSV ── */
 .import-drop{border:1.5px dashed var(--c3);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.2s;color:var(--c4);font-size:13px}
 .import-drop:hover,.import-drop.drag-over{border-color:var(--accent);color:var(--accent)}
@@ -458,12 +505,23 @@ option{background:var(--c1)}
       <button class="icon-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> CSV</button>
       <button class="icon-btn" onclick="openImport()"><i class="fa-solid fa-upload"></i> Import</button>
       <button class="icon-btn" onclick="openAnalytics()" title="Analytics (A)"><i class="fa-solid fa-chart-line"></i></button>
+      <button class="icon-btn" onclick="openAIAssist()" title="AI writing assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
       <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
       <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
     </div>
   </div>
 
+  <!-- PWA Install Banner -->
+  <div class="pwa-banner" id="pwaBanner">
+    <i class="fa-solid fa-mobile-screen" style="color:var(--accent);font-size:1.1rem;flex-shrink:0"></i>
+    <span class="pwa-banner-text"><strong>Install HuntLog</strong> — add to your home screen for quick access and push reminders</span>
+    <button class="pwa-install-btn" onclick="pwaTriggerInstall()"><i class="fa-solid fa-download"></i> Install</button>
+    <button class="pwa-dismiss-btn" onclick="pwaDismiss()" title="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
   <div class="stats-row">
+
+
     <div class="stat s-all active" onclick="filterStat(this,'all')"><div class="stat-num" id="cnt-all">0</div><div class="stat-label">Total</div></div>
     <div class="stat s-applied" onclick="filterStat(this,'applied')"><div class="stat-num" id="cnt-applied">0</div><div class="stat-label">Applied</div></div>
     <div class="stat s-screen" onclick="filterStat(this,'screening')"><div class="stat-num" id="cnt-screen">0</div><div class="stat-label">Screening</div></div>
@@ -588,6 +646,17 @@ option{background:var(--c1)}
       </div>
     </div>
     <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, deadlines, impressions…"></textarea></div>
+    <div class="form-group">
+      <label class="form-label">Fit score <span style="color:var(--c4);font-weight:400;text-transform:none">— how well does this role match your goals?</span></label>
+      <div class="match-score-wrap">
+        <button type="button" class="match-star" data-star="1" onclick="setMatchScore(1)">★</button>
+        <button type="button" class="match-star" data-star="2" onclick="setMatchScore(2)">★</button>
+        <button type="button" class="match-star" data-star="3" onclick="setMatchScore(3)">★</button>
+        <button type="button" class="match-star" data-star="4" onclick="setMatchScore(4)">★</button>
+        <button type="button" class="match-star" data-star="5" onclick="setMatchScore(5)">★</button>
+        <span class="match-score-label" id="matchScoreLabel">Not rated</span>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeAdd()">Cancel</button>
       <button class="btn-save" id="saveBtn" onclick="saveJob()">Save application</button>
@@ -678,7 +747,110 @@ option{background:var(--c1)}
   </div>
 </div>
 
-<script type="module">
+<!-- AI WRITING ASSISTANT MODAL -->
+<div class="ai-overlay" id="aiModal" onclick="if(event.target===this)closeAIAssist()">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <div class="ai-modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Writing Assistant</div>
+      <button class="detail-close" onclick="closeAIAssist()"><i class="fa-solid fa-xmark"></i> Close</button>
+    </div>
+    <div class="ai-mode-tabs">
+      <button class="ai-mode-tab active" id="aiTabCover" onclick="setAIMode('cover')"><i class="fa-solid fa-file-lines"></i> Cover letter</button>
+      <button class="ai-mode-tab" id="aiTabSummary" onclick="setAIMode('summary')"><i class="fa-solid fa-align-left"></i> Tailored summary</button>
+      <button class="ai-mode-tab" id="aiTabPrep" onclick="setAIMode('prep')"><i class="fa-solid fa-comments"></i> Interview prep</button>
+    </div>
+    <div>
+      <label class="form-label">Job description <span style="color:var(--c4);font-weight:400;text-transform:none">— paste the full JD</span></label>
+      <textarea class="ai-jd-textarea" id="aiJDInput" placeholder="Paste the full job description here…"></textarea>
+    </div>
+    <div class="ai-resume-note" id="aiResumeNote">
+      <i class="fa-solid fa-circle-info"></i>
+      <span id="aiResumeNoteText">Tip: add your resume URL in the job form so the AI can reference it.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <button class="ai-generate-btn" id="aiGenerateBtn" onclick="runAIAssist()">
+        <i class="fa-solid fa-sparkles"></i> Generate
+      </button>
+      <span style="font-size:12px;color:var(--c4)" id="aiJobContext"></span>
+    </div>
+    <div class="ai-output-wrap" id="aiOutputWrap">
+      <div class="ai-output-label">
+        <span id="aiOutputLabel">Generated cover letter</span>
+        <button class="ai-copy-btn" id="aiCopyBtn" onclick="copyAIOutput()"><i class="fa-solid fa-copy"></i> Copy</button>
+      </div>
+      <div class="ai-output" id="aiOutput"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PHASE 5: PWA SETUP ──
+(()=>{
+  // Inject manifest as a blob so no separate file is needed
+  const manifest={
+    name:'HuntLog',short_name:'HuntLog',
+    description:'Track every application, interview, and offer.',
+    start_url:'/',display:'standalone',
+    background_color:'#0b0b0f',theme_color:'#6366f1',
+    icons:[
+      {src:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" rx="20" fill="%236366f1"/%3E%3Ctext y=".9em" font-size="80" x="10"%3E📋%3C/text%3E%3C/svg%3E',sizes:'any',type:'image/svg+xml'}
+    ]
+  };
+  const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+  const url=URL.createObjectURL(blob);
+  document.getElementById('pwaManifest').href=url;
+
+  // Service worker registration
+  if('serviceWorker' in navigator){
+    const swCode=`
+const CACHE='huntlog-v1';
+const PRECACHE=['/'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(PRECACHE)).then(()=>self.skipWaiting()));});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+self.addEventListener('fetch',e=>{
+  if(e.request.method!=='GET'||!e.request.url.startsWith(self.location.origin))return;
+  e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||new Response('Offline',{status:503}))));
+});
+self.addEventListener('push',e=>{
+  const data=e.data?e.data.json():{title:'HuntLog',body:'You have a follow-up reminder!'};
+  e.waitUntil(self.registration.showNotification(data.title||'HuntLog',{body:data.body,icon:'/icon-192.png',badge:'/icon-72.png',tag:'huntlog-reminder',requireInteraction:true}));
+});
+self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.openWindow('/'));});
+    `;
+    const swBlob=new Blob([swCode],{type:'application/javascript'});
+    const swUrl=URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl,{scope:'/'}).catch(()=>{});
+  }
+
+  // Install prompt
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();
+    deferredPrompt=e;
+    if(!localStorage.getItem('pwaDismissed')){
+      document.getElementById('pwaBanner').classList.add('visible');
+    }
+  });
+  window.pwaTriggerInstall=()=>{
+    if(!deferredPrompt)return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('pwaBanner').classList.remove('visible');});
+  };
+  window.pwaDismiss=()=>{
+    localStorage.setItem('pwaDismissed','1');
+    document.getElementById('pwaBanner').classList.remove('visible');
+  };
+  // Already installed: hide banner
+  window.matchMedia('(display-mode: standalone)').addEventListener('change',e=>{
+    if(e.matches)document.getElementById('pwaBanner').classList.remove('visible');
+  });
+  if(window.matchMedia('(display-mode: standalone)').matches){
+    document.getElementById('pwaBanner').classList.remove('visible');
+  }
+})();
+</script>
+
+
 import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
 import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
 import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
