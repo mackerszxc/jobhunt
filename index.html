@@ -453,7 +453,6 @@ option{background:var(--c1)}
       </div>
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme (T)" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
       <button class="icon-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> CSV</button>
-      <button class="icon-btn" onclick="openImport()"><i class="fa-solid fa-upload"></i> Import</button>
       <button class="icon-btn" onclick="openAnalytics()" title="Analytics (A)"><i class="fa-solid fa-chart-line"></i></button>
       <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
       <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
@@ -641,24 +640,6 @@ option{background:var(--c1)}
   </div>
 </div>
 
-<!-- IMPORT CSV MODAL -->
-<div class="import-modal-overlay" id="importModal" onclick="if(event.target===this)closeImport()">
-  <div class="import-modal">
-    <h3><i class="fa-solid fa-file-csv" style="color:var(--accent)"></i> Import from CSV</h3>
-    <p style="font-size:12px;color:var(--c4);margin-bottom:12px">Supports LinkedIn, Huntr, or any CSV with columns: title, company, status, date, location, salary, notes, url.</p>
-    <div class="import-drop" id="importDrop" onclick="document.getElementById('csvFileInput').click()">
-      <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
-      Drop your CSV here or click to browse
-      <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVFile(this.files[0])"/>
-    </div>
-    <div class="import-preview" id="importPreview"></div>
-    <div class="import-actions">
-      <button class="btn-cancel" onclick="closeImport()">Cancel</button>
-      <button class="btn-save" id="importConfirmBtn" style="display:none" onclick="confirmImport()">Import jobs</button>
-    </div>
-  </div>
-</div>
-
 <!-- ADMIN OVERLAY -->
 <div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
   <div class="admin-modal">
@@ -672,26 +653,14 @@ option{background:var(--c1)}
 
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
-import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
-import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
 
+const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
 const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
 const fbApp=initializeApp(cfg);
 const auth=getAuth(fbApp);
 const db=getFirestore(fbApp);
-
-// Phase 1: Offline persistence (multi-tab safe)
-enableMultiTabIndexedDbPersistence(db).catch(()=>{});
-
-// Phase 1: Admin check via custom claims (falls back to hardcoded UID during transition)
-const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
-async function isAdmin(user){
-  if(!user)return false;
-  try{
-    const idToken=await user.getIdTokenResult();
-    return idToken.claims.admin===true||user.uid===ADMIN_UID;
-  }catch{return user.uid===ADMIN_UID;}
-}
 
 const SM={applied:{label:'Applied'},screening:{label:'Screening'},interview:{label:'Interview'},offer:{label:'Offer'},rejected:{label:'Rejected'}};
 const REJECT_REASONS={no_response:'No response',skills_gap:'Skills gap',salary_mismatch:'Salary mismatch',position_filled:'Position filled',culture_fit:'Culture fit',withdrew:'I withdrew',other:'Other'};
@@ -897,13 +866,13 @@ function renderKanban(visible){
   const byStatus={};
   cols.forEach(s=>{byStatus[s]=[];});
   visible.forEach(j=>{if(byStatus[j.status])byStatus[j.status].push(j);});
-  container.innerHTML=`<div class="kanban-board" id="kanbanBoard">${cols.map(s=>{
+  container.innerHTML=`<div class="kanban-board">${cols.map(s=>{
     const cards=byStatus[s];
     const cardsHtml=cards.length?cards.map(j=>{
       const n=daysSince(j.date);
       const daysClass=n>30?'very-stale':n>14?'stale':'';
       const daysLabel=n===null?'':(n===0?'today':n===1?'1d ago':`${n}d ago`);
-      return`<div class="kanban-card" draggable="true" data-id="${j.id}" data-status="${j.status}" onclick="window._openDetail('${j.id}')">
+      return`<div class="kanban-card" onclick="window._openDetail('${j.id}')">
         <div class="kanban-card-title">${j.title||''}</div>
         <div class="kanban-card-co">${j.company||''}</div>
         ${j.status==='interview'&&j.interviewRound?`<div style="margin-top:4px"><span class="round-badge" style="font-size:9px;padding:1px 6px">${ROUND_LABELS[j.interviewRound]||`R${j.interviewRound}`}</span></div>`:''}
@@ -913,7 +882,7 @@ function renderKanban(visible){
         </div>
       </div>`;
     }).join(''):`<div class="kanban-empty">empty</div>`;
-    return`<div class="kanban-col" data-status="${s}">
+    return`<div class="kanban-col">
       <div class="kanban-col-header">
         <span class="kanban-col-title ${s}">${SM[s].label}</span>
         <span class="kanban-count">${cards.length}</span>
@@ -922,46 +891,6 @@ function renderKanban(visible){
     </div>`;
   }).join('')}</div>`;
   document.getElementById('noResults').style.display='none';
-  // Attach drag-and-drop
-  initKanbanDragDrop();
-}
-
-// ── KANBAN DRAG & DROP ──
-let dragId=null;
-function initKanbanDragDrop(){
-  document.querySelectorAll('.kanban-card[draggable]').forEach(card=>{
-    card.addEventListener('dragstart',e=>{
-      dragId=card.dataset.id;
-      card.classList.add('dragging');
-      e.dataTransfer.effectAllowed='move';
-    });
-    card.addEventListener('dragend',()=>{
-      card.classList.remove('dragging');
-      document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
-    });
-  });
-  document.querySelectorAll('.kanban-col').forEach(col=>{
-    col.addEventListener('dragover',e=>{
-      e.preventDefault();
-      document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
-      col.classList.add('drag-over');
-    });
-    col.addEventListener('dragleave',()=>col.classList.remove('drag-over'));
-    col.addEventListener('drop',async e=>{
-      e.preventDefault();
-      col.classList.remove('drag-over');
-      const newStatus=col.dataset.status;
-      if(!dragId||!newStatus||!currentUser)return;
-      const job=jobs.find(j=>j.id===dragId);
-      if(!job||job.status===newStatus){dragId=null;return;}
-      setSyncState('syncing');
-      await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,dragId),{status:newStatus});
-      await addDoc(collection(db,`users/${currentUser.uid}/jobs/${dragId}/activity`),{
-        text:`Moved to "${SM[newStatus]?.label}" via Kanban`,ts:serverTimestamp()
-      });
-      dragId=null;
-    });
-  });
 }
 
 function updateBulkBar(){
@@ -1014,17 +943,16 @@ function subscribeJobs(uid){
 }
 
 // ── AUTH ──
-onAuthStateChanged(auth,async user=>{
+onAuthStateChanged(auth,user=>{
   currentUser=user;
   if(user){
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('mainApp').style.display='flex';
     document.getElementById('userAvatar').src=user.photoURL||'';
-    document.getElementById('userName').textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||'';
+    document.getElementById('userName').textContent=user.displayName?.split(' ')[0]||'';
     setSyncState('syncing');
     subscribeJobs(user.uid);
-    const admin=await isAdmin(user);
-    document.getElementById('adminBtn').style.display=admin?'flex':'none';
+    document.getElementById('adminBtn').style.display=user.uid===ADMIN_UID?'flex':'none';
   }else{
     document.getElementById('loginScreen').style.display='flex';
     document.getElementById('mainApp').style.display='none';
@@ -1049,38 +977,6 @@ window.signInGoogle=async()=>{
   }catch(e){alert('Sign-in failed: '+e.message);}
 };
 window.signOutUser=()=>signOut(auth);
-
-// Phase 1: Email/password auth
-function showAuthError(msg){
-  const el=document.getElementById('authError');
-  if(el){el.textContent=msg;setTimeout(()=>{el.textContent='';},4000);}
-}
-window.signInEmail=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  const pass=document.getElementById('authPassword').value;
-  if(!email||!pass){showAuthError('Enter email and password.');return;}
-  try{
-    await signInWithEmailAndPassword(auth,email,pass);
-  }catch(e){showAuthError(e.code==='auth/wrong-password'||e.code==='auth/user-not-found'?'Invalid credentials.':e.message);}
-};
-window.signUpEmail=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  const pass=document.getElementById('authPassword').value;
-  if(!email||!pass){showAuthError('Enter email and password.');return;}
-  if(pass.length<6){showAuthError('Password must be at least 6 characters.');return;}
-  try{
-    const cred=await createUserWithEmailAndPassword(auth,email,pass);
-    await setDoc(doc(db,'users',cred.user.uid),{
-      displayName:email.split('@')[0],email,photoURL:'',lastLoginAt:serverTimestamp(),banned:false
-    },{merge:true});
-  }catch(e){showAuthError(e.code==='auth/email-already-in-use'?'Account already exists. Sign in instead.':e.message);}
-};
-window.resetPassword=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  if(!email){showAuthError('Enter your email first.');return;}
-  try{await sendPasswordResetEmail(auth,email);showAuthError('Reset email sent! Check your inbox.');}
-  catch(e){showAuthError(e.message);}
-};
 
 window.filterStat=function(el,f){
   currentFilter=f;
@@ -1687,100 +1583,6 @@ function renderAnalytics(){
     </div>
   `;
 }
-
-// ── IMPORT CSV ──
-let csvParsed=[];
-window.openImport=function(){document.getElementById('importModal').classList.add('open');};
-window.closeImport=function(){
-  document.getElementById('importModal').classList.remove('open');
-  document.getElementById('importPreview').innerHTML='';
-  document.getElementById('importConfirmBtn').style.display='none';
-  document.getElementById('csvFileInput').value='';
-  csvParsed=[];
-};
-window.handleCSVFile=function(file){
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const text=e.target.result;
-    const lines=text.split(/\r?\n/).filter(l=>l.trim());
-    if(!lines.length)return;
-    const headers=lines[0].split(',').map(h=>h.replace(/^"|"$/g,'').trim().toLowerCase());
-    csvParsed=[];
-    const preview=document.getElementById('importPreview');
-    preview.innerHTML='';
-    for(let i=1;i<Math.min(lines.length,200);i++){
-      const vals=parseCsvLine(lines[i]);
-      const row={};
-      headers.forEach((h,idx)=>{row[h]=(vals[idx]||'').replace(/^"|"$/g,'').trim();});
-      const title=row.title||row['job title']||row['position']||'';
-      const company=row.company||row['company name']||'';
-      if(!title&&!company)continue;
-      const status=normalizeStatus(row.status||row['application status']||'applied');
-      csvParsed.push({title,company,status,
-        location:row.location||row.city||'',
-        salary:row.salary||row['salary range']||'',
-        notes:row.notes||row['note']||'',
-        url:row.url||row['job url']||row['link']||''
-      });
-      const div=document.createElement('div');
-      div.className='import-preview-row';
-      div.textContent=`${title} @ ${company} — ${status}`;
-      preview.appendChild(div);
-    }
-    document.getElementById('importConfirmBtn').style.display=csvParsed.length?'block':'none';
-    document.getElementById('importConfirmBtn').textContent=`Import ${csvParsed.length} jobs`;
-  };
-  reader.readAsText(file);
-};
-function parseCsvLine(line){
-  const result=[];let current='';let inQuotes=false;
-  for(let i=0;i<line.length;i++){
-    if(line[i]==='"'){inQuotes=!inQuotes;}
-    else if(line[i]===','&&!inQuotes){result.push(current);current='';}
-    else{current+=line[i];}
-  }
-  result.push(current);return result;
-}
-function normalizeStatus(s){
-  s=(s||'').toLowerCase().trim();
-  if(s.includes('screen')||s.includes('phone'))return'screening';
-  if(s.includes('interview'))return'interview';
-  if(s.includes('offer'))return'offer';
-  if(s.includes('reject')||s.includes('decline')||s.includes('no'))return'rejected';
-  return'applied';
-}
-window.confirmImport=async function(){
-  if(!currentUser||!csvParsed.length)return;
-  const btn=document.getElementById('importConfirmBtn');
-  btn.textContent='Importing…';btn.disabled=true;
-  setSyncState('syncing');
-  const today=new Date();
-  const dateTs=Timestamp.fromDate(new Date(today.getFullYear(),today.getMonth(),today.getDate()));
-  for(const row of csvParsed){
-    const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),{
-      title:row.title,company:row.company,status:row.status,
-      location:row.location,salary:row.salary,notes:row.notes,url:row.url,
-      tags:[],followupDate:null,recruiter:'',interviewRound:0,rejectReason:'',date:dateTs
-    });
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-      text:'Imported from CSV',ts:serverTimestamp()
-    });
-  }
-  window.closeImport();
-};
-// Drag-over on import drop zone
-(()=>{
-  const drop=document.getElementById('importDrop');
-  if(!drop)return;
-  drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('drag-over');});
-  drop.addEventListener('dragleave',()=>drop.classList.remove('drag-over'));
-  drop.addEventListener('drop',e=>{
-    e.preventDefault();drop.classList.remove('drag-over');
-    const file=e.dataTransfer.files[0];
-    if(file){document.getElementById('csvFileInput').files=e.dataTransfer.files;window.handleCSVFile(file);}
-  });
-})();
 
 // ── KEYBOARD SHORTCUTS ──
 document.addEventListener('keydown',e=>{
