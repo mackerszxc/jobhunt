@@ -337,33 +337,13 @@ option{background:var(--c1)}
 .analytics-kpi-sub{font-size:11px;color:var(--c4);margin-top:2px;font-family:'DM Mono',monospace}
 /* section */
 .analytics-section{background:var(--c2);border:.5px solid var(--c3);border-radius:14px;padding:16px}
-.analytics-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--c4);margin-bottom:12px}
-/* funnel */
-.funnel-rows{display:flex;flex-direction:column;gap:6px}
-.funnel-row{display:flex;align-items:center;gap:10px}
-.funnel-label{font-size:12px;color:var(--c5);width:90px;flex-shrink:0;text-align:right}
-.funnel-bar-wrap{flex:1;background:var(--c3);border-radius:20px;height:10px;overflow:hidden}
-.funnel-bar{height:100%;border-radius:20px;transition:width .4s cubic-bezier(.4,0,.2,1)}
-.funnel-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:24px;flex-shrink:0}
-.funnel-pct{font-family:'DM Mono',monospace;font-size:11px;width:38px;flex-shrink:0;text-align:right}
-/* response time chart */
-.resp-bars{display:flex;align-items:flex-end;gap:6px;height:80px}
-.resp-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.resp-bar{width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:2px;opacity:.8;transition:height .4s}
-.resp-bar-label{font-size:10px;color:var(--c4);text-align:center;white-space:nowrap;font-family:'DM Mono',monospace}
-/* rejection breakdown */
-.reject-rows{display:flex;flex-direction:column;gap:6px}
-.reject-row{display:flex;align-items:center;gap:10px}
-.reject-label{font-size:12px;color:var(--c5);flex:1}
-.reject-bar-wrap{width:100px;background:var(--c3);border-radius:20px;height:6px;flex-shrink:0}
-.reject-bar{height:100%;border-radius:20px;background:var(--rejected)}
-.reject-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:20px;text-align:right;flex-shrink:0}
-/* two col grid */
-.analytics-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:640px){.analytics-grid-2{grid-template-columns:1fr}}
-/* weekly activity */
-.weekly-bars{display:flex;align-items:flex-end;gap:4px;height:60px}
-.weekly-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.analytics-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--c4);margin-bottom:12px}
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:768px){.analytics-grid{grid-template-columns:1fr}}
+
+/* weekly chart elements */
+.weekly-chart{display:flex;align-items:flex-end;justify-content:space-between;height:120px;padding-top:10px;border-bottom:.5px solid var(--c3);margin-bottom:6px;gap:4px}
+.weekly-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
 .weekly-bar{width:100%;background:var(--applied);border-radius:3px 3px 0 0;min-height:1px;opacity:.75}
 .weekly-bar-label{font-size:9px;color:var(--c4);font-family:'DM Mono',monospace}
 /* status donut via conic-gradient */
@@ -381,126 +361,93 @@ option{background:var(--c1)}
 .insight-chip.bad{border-color:var(--rejected);color:var(--rejected)}
 /* empty analytics */
 .analytics-empty{text-align:center;padding:2.5rem;color:var(--c4);font-size:13px}
-
 /* ── MISC ── */
 .app{display:flex;flex-direction:column;min-height:100vh;padding:1.5rem 1.25rem}
 @media(max-width:480px){.app{padding:1rem .75rem}}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
 .view-toggle{display:flex;gap:4px}
-
 /* ── EMAIL AUTH DIVIDER ── */
 .auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--c4);font-size:12px}
 .auth-divider::before,.auth-divider::after{content:'';flex:1;height:.5px;background:var(--c3)}
-.email-auth-form{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.email-auth-input{background:var(--c2);border:.5px solid var(--c3);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s;width:100%}
-.email-auth-input:focus{border-color:var(--accent)}
-.email-btn{background:var(--accent);border:none;border-radius:10px;padding:11px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
-.email-btn:hover{opacity:.88}
-.email-btn.secondary{background:transparent;border:.5px solid var(--c3);color:var(--c5)}
-.email-btn.secondary:hover{border-color:var(--c4);color:var(--c6)}
-.auth-error{font-size:12px;color:var(--rejected);text-align:center;min-height:16px}
-.forgot-link{font-size:12px;color:var(--c4);text-align:center;cursor:pointer;background:none;border:none;font-family:'Syne',sans-serif;margin-top:2px}
-.forgot-link:hover{color:var(--accent)}
+.email-auth-toggle{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;margin-top:10px;font-family:'Syne',sans-serif}
+.email-auth-toggle:hover{text-decoration:underline}
 
-/* ── KANBAN DRAG ── */
-.kanban-card.dragging{opacity:.4;transform:scale(.97)}
-.kanban-col.drag-over{border-color:var(--accent);background:rgba(99,102,241,.06)}
+/* PWA custom banner */
+.pwa-banner{display:none;align-items:center;gap:12px;background:var(--c1);border:.5px solid var(--c3);border-radius:12px;padding:12px 16px;margin-bottom:1.5rem;animation:slideDown .3s ease}
+@keyframes slideDown{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.pwa-banner-text{font-size:12px;color:var(--c5);line-height:1.4;flex:1}
+.pwa-banner-actions{display:flex;align-items:center;gap:8px}
+.pwa-btn-install{background:var(--accent);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+.pwa-btn-dismiss{background:transparent;color:var(--c4);border:none;padding:6px;cursor:pointer;font-size:12px}
 
-/* ── RESUME TRACKER (in form) ── */
-.resume-ver-wrap{display:flex;gap:6px;align-items:center}
-.resume-ver-badge{font-family:'DM Mono',monospace;font-size:11px;background:var(--c3);color:var(--c5);border-radius:20px;padding:2px 10px;display:inline-block}
-
-/* ── PWA INSTALL BANNER ── */
-.pwa-banner{display:none;align-items:center;gap:10px;background:var(--c2);border:.5px solid var(--accent);border-radius:10px;padding:10px 14px;margin-bottom:1rem;flex-wrap:wrap}
-.pwa-banner.visible{display:flex}
-.pwa-banner-text{flex:1;font-size:13px;color:var(--c5)}
-.pwa-banner-text strong{color:var(--c6)}
-.pwa-install-btn{background:var(--accent);border:none;border-radius:8px;padding:7px 14px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;white-space:nowrap}
-.pwa-dismiss-btn{background:transparent;border:none;padding:4px;color:var(--c4);cursor:pointer;font-size:13px}
-
-/* ── AI WRITING ASSISTANT ── */
-.ai-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:1rem}
-.ai-overlay.open{display:flex}
-.ai-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
-.ai-modal-header{display:flex;align-items:center;justify-content:space-between}
-.ai-modal-title{font-size:1.05rem;font-weight:600;color:var(--c6);display:flex;align-items:center;gap:8px}
-.ai-modal-title i{color:var(--accent)}
-.ai-mode-tabs{display:flex;gap:6px}
-.ai-mode-tab{background:var(--c2);border:.5px solid var(--c3);border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
-.ai-mode-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.ai-jd-textarea{width:100%;background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;resize:vertical;min-height:130px;transition:.2s}
-.ai-jd-textarea:focus{border-color:var(--accent)}
-.ai-resume-note{font-size:12px;color:var(--c4);display:flex;align-items:center;gap:6px}
-.ai-resume-note a{color:var(--accent)}
-.ai-generate-btn{background:var(--accent);border:none;border-radius:8px;padding:10px 20px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:8px;transition:.15s;align-self:flex-start}
-.ai-generate-btn:disabled{opacity:.5;cursor:not-allowed}
-.ai-output-wrap{display:none;flex-direction:column;gap:8px}
-.ai-output-wrap.visible{display:flex}
-.ai-output-label{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;justify-content:space-between}
-.ai-output{background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:12px;font-size:13px;color:var(--c5);line-height:1.7;white-space:pre-wrap;max-height:320px;overflow-y:auto}
-.ai-copy-btn{background:transparent;border:.5px solid var(--c3);border-radius:8px;padding:5px 12px;color:var(--c4);font-size:11px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:5px;transition:.15s}
-.ai-copy-btn:hover{border-color:var(--accent);color:var(--accent)}
-.ai-copy-btn.copied{border-color:var(--offer);color:var(--offer)}
-.ai-spinner{width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
-
-/* ── MATCH SCORE (fit rating) ── */
-.match-score-wrap{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px}
-.match-star{background:none;border:none;font-size:18px;cursor:pointer;color:var(--c3);padding:0 1px;line-height:1;transition:.1s}
+/* match-score star items */
+.match-stars{display:flex;gap:4px;margin-top:6px}
+.match-star{font-size:14px;color:var(--c3);cursor:pointer;transition:color .1s}
 .match-star.lit{color:#f59e0b}
-.match-star:hover{transform:scale(1.15)}
-.match-score-label{font-size:11px;color:var(--c4);margin-left:4px}
-.card-match-score{font-size:11px;color:#f59e0b;display:flex;align-items:center;gap:2px}
+.match-star-label{font-size:11px;color:var(--c4);margin-top:4px}
 
-/* ── IMPORT CSV ── */
-.import-drop{border:1.5px dashed var(--c3);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.2s;color:var(--c4);font-size:13px}
-.import-drop:hover,.import-drop.drag-over{border-color:var(--accent);color:var(--accent)}
-.import-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;align-items:center;justify-content:center;padding:1rem}
-.import-modal-overlay.open{display:flex}
-.import-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:440px}
-.import-modal h3{font-size:1rem;font-weight:600;color:var(--c6);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
-.import-preview{max-height:180px;overflow-y:auto;margin:12px 0;font-size:12px;color:var(--c5)}
-.import-preview-row{padding:4px 0;border-bottom:.5px solid var(--c2)}
-.import-actions{display:flex;gap:8px;margin-top:1rem}
+/* AI writing modal elements */
+.ai-modal{max-width:540px}
+.ai-tabs{display:flex;border-bottom:.5px solid var(--c3);margin-bottom:12px}
+.ai-tab{flex:1;background:none;border:none;padding:8px;color:var(--c4);font-size:12px;font-family:'Syne',sans-serif;cursor:pointer;font-weight:600}
+.ai-tab.active{color:var(--accent);border-bottom:2px solid var(--accent)}
+.ai-generate-btn{background:var(--accent);border:none;border-radius:8px;padding:10px 18px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:6px}
+.ai-generate-btn:disabled{opacity:.5;cursor:not-allowed}
+.ai-output-wrap{margin-top:14px;display:none}
+.ai-output-wrap.visible{display:block}
+.ai-output-label{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;justify-content:between}
+.ai-copy-btn{background:var(--c2);border:.5px solid var(--c3);border-radius:4px;padding:2px 8px;font-size:11px;color:var(--c5);cursor:pointer;font-family:'Syne',sans-serif}
+.ai-output{background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:12px;font-size:13px;color:var(--c5);white-space:pre-wrap;max-height:240px;overflow-y:auto;font-family:inherit;line-height:1.5}
+.ai-resume-note{background:var(--screen-bg);border:.5px solid var(--screen);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--screen);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* Import data components */
+.import-preview{background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:10px;max-height:140px;overflow-y:auto;margin-top:10px;font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)}
 </style>
 </head>
 <body>
 
-<h2 class="sr-only">HuntLog — secure job application tracker</h2>
-
-<!-- LOGIN -->
-<div id="loginScreen" class="login-screen">
+<div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <div class="login-logo">hunt<span>log</span></div>
-    <p class="login-sub">Track every application, interview, and offer — all synced securely to your account.</p>
-    <button class="google-btn" onclick="signInGoogle()">
-      <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Continue with Google
-    </button>
-    <div class="auth-divider">or</div>
-    <div class="email-auth-form">
-      <input class="email-auth-input" id="authEmail" type="email" placeholder="Email address" autocomplete="email"/>
-      <input class="email-auth-input" id="authPassword" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')signInEmail()"/>
-      <div class="auth-error" id="authError"></div>
-      <button class="email-btn" onclick="signInEmail()">Sign in with Email</button>
-      <button class="email-btn secondary" onclick="signUpEmail()">Create account</button>
-      <button class="forgot-link" onclick="resetPassword()">Forgot password?</button>
+    <div class="login-logo">Hunt<span>Log</span></div>
+    <div class="login-sub">Track every application, interview, and offer.<br/>Elevate your technical job search pipeline natively.</div>
+    
+    <div id="authInterface">
+      <button class="google-btn" onclick="window.signInGoogle()">
+        <svg class="google-icon" viewBox="0 0 24 24">
+          <path fill="#EA4335" d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.33 0 3.357 2.673 1.386 6.586l3.88 3.179z"/>
+          <path fill="#4285F4" d="M23.605 12.3c0-.823-.074-1.614-.211-2.382H12v4.514h6.51c-.28 1.482-1.12 2.736-2.38 3.582v2.977h3.845c2.25-2.073 3.54-5.123 3.54-8.69z"/>
+          <path fill="#FBBC05" d="M5.266 14.235A7.086 7.086 0 0 1 4.909 12c0-.79.13-1.55.357-2.235L1.386 6.586A11.948 11.948 0 0 0 0 12c0 1.96.47 3.82 1.307 5.486l3.959-3.251z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.077 7.936-2.914l-3.845-2.977c-1.064.714-2.432 1.14-4.091 1.14-3.155 0-5.83-2.132-6.784-5.004L1.257 17.43A11.946 11.946 0 0 0 12 24z"/>
+        </svg>
+        Continue with Google
+      </button>
+      
+      <div class="auth-divider">or manage via security email</div>
+      
+      <div class="form-group" style="text-align:left">
+        <input class="form-input" id="authEmail" type="email" placeholder="e.g. developer@domain.com" style="margin-bottom:8px"/>
+        <input class="form-input" id="authPassword" type="password" placeholder="Enter secure account password"/>
+      </div>
+      
+      <button class="btn-save" id="emailAuthSubmitBtn" onclick="handleEmailAuth()" style="width:100%">Sign In / Register</button>
     </div>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="mainApp" class="app" style="display:none">
+<div class="app" id="app" style="display:none">
+  
   <div class="topbar">
-    <div class="logo">hunt<span>log</span></div>
+    <div class="logo">Hunt<span>Log</span></div>
     <div class="top-right">
-      <div class="sync-dot syncing" id="syncDot"></div>
-      <img class="user-avatar" id="userAvatar" src="" alt="avatar"/>
+      <div class="sync-dot" id="syncDot" title="Synced with secure datastore"></div>
+      <img class="user-avatar" id="userAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231c1c27'/%3E%3Ctext y='1.3em' font-size='40' x='25'%3E👤%3C/text%3E%3C/svg%3E" alt="avatar"/>
       <span class="user-name" id="userName"></span>
-      <!-- view toggle -->
+      
       <div class="view-toggle">
         <button class="icon-btn active-view" id="listViewBtn" onclick="setView('list')" title="List view"><i class="fa-solid fa-list"></i></button>
         <button class="icon-btn" id="kanbanViewBtn" onclick="setView('kanban')" title="Kanban view"><i class="fa-solid fa-table-columns"></i></button>
       </div>
+      
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme (T)" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
       <button class="icon-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> CSV</button>
       <button class="icon-btn" onclick="openImport()"><i class="fa-solid fa-upload"></i> Import</button>
@@ -511,88 +458,122 @@ option{background:var(--c1)}
     </div>
   </div>
 
-  <!-- PWA Install Banner -->
   <div class="pwa-banner" id="pwaBanner">
     <i class="fa-solid fa-mobile-screen" style="color:var(--accent);font-size:1.1rem;flex-shrink:0"></i>
     <span class="pwa-banner-text"><strong>Install HuntLog</strong> — add to your home screen for quick access and push reminders</span>
-    <button class="pwa-install-btn" onclick="pwaTriggerInstall()"><i class="fa-solid fa-download"></i> Install</button>
-    <button class="pwa-dismiss-btn" onclick="pwaDismiss()" title="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+    <div class="pwa-banner-actions">
+      <button class="pwa-btn-install" onclick="triggerPWAInstall()">Install</button>
+      <button class="pwa-btn-dismiss" onclick="dismissPWABanner()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
   </div>
 
   <div class="stats-row">
-
-
-    <div class="stat s-all active" onclick="filterStat(this,'all')"><div class="stat-num" id="cnt-all">0</div><div class="stat-label">Total</div></div>
-    <div class="stat s-applied" onclick="filterStat(this,'applied')"><div class="stat-num" id="cnt-applied">0</div><div class="stat-label">Applied</div></div>
-    <div class="stat s-screen" onclick="filterStat(this,'screening')"><div class="stat-num" id="cnt-screen">0</div><div class="stat-label">Screening</div></div>
-    <div class="stat s-interview" onclick="filterStat(this,'interview')"><div class="stat-num" id="cnt-interview">0</div><div class="stat-label">Interview</div></div>
-    <div class="stat s-offer" onclick="filterStat(this,'offer')"><div class="stat-num" id="cnt-offer">0</div><div class="stat-label">Offers</div></div>
+    <div class="stat s-all active" id="st-all" onclick="setFilter('all')">
+      <div class="stat-num" id="cnt-all">0</div>
+      <div class="stat-label">Total Logs</div>
+    </div>
+    <div class="stat s-applied" id="st-applied" onclick="setFilter('applied')">
+      <div class="stat-num" id="cnt-applied">0</div>
+      <div class="stat-label">Applied</div>
+    </div>
+    <div class="stat s-screen" id="st-screening" onclick="setFilter('screening')">
+      <div class="stat-num" id="cnt-screen">0</div>
+      <div class="stat-label">Screening</div>
+    </div>
+    <div class="stat s-interview" id="st-interview" onclick="setFilter('interview')">
+      <div class="stat-num" id="cnt-interview">0</div>
+      <div class="stat-label">Interviews</div>
+    </div>
+    <div class="stat s-offer" id="st-offer" onclick="setFilter('offer')">
+      <div class="stat-num" id="cnt-offer">0</div>
+      <div class="stat-label">Offers</div>
+    </div>
   </div>
 
   <div class="toolbar">
     <div class="search-wrap">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input class="search-input" id="searchInput" type="text" placeholder="Search jobs, companies, notes… (/)" oninput="onSearch(this.value)"/>
+      <input class="search-input" id="searchInput" placeholder="Search position, company, or custom tags…" oninput="onSearchChange()"/>
     </div>
-    <select class="sort-select" onchange="onSort(this.value)" id="sortSelect">
-      <option value="date-desc">Newest first</option>
-      <option value="date-asc">Oldest first</option>
-      <option value="company-asc">Company A–Z</option>
-      <option value="company-desc">Company Z–A</option>
-      <option value="title-asc">Title A–Z</option>
-      <option value="status">Status</option>
-      <option value="salary-desc">Salary ↓</option>
-      <option value="stale">Most stale</option>
+    <select class="sort-select" id="sortSelect" onchange="onSortChange()">
+      <option value="date-desc">Applied: Newest First</option>
+      <option value="date-asc">Applied: Oldest First</option>
+      <option value="company-asc">Company: A–Z</option>
+      <option value="company-desc">Company: Z–A</option>
+      <option value="title-asc">Role Title: A–Z</option>
+      <option value="status">Pipeline Stage order</option>
     </select>
-    <button class="add-btn" onclick="openAdd()" title="Add job (N)"><i class="fa-solid fa-plus"></i> Add Job</button>
-    <button class="icon-btn" onclick="toggleQuickAdd()" id="quickAddBtn" title="Quick capture (Q)"><i class="fa-solid fa-bolt"></i></button>
+    <button class="icon-btn" onclick="toggleQuickAdd()" title="Toggle Quick Add Input Bar (Q)"><i class="fa-solid fa-bolt"></i> Quick Add</button>
+    <button class="add-btn" onclick="window.openAdd()"><i class="fa-solid fa-plus"></i> Track New Job <span class="kbd">N</span></button>
   </div>
 
-  <!-- Quick Add Bar -->
   <div class="quick-add-bar hidden" id="quickAddBar">
-    <input class="quick-input qi-title" id="qa-title" placeholder="Job title *" onkeydown="qaKeydown(event)"/>
-    <input class="quick-input qi-company" id="qa-company" placeholder="Company *" onkeydown="qaKeydown(event)"/>
-    <select class="quick-select" id="qa-status" onkeydown="qaKeydown(event)">
+    <input class="quick-input qi-title" id="qa-title" placeholder="Job Title... (e.g. Frontend Engineer)"/>
+    <input class="quick-input qi-company" id="qa-company" placeholder="Company Name... (e.g. Stripe)"/>
+    <select class="quick-select" id="qa-status">
       <option value="applied">Applied</option>
       <option value="screening">Screening</option>
       <option value="interview">Interview</option>
       <option value="offer">Offer</option>
-      <option value="rejected">Rejected</option>
     </select>
-    <button class="quick-save-btn" onclick="saveQuickAdd()">Add <span class="kbd">↵</span></button>
+    <button class="quick-save-btn" onclick="saveQuickAdd()">Save Entry</button>
     <button class="quick-cancel-btn" onclick="toggleQuickAdd()"><i class="fa-solid fa-xmark"></i></button>
-    <span class="quick-hint"><span class="kbd">Tab</span> between fields · <span class="kbd">↵</span> to save · <span class="kbd">Esc</span> to close</span>
+    <span class="quick-hint">Press <span class="kbd">Enter</span> inside inputs to fire. Defaults to current date with blank metadata notes.</span>
   </div>
 
-  <!-- Bulk Action Bar -->
   <div class="bulk-bar" id="bulkBar">
-    <span class="bulk-info" id="bulkInfo">0 selected</span>
-    <div class="bulk-status-wrap" id="bulkStatusWrap"></div>
-    <button class="bulk-del-btn" onclick="bulkDelete()"><i class="fa-solid fa-trash"></i> Delete</button>
-    <button class="bulk-clear" onclick="clearSelection()" title="Clear selection"><i class="fa-solid fa-xmark"></i></button>
+    <button class="bulk-clear" onclick="clearBulkSelection()"><i class="fa-solid fa-minus-square"></i></button>
+    <div class="bulk-info" id="bulkInfo">0 applications selected</div>
+    <div class="bulk-status-wrap">
+      <button class="bulk-status-btn" onclick="bulkUpdateStatus('applied')">Move to Applied</button>
+      <button class="bulk-status-btn" onclick="bulkUpdateStatus('screening')">Move to Screening</button>
+      <button class="bulk-status-btn" onclick="bulkUpdateStatus('interview')">Move to Interview</button>
+      <button class="bulk-status-btn" onclick="bulkUpdateStatus('offer')">Move to Offer</button>
+      <button class="bulk-status-btn" onclick="bulkUpdateStatus('rejected')">Move to Rejected</button>
+    </div>
+    <button class="bulk-del-btn" onclick="bulkDeleteJobs()"><i class="fa-solid fa-trash-can"></i> Bulk Delete</button>
   </div>
 
-  <div id="jobsList"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
-  <div class="no-results" id="noResults" style="display:none">No matching jobs found.</div>
+  <div id="listView">
+    <div class="jobs-list" id="jobsList"></div>
+  </div>
+  
+  <div id="kanbanView" style="display:none">
+    <div class="kanban-board" id="kanbanBoard"></div>
+  </div>
+
+  <div class="loading-state" id="loadingState">
+    <div class="spinner"></div> Loading job pipeline dataset securely...
+  </div>
+  <div class="no-results" id="noResults" style="display:none">
+    No indexed application data matches your designated filter view bounds.
+  </div>
+  
+  <div class="empty-state" id="emptyState" style="display:none">
+    <div class="empty-icon">📋</div>
+    <div class="empty-title">Your pipeline tracker is empty</div>
+    <div class="empty-sub">Begin indexing your job tracking journey by mapping a real-time card or uploading custom CSV logs.</div>
+    <button class="empty-cta" onclick="window.openAdd()"><i class="fa-solid fa-plus"></i> Index First Application</button>
+  </div>
+
 </div>
 
-<!-- ADD / EDIT MODAL -->
-<div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAdd()">
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)window.closeAdd()">
   <div class="modal">
-    <div class="modal-title" id="modalTitle">Add new application</div>
-
-    <!-- duplicate warning -->
+    <div class="modal-title" id="modalTitle">Track New Job</div>
+    
     <div class="dup-warning" id="dupWarning"><i class="fa-solid fa-triangle-exclamation"></i><span id="dupWarningText"></span></div>
-
+    
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Job title *</label><input class="form-input" id="f-title" placeholder="e.g. Senior Product Designer" oninput="checkDuplicate()"/></div>
-      <div class="form-group"><label class="form-label">Company *</label><input class="form-input" id="f-company" placeholder="e.g. Acme Corp" oninput="checkDuplicate()"/></div>
+      <div class="form-group"><label class="form-label">Job title *</label><input class="form-input" id="f-title" placeholder="e.g. Senior Product Designer" oninput="window.checkDuplicate()"/></div>
+      <div class="form-group"><label class="form-label">Company *</label><input class="form-input" id="f-company" placeholder="e.g. Acme Corp" oninput="window.checkDuplicate()"/></div>
     </div>
+    
     <div class="form-row">
       <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-location" placeholder="e.g. Remote / Manila"/></div>
       <div class="form-group">
         <label class="form-label">Status</label>
-        <select class="form-select" id="f-status" onchange="onStatusChange()">
+        <select class="form-select" id="f-status" onchange="window.onStatusChange()">
           <option value="applied">Applied</option>
           <option value="screening">Screening</option>
           <option value="interview">Interview</option>
@@ -602,177 +583,197 @@ option{background:var(--c1)}
       </div>
     </div>
 
-    <!-- Interview round section (shown only when status=interview) -->
     <div class="form-group round-section" id="roundSection">
       <label class="form-label">Interview round</label>
       <div class="round-btns" id="roundBtns">
-        <button type="button" class="round-btn" onclick="selectRound(1)">Round 1 — Phone Screen</button>
-        <button type="button" class="round-btn" onclick="selectRound(2)">Round 2 — Technical</button>
-        <button type="button" class="round-btn" onclick="selectRound(3)">Round 3 — Final</button>
-        <button type="button" class="round-btn" onclick="selectRound(4)">Offer Stage</button>
+        <button type="button" class="round-btn" onclick="window.selectRound(1)">Round 1 — Phone Screen</button>
+        <button type="button" class="round-btn" onclick="window.selectRound(2)">Round 2 — Technical</button>
+        <button type="button" class="round-btn" onclick="window.selectRound(3)">Round 3 — Final</button>
+        <button type="button" class="round-btn" onclick="window.selectRound(4)">Offer Stage</button>
       </div>
     </div>
 
-    <!-- Rejection reason section (shown only when status=rejected) -->
     <div class="form-group reject-section" id="rejectSection">
-      <label class="form-label">Rejection reason</label>
-      <select class="form-select" id="f-rejectreason">
-        <option value="">— select if known —</option>
-        <option value="no_response">No response / ghosted</option>
-        <option value="skills_gap">Skills gap / not qualified</option>
-        <option value="salary_mismatch">Salary mismatch</option>
-        <option value="position_filled">Position already filled</option>
-        <option value="culture_fit">Culture fit</option>
-        <option value="withdrew">I withdrew</option>
-        <option value="other">Other</option>
+      <label class="form-label">Primary Reason for Rejection</label>
+      <select class="form-select" id="f-rejectReason">
+        <option value="ghosted">Ghosted / No Reply</option>
+        <option value="resume-drop">Initial Resume Screen Rejection</option>
+        <option value="tech-fail">Technical Interview Challenge Failure</option>
+        <option value="culture-fit">Behavioral / Alignment Conflict</option>
+        <option value="compensation">Salary / Budget Expectations Mismatch</option>
+        <option value="market-freeze">Role Frozen / Hiring Pipeline Cancelled</option>
       </select>
     </div>
 
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Salary range</label><input class="form-input" id="f-salary" placeholder="e.g. ₱80k–120k / yr"/></div>
-      <div class="form-group"><label class="form-label">Applied date</label><input class="form-input" id="f-date" type="date"/></div>
+      <div class="form-group"><label class="form-label">Salary / Rate Package</label><input class="form-input" id="f-salary" placeholder="e.g. ₱70k/mo, $90k/yr"/></div>
+      <div class="form-group"><label class="form-label">Application Date</label><input class="form-input" id="f-date" type="date"/></div>
     </div>
-    <div class="form-group"><label class="form-label">Recruiter name & email</label><input class="form-input" id="f-recruiter" placeholder="e.g. Sarah Cruz · sarah@company.com"/></div>
-    <div class="form-group"><label class="form-label">Job posting URL</label><input class="form-input" id="f-url" type="url" placeholder="https://…"/></div>
+
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Resume URL</label><input class="form-input" id="f-resumeUrl" type="url" placeholder="Google Drive, Notion, etc."/></div>
-      <div class="form-group"><label class="form-label">Resume version</label><input class="form-input" id="f-resumeVersion" placeholder="e.g. v3 · SWE tailored"/></div>
+      <div class="form-group"><label class="form-label">Recruiter Contact / Email</label><input class="form-input" id="f-recruiter" placeholder="e.g. jane.d@company.com"/></div>
+      <div class="form-group"><label class="form-label">Follow-up Reminder Date</label><input class="form-input" id="f-followup" type="date"/></div>
     </div>
-    <div class="form-group"><label class="form-label">Follow-up date</label><input class="form-input" id="f-followup" type="date"/></div>
+
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Resume Link URL</label><input class="form-input" id="f-resumeUrl" type="url" placeholder="e.g. Drive / Dropbox URL"/></div>
+      <div class="form-group"><label class="form-label">Resume Track ID / Tag Version</label><input class="form-input" id="f-resumeVersion" placeholder="e.g. Tech-Resume-V2"/></div>
+    </div>
+
     <div class="form-group">
-      <label class="form-label">Tags <span style="color:var(--c4);font-weight:400;text-transform:none">— type & press Enter</span></label>
+      <label class="form-label">Metadata Tags <span style="font-size:10px;text-transform:none;color:var(--c4)">(Press Enter or Comma)</span></label>
       <div class="tags-input-wrap" id="tagsWrap" onclick="document.getElementById('tagInput').focus()">
-        <input class="tag-text-input" id="tagInput" placeholder="priority, referral, cold apply…" onkeydown="handleTagInput(event)"/>
+        <input class="tag-text-input" id="tagInput" placeholder="Add custom..." onkeydown="window.handleTagInput(event)"/>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, deadlines, impressions…"></textarea></div>
+
     <div class="form-group">
-      <label class="form-label">Fit score <span style="color:var(--c4);font-weight:400;text-transform:none">— how well does this role match your goals?</span></label>
-      <div class="match-score-wrap">
-        <button type="button" class="match-star" data-star="1" onclick="setMatchScore(1)">★</button>
-        <button type="button" class="match-star" data-star="2" onclick="setMatchScore(2)">★</button>
-        <button type="button" class="match-star" data-star="3" onclick="setMatchScore(3)">★</button>
-        <button type="button" class="match-star" data-star="4" onclick="setMatchScore(4)">★</button>
-        <button type="button" class="match-star" data-star="5" onclick="setMatchScore(5)">★</button>
-        <span class="match-score-label" id="matchScoreLabel">Not rated</span>
+      <label class="form-label">Role Fit Score Rating</label>
+      <div class="match-stars" id="modalStars">
+        <i class="fa-solid fa-star match-star" onclick="window.setMatchScore(1)"></i>
+        <i class="fa-solid fa-star match-star" onclick="window.setMatchScore(2)"></i>
+        <i class="fa-solid fa-star match-star" onclick="window.setMatchScore(3)"></i>
+        <i class="fa-solid fa-star match-star" onclick="window.setMatchScore(4)"></i>
+        <i class="fa-solid fa-star match-star" onclick="window.setMatchScore(5)"></i>
       </div>
+      <div class="match-star-label" id="matchScoreLabel">Not rated</div>
     </div>
+
+    <div class="form-group">
+      <label class="form-label">Notes & Technical Requirements</label>
+      <textarea class="form-textarea" id="f-notes" placeholder="Paste structural JD metrics, interview questions, or links here..."></textarea>
+    </div>
+
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeAdd()">Cancel</button>
-      <button class="btn-save" id="saveBtn" onclick="saveJob()">Save application</button>
+      <button class="btn-cancel" type="button" onclick="window.closeAdd()">Cancel</button>
+      <button class="btn-save" type="button" onclick="saveJob()">Save Application</button>
     </div>
   </div>
 </div>
 
-<!-- DETAIL PANEL -->
-<div class="detail-overlay" id="detailPanel" onclick="if(event.target===this)closeDetail()">
+<div class="detail-overlay" id="detailPanel" onclick="if(event.target===this)window.closeDetail()">
   <div class="detail-panel">
-    <button class="detail-close" onclick="closeDetail()"><i class="fa-solid fa-xmark"></i> Close</button>
+    <button class="detail-close" onclick="window.closeDetail()"><i class="fa-solid fa-arrow-right"></i> Close Panel</button>
+    
     <div class="detail-header">
-      <div><div class="detail-role" id="d-title"></div><div class="detail-co" id="d-company"></div></div>
-      <button class="edit-btn" onclick="openEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
+      <div>
+        <div class="detail-role" id="d-role"></div>
+        <div class="detail-co" id="d-company"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="edit-btn" onclick="window.openEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
+      </div>
     </div>
+
+    <div class="status-change-label">Pipeline Progression State</div>
+    <div class="status-btns" id="d-statusbtns"></div>
+
+    <div class="detail-field" id="d-round-wrap" style="display:none">
+      <div class="detail-field-label">Interview stage</div>
+      <div class="detail-round-row" id="d-round-btns"></div>
+    </div>
+
+    <div class="reject-prompt" id="d-reject-wrap" style="display:none">
+      <div class="reject-prompt-label">Loss Prevention Architecture — Flag Failure Code</div>
+      <div class="reject-reason-btns" id="d-reject-btns"></div>
+    </div>
+
     <div class="detail-field"><div class="detail-field-label">Location</div><div class="detail-field-val" id="d-location"></div></div>
     <div class="detail-field"><div class="detail-field-label">Salary</div><div class="detail-field-val" id="d-salary"></div></div>
     <div class="detail-field"><div class="detail-field-label">Applied on</div><div class="detail-field-val" id="d-date"></div></div>
     <div class="detail-field" id="d-recruiter-wrap"><div class="detail-field-label">Recruiter</div><div class="detail-field-val" id="d-recruiter"></div></div>
     <div class="detail-field" id="d-url-wrap"><div class="detail-field-label">Job posting</div><div class="detail-field-val" id="d-url"></div></div>
-    <div class="detail-field" id="d-resume-wrap" style="display:none"><div class="detail-field-label">Resume sent</div><div class="detail-field-val" id="d-resume"></div></div>
+    
+    <div class="detail-field" id="d-resume-wrap" style="display:none">
+      <div class="detail-field-label">Linked Tracking Resume Asset</div>
+      <div class="detail-field-val" id="d-resume"></div>
+    </div>
+    
     <div class="detail-field" id="d-followup-wrap"><div class="detail-field-label">Follow-up date</div><div class="detail-field-val" id="d-followup"></div></div>
     <div class="detail-field" id="d-tags-wrap"><div class="detail-field-label">Tags</div><div id="d-tags" class="job-tags-row" style="margin-top:6px"></div></div>
     <div class="detail-field"><div class="detail-field-label">Notes</div><div class="detail-field-val" id="d-notes"></div></div>
-    <!-- interview round detail -->
-    <div class="detail-field" id="d-round-wrap" style="display:none">
-      <div class="detail-field-label">Interview stage</div>
-      <div class="detail-round-row" id="d-round-btns"></div>
-    </div>
-    <!-- rejection reason prompt / display -->
-    <div class="reject-prompt" id="d-reject-wrap" style="display:none">
-      <div class="reject-prompt-label">Why was this rejected?</div>
-      <div class="reject-reason-btns" id="d-reject-btns"></div>
-    </div>
-    <div>
-      <div class="status-change-label">Move to</div>
-      <div class="status-btns" id="d-statusbtns"></div>
-    </div>
+
     <div class="activity-section">
-      <div class="activity-header">Activity log</div>
+      <div class="activity-header">Audit Timeline Log</div>
       <div class="activity-log" id="d-activitylog"></div>
       <div class="activity-input-row">
-        <input class="activity-input" id="activityInput" placeholder="Add a note, call, or update…" onkeydown="if(event.key==='Enter')addActivity()"/>
-        <button class="activity-add-btn" onclick="addActivity()">Log it</button>
+        <input class="activity-input" id="activityInput" placeholder="Log status updates or notes..." onkeydown="if(event.key==='Enter')addActivityItem()"/>
+        <button class="activity-add-btn" onclick="addActivityItem()">Log</button>
       </div>
     </div>
-    <button class="del-btn" onclick="deleteJob()"><i class="fa-solid fa-trash"></i> Delete application</button>
+
+    <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">
+      <div id="d-matchDisplay" style="font-size:12px;color:var(--c4)"></div>
+      <button class="del-btn" onclick="deleteJob()"><i class="fa-solid fa-trash-can"></i> Scrub Application</button>
+    </div>
   </div>
 </div>
 
-<!-- ANALYTICS OVERLAY -->
+<div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
+  <div class="admin-modal">
+    <h2><i class="fa-solid fa-shield-halved"></i> Superuser Administrator Hub</h2>
+    <div id="adminModalBody"></div>
+    <button class="admin-close-btn" onclick="closeAdmin()">Close Control Hub</button>
+  </div>
+</div>
+
 <div class="analytics-overlay" id="analyticsOverlay" onclick="if(event.target===this)closeAnalytics()">
   <div class="analytics-modal">
     <div class="analytics-header">
-      <div class="analytics-title"><i class="fa-solid fa-chart-line"></i> Analytics</div>
+      <div class="analytics-title"><i class="fa-solid fa-chart-pie"></i> Metrics & Pipeline Conversion Insights</div>
       <button class="analytics-close-btn" onclick="closeAnalytics()"><i class="fa-solid fa-xmark"></i> Close</button>
     </div>
-    <div id="analyticsBody"><div class="analytics-empty">No data yet — add some applications first.</div></div>
+    <div id="analyticsModalBody"></div>
   </div>
 </div>
 
-<!-- IMPORT CSV MODAL -->
-<div class="import-modal-overlay" id="importModal" onclick="if(event.target===this)closeImport()">
-  <div class="import-modal">
-    <h3><i class="fa-solid fa-file-csv" style="color:var(--accent)"></i> Import from CSV</h3>
-    <p style="font-size:12px;color:var(--c4);margin-bottom:12px">Supports LinkedIn, Huntr, or any CSV with columns: title, company, status, date, location, salary, notes, url.</p>
-    <div class="import-drop" id="importDrop" onclick="document.getElementById('csvFileInput').click()">
-      <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
-      Drop your CSV here or click to browse
-      <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVFile(this.files[0])"/>
+<div class="modal-overlay" id="importModal" onclick="if(event.target===this)window.closeImport()">
+  <div class="modal">
+    <div class="modal-title">Bulk CSV Import Parser</div>
+    <div class="form-group">
+      <label class="form-label">Select Valid CSV File</label>
+      <input type="file" id="csvFileInput" accept=".csv" onchange="window.handleCSVFile(this.files[0])" style="width:100%;color:var(--c5)"/>
     </div>
-    <div class="import-preview" id="importPreview"></div>
-    <div class="import-actions">
-      <button class="btn-cancel" onclick="closeImport()">Cancel</button>
-      <button class="btn-save" id="importConfirmBtn" style="display:none" onclick="confirmImport()">Import jobs</button>
+    <div style="font-size:11px;color:var(--c4);line-height:1.5;margin-bottom:8px">
+      Accepted Headers: <code>title, company, location, status, salary, notes, url, tags</code>. Delimited arrays inside tags parse automatically.
     </div>
-  </div>
-</div>
-
-<!-- ADMIN OVERLAY -->
-<div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
-  <div class="admin-modal">
-    <h2><i class="fa-solid fa-shield"></i> Admin — All Users</h2>
-    <div id="adminBody" class="admin-loading"><div class="spinner"></div> Loading users…</div>
-    <div style="margin-top:1rem;display:flex;gap:8px">
-      <button class="admin-close-btn" onclick="closeAdmin()">Close</button>
+    <div id="importPreview" class="import-preview"></div>
+    <div class="modal-actions" style="margin-top:14px">
+      <button class="btn-cancel" type="button" onclick="window.closeImport()">Cancel</button>
+      <button class="btn-save" type="button" id="importConfirmBtn" style="display:none" onclick="confirmImport()">Commit Parsed Items</button>
     </div>
   </div>
 </div>
 
-<!-- AI WRITING ASSISTANT MODAL -->
-<div class="ai-overlay" id="aiModal" onclick="if(event.target===this)closeAIAssist()">
-  <div class="ai-modal">
-    <div class="ai-modal-header">
-      <div class="ai-modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Writing Assistant</div>
-      <button class="detail-close" onclick="closeAIAssist()"><i class="fa-solid fa-xmark"></i> Close</button>
+<div class="modal-overlay" id="aiAssistModal" onclick="if(event.target===this)closeAIAssist()">
+  <div class="modal ai-modal">
+    <div class="modal-title" style="display:flex;align-items:center;gap:8px">
+      <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--accent)"></i> Copilot Job Assistant
     </div>
-    <div class="ai-mode-tabs">
-      <button class="ai-mode-tab active" id="aiTabCover" onclick="setAIMode('cover')"><i class="fa-solid fa-file-lines"></i> Cover letter</button>
-      <button class="ai-mode-tab" id="aiTabSummary" onclick="setAIMode('summary')"><i class="fa-solid fa-align-left"></i> Tailored summary</button>
-      <button class="ai-mode-tab" id="aiTabPrep" onclick="setAIMode('prep')"><i class="fa-solid fa-comments"></i> Interview prep</button>
+    
+    <div class="ai-tabs">
+      <button class="ai-tab active" id="aiTab-cover" onclick="setAIMode('cover')">Cover Letter</button>
+      <button class="ai-tab" id="aiTab-follow" onclick="setAIMode('follow')">Follow-up Mail</button>
+      <button class="ai-tab" id="aiTab-interview" onclick="setAIMode('interview')">Interview Guide</button>
     </div>
-    <div>
-      <label class="form-label">Job description <span style="color:var(--c4);font-weight:400;text-transform:none">— paste the full JD</span></label>
-      <textarea class="ai-jd-textarea" id="aiJDInput" placeholder="Paste the full job description here…"></textarea>
+
+    <div class="form-group">
+      <label class="form-label">Job Description Target</label>
+      <textarea class="form-textarea" id="aiJobDescription" style="min-height:110px" placeholder="Paste the text requirements or copy of raw job description here…"></textarea>
     </div>
+
     <div class="ai-resume-note" id="aiResumeNote">
       <i class="fa-solid fa-circle-info"></i>
       <span id="aiResumeNoteText">Tip: add your resume URL in the job form so the AI can reference it.</span>
     </div>
+
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <button class="ai-generate-btn" id="aiGenerateBtn" onclick="runAIAssist()">
         <i class="fa-solid fa-sparkles"></i> Generate
       </button>
       <span style="font-size:12px;color:var(--c4)" id="aiJobContext"></span>
     </div>
+
     <div class="ai-output-wrap" id="aiOutputWrap">
       <div class="ai-output-label">
         <span id="aiOutputLabel">Generated cover letter</span>
@@ -780,1377 +781,1171 @@ option{background:var(--c1)}
       </div>
       <div class="ai-output" id="aiOutput"></div>
     </div>
+
+    <div class="modal-actions" style="margin-top:14px">
+      <button class="btn-cancel" style="width:100%" type="button" onclick="closeAIAssist()">Exit Terminal</button>
+    </div>
   </div>
 </div>
 
-<script>
-// ── PHASE 5: PWA SETUP ──
-(()=>{
-  // Inject manifest as a blob so no separate file is needed
-  const manifest={
-    name:'HuntLog',short_name:'HuntLog',
-    description:'Track every application, interview, and offer.',
-    start_url:'/',display:'standalone',
-    background_color:'#0b0b0f',theme_color:'#6366f1',
-    icons:[
-      {src:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" rx="20" fill="%236366f1"/%3E%3Ctext y=".9em" font-size="80" x="10"%3E📋%3C/text%3E%3C/svg%3E',sizes:'any',type:'image/svg+xml'}
-    ]
-  };
-  const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
-  const url=URL.createObjectURL(blob);
-  document.getElementById('pwaManifest').href=url;
 
-  // Service worker registration
-  if('serviceWorker' in navigator){
-    const swCode=`
-const CACHE='huntlog-v1';
-const PRECACHE=['/'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(PRECACHE)).then(()=>self.skipWaiting()));});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',e=>{
-  if(e.request.method!=='GET'||!e.request.url.startsWith(self.location.origin))return;
-  e.respondWith(fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||new Response('Offline',{status:503}))));
-});
-self.addEventListener('push',e=>{
-  const data=e.data?e.data.json():{title:'HuntLog',body:'You have a follow-up reminder!'};
-  e.waitUntil(self.registration.showNotification(data.title||'HuntLog',{body:data.body,icon:'/icon-192.png',badge:'/icon-72.png',tag:'huntlog-reminder',requireInteraction:true}));
-});
-self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.openWindow('/'));});
-    `;
-    const swBlob=new Blob([swCode],{type:'application/javascript'});
-    const swUrl=URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl,{scope:'/'}).catch(()=>{});
+<script type="module">
+// ── PHASE 1: INITIALIZATION & FIREBASE IMPORTS ──
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  signOut,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  doc, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  getDocs, 
+  getDoc,
+  query, 
+  orderBy, 
+  onSnapshot,
+  serverTimestamp,
+  Timestamp,
+  writeBatch
+} from "https://www.gstatic.com/firebasejs/10.7.1/firestore-data.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js";
+
+// Global Firebase Configurations Map
+const firebaseConfig = {
+  apiKey: "AIzaSyAs-FakeKeyStringForCompilationPurposes",
+  authDomain: "huntlog-data-vault.firebaseapp.com",
+  projectId: "huntlog-data-vault",
+  storageBucket: "huntlog-data-vault.appspot.com",
+  messagingSenderId: "847592018472",
+  appId: "1:847592018472:web:a1b2c3d4e5f6g7h8i9j0k"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const functions = getFunctions(app);
+const provider = new GoogleAuthProvider();
+
+// System global runtime states variables
+let currentUser = null;
+let jobs = [];
+let currentFilter = 'all'; 
+let currentSort = 'date-desc'; 
+let currentView = 'list'; 
+let modalTags = [];
+let editingJobId = null;
+let openJobId = null;
+let quickAddOpen = false;
+let bulkSelectedIds = [];
+let currentRound = 0;
+let aiMode = 'cover';
+let aiCurrentJob = null;
+
+// Static pipeline maps constants
+const SM = {
+  applied: { label: 'Applied', color: 'var(--applied)' },
+  screening: { label: 'Screening', color: 'var(--screen)' },
+  interview: { label: 'Interview', color: 'var(--interview)' },
+  offer: { label: 'Offer', color: 'var(--offer)' },
+  rejected: { label: 'Rejected', color: 'var(--rejected)' }
+};
+const ROUND_LABELS = {
+  1: 'Round 1 — Phone Screen',
+  2: 'Round 2 — Technical',
+  3: 'Round 3 — Final',
+  4: 'Offer Stage'
+};
+const REJECT_REASONS = {
+  'ghosted': 'Ghosted',
+  'resume-drop': 'Resume Rejection',
+  'tech-fail': 'Technical Fail',
+  'culture-fit': 'Culture Mismatch',
+  'compensation': 'Comp Barrier',
+  'market-freeze': 'Role Frozen'
+};
+
+// Expose Auth variables cleanly onto the global window scope to ensure HTML access
+window.signInGoogle = async function() {
+  try {
+    setSyncState('syncing');
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    console.error("Google Authentication System Error Loop:", err);
+    setSyncState('err');
   }
+};
 
-  // Install prompt
-  let deferredPrompt=null;
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault();
-    deferredPrompt=e;
-    if(!localStorage.getItem('pwaDismissed')){
-      document.getElementById('pwaBanner').classList.add('visible');
+window.signOutUser = () => signOut(auth);
+
+// ── PHASE 2: AUTH RUNTIME LISTENER ──
+onAuthStateChanged(auth, async (user) => {
+  const loginScreen = document.getElementById('loginScreen');
+  const appContainer = document.getElementById('app');
+  
+  if (user) {
+    currentUser = user;
+    loginScreen.style.display = 'none';
+    appContainer.style.display = 'flex';
+    
+    // Explicitly reference valid runtime object parameter, fall back gracefully to inline asset if missing
+    document.getElementById('userAvatar').src = user.photoURL || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231c1c27'/%3E%3Ctext y='1.3em' font-size='40' x='25'%3E👤%3C/text%3E%3C/svg%3E";
+    document.getElementById('userName').textContent = user.displayName || user.email;
+    
+    // Resolve administrative backend views visibility bounds check
+    const token = await user.getIdTokenResult();
+    if (token.claims.admin) {
+      document.getElementById('adminBtn').style.display = 'inline-flex';
     }
-  });
-  window.pwaTriggerInstall=()=>{
-    if(!deferredPrompt)return;
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('pwaBanner').classList.remove('visible');});
-  };
-  window.pwaDismiss=()=>{
-    localStorage.setItem('pwaDismissed','1');
-    document.getElementById('pwaBanner').classList.remove('visible');
-  };
-  // Already installed: hide banner
-  window.matchMedia('(display-mode: standalone)').addEventListener('change',e=>{
-    if(e.matches)document.getElementById('pwaBanner').classList.remove('visible');
-  });
-  if(window.matchMedia('(display-mode: standalone)').matches){
-    document.getElementById('pwaBanner').classList.remove('visible');
+    
+    initializePipelineDataStream();
+  } else {
+    currentUser = null;
+    jobs = [];
+    appContainer.style.display = 'none';
+    loginScreen.style.display = 'flex';
   }
-})();
-</script>
+});
 
-
-import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
-import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
-import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
-
-const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
-const fbApp=initializeApp(cfg);
-const auth=getAuth(fbApp);
-const db=getFirestore(fbApp);
-
-// Phase 1: Offline persistence (multi-tab safe)
-enableMultiTabIndexedDbPersistence(db).catch(()=>{});
-
-// Phase 1: Admin check via custom claims (falls back to hardcoded UID during transition)
-const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
-async function isAdmin(user){
-  if(!user)return false;
-  try{
-    const idToken=await user.getIdTokenResult();
-    return idToken.claims.admin===true||user.uid===ADMIN_UID;
-  }catch{return user.uid===ADMIN_UID;}
-}
-
-const SM={applied:{label:'Applied'},screening:{label:'Screening'},interview:{label:'Interview'},offer:{label:'Offer'},rejected:{label:'Rejected'}};
-const REJECT_REASONS={no_response:'No response',skills_gap:'Skills gap',salary_mismatch:'Salary mismatch',position_filled:'Position filled',culture_fit:'Culture fit',withdrew:'I withdrew',other:'Other'};
-const ROUND_LABELS={1:'Round 1 · Phone Screen',2:'Round 2 · Technical',3:'Round 3 · Final',4:'Offer Stage'};
-let jobs=[],currentFilter='all',currentSearch='',currentSort='date-desc',openJobId=null,unsubJobs=null,currentUser=null;
-let selectedIds=new Set();
-let editingJobId=null;
-let modalTags=[];
-let currentRound=0; // 0 = not set
-let currentView='list'; // 'list' or 'kanban'
-
-// ── THEME ──
-function applyTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  const btn=document.getElementById('themeBtn');
-  if(btn)btn.innerHTML=t==='light'?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
-  localStorage.setItem('theme',t);
-}
-window.toggleTheme=()=>{
-  const current=document.documentElement.getAttribute('data-theme')||'dark';
-  applyTheme(current==='dark'?'light':'dark');
-};
-applyTheme(localStorage.getItem('theme')||'dark');
-
-// ── SYNC ──
-function setSyncState(s){
-  const d=document.getElementById('syncDot');
-  d.className='sync-dot'+(s==='syncing'?' syncing':s==='err'?' err':'');
-}
-
-// ── FORMATTING ──
-function fmt(ts){
-  if(!ts)return'—';
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return'—';
-  return d.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
-}
-function fmtFull(ts){
-  if(!ts)return'';
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return'';
-  return d.toLocaleString('en-PH',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-}
-function parseLocalDate(s){
-  if(!s)return null;
-  const[y,m,d]=s.split('-').map(Number);
-  return new Date(y,m-1,d);
-}
-function toDateInput(ts){
-  if(!ts)return'';
-  const d=ts.toDate?ts.toDate():(ts instanceof Date?ts:new Date(ts));
-  if(isNaN(d))return'';
-  return d.toISOString().split('T')[0];
-}
-function fmtFollowup(ts){
-  if(!ts)return null;
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return null;
-  const now=new Date();now.setHours(0,0,0,0);
-  d.setHours(0,0,0,0);
-  const diff=Math.round((d-now)/(1000*60*60*24));
-  if(diff<0)return{label:`Overdue by ${-diff}d`,overdue:true};
-  if(diff===0)return{label:'Follow up today',overdue:true};
-  return{label:`Follow up in ${diff}d`,overdue:false};
-}
-
-// ── DAYS SINCE ──
-function daysSince(ts){
-  if(!ts)return null;
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return null;
-  const now=new Date();now.setHours(0,0,0,0);
-  d.setHours(0,0,0,0);
-  return Math.round((now-d)/(1000*60*60*24));
-}
-function daysBadgeHtml(ts){
-  const n=daysSince(ts);
-  if(n===null)return'';
-  const cls=n>30?'very-stale':n>14?'stale':'';
-  const label=n===0?'today':n===1?'1d ago':`${n}d ago`;
-  return`<span class="days-badge ${cls}">${label}</span>`;
-}
-
-// ── COUNTS ──
-function updateCounts(){
-  document.getElementById('cnt-all').textContent=jobs.length;
-  ['applied','screening','interview','offer'].forEach(s=>{
-    const el=document.getElementById('cnt-'+(s==='screening'?'screen':s));
-    if(el)el.textContent=jobs.filter(j=>j.status===s).length;
-  });
-}
-
-// ── SORT ──
-function sortedJobs(arr){
-  const a=[...arr];
-  switch(currentSort){
-    case'date-asc':return a.sort((x,y)=>tsMs(x.date)-tsMs(y.date));
-    case'company-asc':return a.sort((x,y)=>(x.company||'').localeCompare(y.company||''));
-    case'company-desc':return a.sort((x,y)=>(y.company||'').localeCompare(x.company||''));
-    case'title-asc':return a.sort((x,y)=>(x.title||'').localeCompare(y.title||''));
-    case'status':return a.sort((x,y)=>Object.keys(SM).indexOf(x.status)-Object.keys(SM).indexOf(y.status));
-    case'salary-desc':return a.sort((x,y)=>parseSalary(y.salary)-parseSalary(x.salary));
-    case'stale':return a.sort((x,y)=>tsMs(x.date)-tsMs(y.date)); // oldest first = most stale
-    default:return a.sort((x,y)=>tsMs(y.date)-tsMs(x.date));
+// Email Authentication Handler
+window.handleEmailAuth = async function() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if(!email || !password) { alert('Please execute standard complete auth strings inputs.'); return; }
+  setSyncState('syncing');
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    if(e.code === 'auth/user-not-found') {
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch(createErr) { alert(`Registration failed code trace: ${createErr.message}`); setSyncState('err'); }
+    } else {
+      alert(`Authentication mapping signature match crash: ${e.message}`);
+      setSyncState('err');
+    }
   }
-}
-function tsMs(ts){if(!ts)return 0;const d=ts.toDate?ts.toDate():new Date(ts);return isNaN(d)?0:d.getTime();}
-function parseSalary(s){if(!s)return 0;const m=s.match(/[\d,]+/);return m?parseInt(m[0].replace(/,/g,''),10):0;}
-
-// ── TAG CHIP HTML ──
-const TAG_COLORS={priority:'tag-priority',referral:'tag-referral','cold apply':'tag-cold','cold':'tag-cold'};
-function tagChipHtml(tag){const cls=TAG_COLORS[tag.toLowerCase()]||'tag-custom';return`<span class="tag-chip ${cls}">${tag}</span>`;}
-
-// ── VIEW TOGGLE ──
-window.setView=function(v){
-  currentView=v;
-  localStorage.setItem('view',v);
-  document.getElementById('listViewBtn').classList.toggle('active-view',v==='list');
-  document.getElementById('kanbanViewBtn').classList.toggle('active-view',v==='kanban');
-  // sort select: hide in kanban
-  document.getElementById('sortSelect').style.display=v==='kanban'?'none':'';
-  render();
 };
-// restore saved view
-const savedView=localStorage.getItem('view')||'list';
-// will call setView after render is defined
 
-// ── RENDER ──
-function render(){
-  updateCounts();
-  const q=currentSearch.toLowerCase();
-  let visible=jobs.filter(j=>{
-    const mf=currentFilter==='all'||j.status===currentFilter;
-    // search: title, company, location, tags, notes, recruiter
-    const ms=!q||(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.location||'').toLowerCase().includes(q)||(j.tags||[]).some(t=>t.toLowerCase().includes(q))||(j.notes||'').toLowerCase().includes(q)||(j.recruiter||'').toLowerCase().includes(q);
-    return mf&&ms;
+// ── PHASE 3: CORE DATA PIPELINE SUBSCRIPTION ──
+let unsubscribeStream = null;
+function initializePipelineDataStream() {
+  if (unsubscribeStream) unsubscribeStream();
+  
+  setSyncState('syncing');
+  const q = query(collection(db, `users/${currentUser.uid}/jobs`), orderBy('date', 'desc'));
+  
+  unsubscribeStream = onSnapshot(q, (snapshot) => {
+    jobs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    document.getElementById('loadingState').style.display = 'none';
+    
+    updateCounts();
+    renderPipelineDashboard();
+    setSyncState('synced');
+  }, (err) => {
+    console.error("Firestore Core Stream Connection Crash:", err);
+    setSyncState('err');
   });
-  visible=sortedJobs(visible);
+}
 
-  if(jobs.length===0){
-    document.getElementById('jobsList').innerHTML=`
-      <div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <div class="empty-title">No applications yet</div>
-        <div class="empty-sub">Start tracking your job search by adding your first application. Every journey starts somewhere.</div>
-        <button class="empty-cta" onclick="openAdd()">Add your first job</button>
-      </div>`;
-    document.getElementById('noResults').style.display='none';
+function setSyncState(state) {
+  const dot = document.getElementById('syncDot');
+  dot.className = `sync-dot ${state}`;
+  if (state === 'synced') dot.title = "Local storage matched cleanly with Cloud Instance";
+  if (state === 'syncing') dot.title = "Synchronizing database delta states...";
+  if (state === 'err') dot.title = "Database sync failure encountered.";
+}
+
+// ── PHASE 4: DASHBOARD RENDERING RENDERS ──
+function renderPipelineDashboard() {
+  if (jobs.length === 0) {
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('listView').style.display = 'none';
+    document.getElementById('kanbanView').style.display = 'none';
+    document.getElementById('noResults').style.display = 'none';
     return;
   }
+  document.getElementById('emptyState').style.display = 'none';
 
-  if(currentView==='kanban'){
-    renderKanban(visible);
+  // Apply tracking filters pipelines
+  let processed = jobs.filter(j => {
+    if (currentFilter === 'all') return true;
+    return j.status === currentFilter;
+  });
+
+  const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (searchVal) {
+    processed = processed.filter(j => 
+      (j.title || '').toLowerCase().includes(searchVal) ||
+      (j.company || '').toLowerCase().includes(searchVal) ||
+      (j.tags || []).some(t => t.toLowerCase().includes(searchVal))
+    );
+  }
+
+  // Handle visual list vs kanban display rules toggle
+  if (currentView === 'list') {
+    document.getElementById('listView').style.display = 'block';
+    document.getElementById('kanbanView').style.display = 'none';
+    renderListView(processed);
   } else {
-    renderList(visible);
+    document.getElementById('listView').style.display = 'none';
+    document.getElementById('kanbanView').style.display = 'block';
+    renderKanbanView(processed);
   }
 }
 
-function renderList(visible){
-  const container=document.getElementById('jobsList');
-  container.className='jobs-list';
-  container.innerHTML=visible.map(j=>{
-    const fu=j.followupDate?fmtFollowup(j.followupDate):null;
-    const tags=(j.tags||[]).map(tagChipHtml).join('');
-    const isSelected=selectedIds.has(j.id);
-    const roundHtml=j.status==='interview'&&j.interviewRound?`<span class="round-badge">${ROUND_LABELS[j.interviewRound]||`Round ${j.interviewRound}`}</span>`:'';
-    const rejectHtml=j.status==='rejected'&&j.rejectReason?`<div class="rejection-reason"><i class="fa-solid fa-circle-xmark"></i>${REJECT_REASONS[j.rejectReason]||j.rejectReason}</div>`:'';
-    return`<div class="job-card ${j.status}${isSelected?' selected':''}" onclick="window._cardClick(event,'${j.id}')">
-      <div class="job-top">
-        <div class="job-title">
-          <label class="cb-wrap" onclick="event.stopPropagation()">
-            <input type="checkbox" ${isSelected?'checked':''} onchange="window._toggleSelect('${j.id}',this.checked)"/>
-            <div class="cb-mark"><i class="fa-solid fa-check"></i></div>
-          </label>
-          ${j.title||''}
+function renderListView(targetJobs) {
+  const container = document.getElementById('jobsList');
+  if (targetJobs.length === 0) {
+    container.innerHTML = '';
+    document.getElementById('noResults').style.display = 'block';
+    return;
+  }
+  document.getElementById('noResults').style.display = 'none';
+
+  const sorted = sortedJobs(targetJobs);
+  container.innerHTML = sorted.map(j => {
+    const isChecked = bulkSelectedIds.includes(j.id);
+    const fu = fmtFollowup(j.followupDate);
+    const fuHtml = fu ? `<div class="follow-up-badge ${fu.overdue?'overdue':''}"><i class="fa-solid fa-clock"></i> ${fu.label}</div>` : '';
+    const roundHtml = (j.status === 'interview' && j.interviewRound) ? `<span class="round-badge">${ROUND_LABELS[j.interviewRound]||`R${j.interviewRound}`}</span>` : '';
+    const rejectHtml = (j.status === 'rejected' && j.rejectReason) ? `<div class="rejection-reason"><i class="fa-solid fa-circle-info"></i> Reason: ${REJECT_REASONS[j.rejectReason]||j.rejectReason}</div>` : '';
+
+    return `
+      <div class="job-card ${j.status} ${openJobId===j.id?'selected':''}" onclick="handleCardClick(event, '${j.id}')">
+        <div class="job-top">
+          <div>
+            <div class="job-title">
+              <label class="cb-wrap" onclick="event.stopPropagation()">
+                <input type="checkbox" data-id="${j.id}" ${isChecked?'checked':''} onchange="handleBulkCheckbox(this)"/>
+                <span class="cb-mark"><i class="fa-solid fa-check"></i></span>
+              </label>
+              ${j.title || 'Untitled Position'}
+            </div>
+            <div class="job-company">${j.company || 'Unknown Entity'}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+            <span class="job-status ${j.status}">${SM[j.status]?.label || j.status}</span>
+            ${daysBadgeHtml(j.date)}
+          </div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-          ${daysBadgeHtml(j.date)}
-          <div class="job-status ${j.status}">${SM[j.status]?.label||j.status}</div>
+        <div class="job-meta">
+          ${j.location ? `<span class="job-tag"><i class="fa-solid fa-location-dot"></i> ${j.location}</span>` : ''}
+          ${j.salary ? `<span class="job-tag"><i class="fa-solid fa-money-bill-wave"></i> ${j.salary}</span>` : ''}
+          ${roundHtml}
+        </div>
+        ${rejectHtml}
+        ${fuHtml}
+        <div class="job-tags-row">
+          ${(j.tags || []).map(t => `<span class="tag-chip tag-custom">${t}</span>`).join('')}
         </div>
       </div>
-      <div class="job-company">${j.company||''}</div>
-      ${roundHtml?`<div style="margin-bottom:4px">${roundHtml}</div>`:''}
-      <div class="job-meta">
-        ${j.location?`<span class="job-tag"><i class="fa-solid fa-location-dot"></i>${j.location}</span>`:''}
-        ${j.salary?`<span class="job-tag"><i class="fa-solid fa-peso-sign"></i>${j.salary}</span>`:''}
-        <span class="job-tag"><i class="fa-solid fa-calendar"></i>${fmt(j.date)}</span>
-        ${j.url?`<span class="job-tag"><i class="fa-solid fa-link"></i>Link</span>`:''}
-        ${j.recruiter?`<span class="job-tag"><i class="fa-solid fa-user-tie"></i>${j.recruiter.split('·')[0].trim()}</span>`:''}
-      </div>
-      ${tags?`<div class="job-tags-row">${tags}</div>`:''}
-      ${rejectHtml}
-      ${fu?`<div class="follow-up-badge${fu.overdue?' overdue':''}"><i class="fa-solid fa-bell"></i>${fu.label}</div>`:''}
-    </div>`;
+    `;
   }).join('');
-  document.getElementById('noResults').style.display=visible.length?'none':'block';
 }
 
-function renderKanban(visible){
-  const container=document.getElementById('jobsList');
-  container.className='';
-  const cols=Object.keys(SM);
-  const byStatus={};
-  cols.forEach(s=>{byStatus[s]=[];});
-  visible.forEach(j=>{if(byStatus[j.status])byStatus[j.status].push(j);});
-  container.innerHTML=`<div class="kanban-board" id="kanbanBoard">${cols.map(s=>{
-    const cards=byStatus[s];
-    const cardsHtml=cards.length?cards.map(j=>{
-      const n=daysSince(j.date);
-      const daysClass=n>30?'very-stale':n>14?'stale':'';
-      const daysLabel=n===null?'':(n===0?'today':n===1?'1d ago':`${n}d ago`);
-      return`<div class="kanban-card" draggable="true" data-id="${j.id}" data-status="${j.status}" onclick="window._openDetail('${j.id}')">
-        <div class="kanban-card-title">${j.title||''}</div>
-        <div class="kanban-card-co">${j.company||''}</div>
-        ${j.status==='interview'&&j.interviewRound?`<div style="margin-top:4px"><span class="round-badge" style="font-size:9px;padding:1px 6px">${ROUND_LABELS[j.interviewRound]||`R${j.interviewRound}`}</span></div>`:''}
-        <div class="kanban-card-meta">
-          <div class="kanban-card-days ${daysClass}">${daysLabel}</div>
-          ${(j.tags||[]).length?`<span class="tag-chip tag-custom" style="font-size:9px">${j.tags[0]}</span>`:''}
+function renderKanbanView(targetJobs) {
+  const board = document.getElementById('kanbanBoard');
+  const columns = ['applied', 'screening', 'interview', 'offer', 'rejected'];
+  
+  board.innerHTML = columns.map(s => {
+    const cards = targetJobs.filter(j => j.status === s);
+    const cardsHtml = cards.length ? cards.map(j => {
+      const n = daysSince(j.date);
+      const daysClass = n > 30 ? 'very-stale' : n > 14 ? 'stale' : '';
+      const daysLabel = n === null ? '' : (n === 0 ? 'today' : n === 1 ? '1d ago' : `${n}d ago`);
+      return `
+        <div class="kanban-card" draggable="true" data-id="${j.id}" data-status="${j.status}" onclick="window._openDetail('${j.id}')">
+          <div class="kanban-card-title">${j.title||''}</div>
+          <div class="kanban-card-co">${j.company||''}</div>
+          ${j.status==='interview'&&j.interviewRound?`<div style="margin-top:4px"><span class="round-badge" style="font-size:9px;padding:1px 6px">${ROUND_LABELS[j.interviewRound]||`R${j.interviewRound}`}</span></div>`:''}
+          <div class="kanban-card-meta">
+            <div class="kanban-card-days ${daysClass}">${daysLabel}</div>
+            ${(j.tags||[]).length?`<span class="tag-chip tag-custom" style="font-size:9px">${j.tags[0]}</span>`:''}
+          </div>
+        </div>`;
+    }).join('') : `<div class="kanban-empty">empty</div>`;
+
+    return `
+      <div class="kanban-col" data-status="${s}">
+        <div class="kanban-col-header">
+          <span class="kanban-col-title ${s}">${SM[s].label}</span>
+          <span class="kanban-count">${cards.length}</span>
         </div>
+        ${cardsHtml}
       </div>`;
-    }).join(''):`<div class="kanban-empty">empty</div>`;
-    return`<div class="kanban-col" data-status="${s}">
-      <div class="kanban-col-header">
-        <span class="kanban-col-title ${s}">${SM[s].label}</span>
-        <span class="kanban-count">${cards.length}</span>
-      </div>
-      ${cardsHtml}
-    </div>`;
-  }).join('')}</div>`;
-  document.getElementById('noResults').style.display='none';
-  // Attach drag-and-drop
+  }).join('');
+
+  document.getElementById('noResults').style.display = 'none';
   initKanbanDragDrop();
 }
 
-// ── KANBAN DRAG & DROP ──
-let dragId=null;
-function initKanbanDragDrop(){
-  document.querySelectorAll('.kanban-card[draggable]').forEach(card=>{
-    card.addEventListener('dragstart',e=>{
-      dragId=card.dataset.id;
-      card.classList.add('dragging');
-      e.dataTransfer.effectAllowed='move';
-    });
-    card.addEventListener('dragend',()=>{
-      card.classList.remove('dragging');
-      document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
-    });
-  });
-  document.querySelectorAll('.kanban-col').forEach(col=>{
-    col.addEventListener('dragover',e=>{
-      e.preventDefault();
-      document.querySelectorAll('.kanban-col').forEach(c=>c.classList.remove('drag-over'));
-      col.classList.add('drag-over');
-    });
-    col.addEventListener('dragleave',()=>col.classList.remove('drag-over'));
-    col.addEventListener('drop',async e=>{
-      e.preventDefault();
-      col.classList.remove('drag-over');
-      const newStatus=col.dataset.status;
-      if(!dragId||!newStatus||!currentUser)return;
-      const job=jobs.find(j=>j.id===dragId);
-      if(!job||job.status===newStatus){dragId=null;return;}
-      setSyncState('syncing');
-      await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,dragId),{status:newStatus});
-      await addDoc(collection(db,`users/${currentUser.uid}/jobs/${dragId}/activity`),{
-        text:`Moved to "${SM[newStatus]?.label}" via Kanban`,ts:serverTimestamp()
-      });
-      dragId=null;
-    });
-  });
-}
+// ── PHASE 5: PWA SETUP ──
+(() => {
+  // Configured as full layout absolute address dynamically stringed for valid PWA asset extraction bounds inside hosting wrappers
+  const manifest = {
+    name: 'HuntLog',
+    short_name: 'HuntLog',
+    description: 'Track every application, interview, and offer.',
+    start_url: window.location.href, 
+    display: 'standalone',
+    background_color: '#0b0b0f',
+    theme_color: '#6366f1',
+    icons: [
+      { src: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" rx="20" fill="%236366f1"/%3E%3Ctext y=".9em" font-size="80" x="10"%3E📋%3C/text%3E%3C/svg%3E', sizes: 'any', type: 'image/svg+xml' }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+  const url = URL.createObjectURL(blob);
+  document.getElementById('pwaManifest').href = url;
 
-function updateBulkBar(){
-  const bar=document.getElementById('bulkBar');
-  const n=selectedIds.size;
-  if(n===0){bar.classList.remove('visible');return;}
-  bar.classList.add('visible');
-  document.getElementById('bulkInfo').textContent=`${n} selected`;
-  document.getElementById('bulkStatusWrap').innerHTML=Object.entries(SM).map(([k,v])=>
-    `<button class="bulk-status-btn" onclick="bulkChangeStatus('${k}')">${v.label}</button>`
-  ).join('');
-}
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+      const CACHE='huntlog-v1';
+      const PRECACHE=['/'];
+      self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(PRECACHE)).then(()=>self.skipWaiting()));});
+      self.addEventListener('activate',e=>{e.waitUntil(self.clients.claim());});
+      self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(res=>res||fetch(e.request)));});
+    `;
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    const swUrl = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swUrl).catch(err => console.warn("PWA Service Worker registration skipped:", err));
+  }
+})();
 
-window._cardClick=function(e,id){
-  if(e.target.closest('.cb-wrap'))return;
-  window._openDetail(id);
-};
-window._toggleSelect=function(id,checked){
-  if(checked)selectedIds.add(id);else selectedIds.delete(id);
-  updateBulkBar();render();
-};
-window.clearSelection=function(){selectedIds.clear();updateBulkBar();render();};
-window.bulkChangeStatus=async function(s){
-  if(!currentUser||selectedIds.size===0)return;
-  if(!confirm(`Change ${selectedIds.size} jobs to "${SM[s]?.label}"?`))return;
-  setSyncState('syncing');
-  const batch=writeBatch(db);
-  selectedIds.forEach(id=>{batch.update(doc(db,`users/${currentUser.uid}/jobs`,id),{status:s});});
-  await batch.commit();
-  selectedIds.clear();updateBulkBar();
-};
-window.bulkDelete=async function(){
-  if(!currentUser||selectedIds.size===0)return;
-  if(!confirm(`Delete ${selectedIds.size} application(s)?`))return;
-  setSyncState('syncing');
-  const batch=writeBatch(db);
-  selectedIds.forEach(id=>{batch.delete(doc(db,`users/${currentUser.uid}/jobs`,id));});
-  await batch.commit();
-  selectedIds.clear();updateBulkBar();
-};
-
-// ── SUBSCRIBE ──
-function subscribeJobs(uid){
-  if(unsubJobs)unsubJobs();
-  const q2=query(collection(db,`users/${uid}/jobs`),orderBy('date','desc'));
-  unsubJobs=onSnapshot(q2,snap=>{
-    jobs=snap.docs.map(d=>({id:d.id,...d.data()}));
-    setSyncState('ok');render();
-  },()=>setSyncState('err'));
-}
-
-// ── AUTH ──
-onAuthStateChanged(auth,async user=>{
-  currentUser=user;
-  if(user){
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('mainApp').style.display='flex';
-    document.getElementById('userAvatar').src=user.photoURL||'';
-    document.getElementById('userName').textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||'';
-    setSyncState('syncing');
-    subscribeJobs(user.uid);
-    const admin=await isAdmin(user);
-    document.getElementById('adminBtn').style.display=admin?'flex':'none';
-  }else{
-    document.getElementById('loginScreen').style.display='flex';
-    document.getElementById('mainApp').style.display='none';
-    if(unsubJobs)unsubJobs();
-    jobs=[];
+// PWA installation intercept definitions handles
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if(localStorage.getItem('pwaDismissed') !== 'true') {
+    document.getElementById('pwaBanner').style.display = 'flex';
   }
 });
-
-async function getClientIP(){try{const r=await fetch('https://api.ipify.org?format=json');const d=await r.json();return d.ip||'unknown';}catch{return'unknown';}}
-
-window.signInGoogle=async()=>{
-  try{
-    const result=await signInWithPopup(auth,new GoogleAuthProvider());
-    const user=result.user;
-    const ip=await getClientIP();
-    await setDoc(doc(db,'users',user.uid),{
-      displayName:user.displayName||'',email:user.email||'',photoURL:user.photoURL||'',
-      lastLoginIP:ip,lastLoginAt:serverTimestamp(),banned:false
-    },{merge:true});
-    const snap=await getDoc(doc(db,'users',user.uid));
-    if(snap.data()?.banned){await signOut(auth);alert('Your account has been suspended.');return;}
-  }catch(e){alert('Sign-in failed: '+e.message);}
+window.triggerPWAInstall = async function() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') document.getElementById('pwaBanner').style.display = 'none';
+  deferredPrompt = null;
 };
-window.signOutUser=()=>signOut(auth);
-
-// Phase 1: Email/password auth
-function showAuthError(msg){
-  const el=document.getElementById('authError');
-  if(el){el.textContent=msg;setTimeout(()=>{el.textContent='';},4000);}
-}
-window.signInEmail=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  const pass=document.getElementById('authPassword').value;
-  if(!email||!pass){showAuthError('Enter email and password.');return;}
-  try{
-    await signInWithEmailAndPassword(auth,email,pass);
-  }catch(e){showAuthError(e.code==='auth/wrong-password'||e.code==='auth/user-not-found'?'Invalid credentials.':e.message);}
-};
-window.signUpEmail=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  const pass=document.getElementById('authPassword').value;
-  if(!email||!pass){showAuthError('Enter email and password.');return;}
-  if(pass.length<6){showAuthError('Password must be at least 6 characters.');return;}
-  try{
-    const cred=await createUserWithEmailAndPassword(auth,email,pass);
-    await setDoc(doc(db,'users',cred.user.uid),{
-      displayName:email.split('@')[0],email,photoURL:'',lastLoginAt:serverTimestamp(),banned:false
-    },{merge:true});
-  }catch(e){showAuthError(e.code==='auth/email-already-in-use'?'Account already exists. Sign in instead.':e.message);}
-};
-window.resetPassword=async()=>{
-  const email=document.getElementById('authEmail').value.trim();
-  if(!email){showAuthError('Enter your email first.');return;}
-  try{await sendPasswordResetEmail(auth,email);showAuthError('Reset email sent! Check your inbox.');}
-  catch(e){showAuthError(e.message);}
+window.dismissPWABanner = function() {
+  document.getElementById('pwaBanner').style.display = 'none';
+  localStorage.setItem('pwaDismissed', 'true');
 };
 
-window.filterStat=function(el,f){
-  currentFilter=f;
-  document.querySelectorAll('.stat').forEach(s=>s.classList.remove('active'));
-  el.classList.add('active');render();
+// ── PHASE 6: OPERATIONAL HELPERS & DIALECTS ──
+window.toggleQuickAdd = function() {
+  quickAddOpen = !quickAddOpen;
+  const bar = document.getElementById('quickAddBar');
+  bar.classList.toggle('hidden', !quickAddOpen);
+  if(quickAddOpen) document.getElementById('qa-title').focus();
 };
-window.onSearch=function(v){currentSearch=v;render();};
-window.onSort=function(v){currentSort=v;render();};
 
-// ── QUICK ADD ──
-let quickAddOpen=false;
-window.toggleQuickAdd=function(){
-  quickAddOpen=!quickAddOpen;
-  document.getElementById('quickAddBar').classList.toggle('hidden',!quickAddOpen);
-  document.getElementById('quickAddBtn').classList.toggle('active-view',quickAddOpen);
-  if(quickAddOpen){document.getElementById('qa-title').focus();}
-};
-window.qaKeydown=function(e){
-  if(e.key==='Enter')saveQuickAdd();
-  if(e.key==='Escape'){toggleQuickAdd();}
-};
-window.saveQuickAdd=async function(){
-  if(!currentUser)return;
-  const title=document.getElementById('qa-title').value.trim();
-  const company=document.getElementById('qa-company').value.trim();
-  if(!title||!company){document.getElementById('qa-title').focus();return;}
-  // duplicate check
-  const dup=jobs.find(j=>j.title.toLowerCase()===title.toLowerCase()&&j.company.toLowerCase()===company.toLowerCase());
-  if(dup&&!confirm(`"${title}" at ${company} already exists. Add anyway?`))return;
+window.saveQuickAdd = async function() {
+  const title = document.getElementById('qa-title').value.trim();
+  const company = document.getElementById('qa-company').value.trim();
+  if(!title || !company) return;
+  
   setSyncState('syncing');
-  const status=document.getElementById('qa-status').value;
-  const today=new Date();
-  const dateTs=Timestamp.fromDate(new Date(today.getFullYear(),today.getMonth(),today.getDate()));
-  const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),{
-    title,company,status,date:dateTs,location:'',salary:'',notes:'',url:'',tags:[],followupDate:null,recruiter:'',interviewRound:0,rejectReason:'',resumeUrl:'',resumeVersion:''
+  const status = document.getElementById('qa-status').value;
+  const today = new Date();
+  const dateTs = Timestamp.fromDate(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+  
+  const ref = await addDoc(collection(db, `users/${currentUser.uid}/jobs`), {
+    title, company, status, date: dateTs, location: '', salary: '', notes: '', url: '', tags: [], followupDate: null, recruiter: '', interviewRound: 0, rejectReason: '', resumeUrl: '', resumeVersion: ''
   });
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-    text:`Application added as "${SM[status]?.label}" via quick add`,ts:serverTimestamp()
+  
+  await addDoc(collection(db, `users/${currentUser.uid}/jobs/${ref.id}/activity`), {
+    text: `Application added as "${SM[status]?.label}" via quick add`, ts: serverTimestamp()
   });
-  // clear fields, keep open for next entry
-  document.getElementById('qa-title').value='';
-  document.getElementById('qa-company').value='';
+  
+  document.getElementById('qa-title').value = '';
+  document.getElementById('qa-company').value = '';
   document.getElementById('qa-title').focus();
 };
 
-// ── TAG INPUT ──
-window.handleTagInput=function(e){
-  if(e.key==='Enter'||e.key===','){
+// Map input actions inside Quick Add elements
+document.getElementById('qa-title').addEventListener('keydown', e => { if(e.key==='Enter') window.saveQuickAdd(); });
+document.getElementById('qa-company').addEventListener('keydown', e => { if(e.key==='Enter') window.saveQuickAdd(); });
+
+window.handleTagInput = function(e) {
+  if (e.key === 'Enter' || e.key === ',') {
     e.preventDefault();
-    const val=e.target.value.trim().replace(/,$/,'');
-    if(val&&!modalTags.includes(val)){
+    const val = e.target.value.trim().replace(/,$/, '');
+    if (val && !modalTags.includes(val)) {
       modalTags.push(val);
       renderModalTags();
     }
-    e.target.value='';
+    e.target.value = '';
   }
 };
-function renderModalTags(){
-  const wrap=document.getElementById('tagsWrap');
-  const input=document.getElementById('tagInput');
-  wrap.querySelectorAll('.tag-item').forEach(t=>t.remove());
-  modalTags.forEach((tag,i)=>{
-    const chip=document.createElement('span');
-    chip.className='tag-item';
-    chip.innerHTML=`${tag}<button onclick="removeTag(${i})" type="button">&times;</button>`;
-    wrap.insertBefore(chip,input);
+
+function renderModalTags() {
+  const wrap = document.getElementById('tagsWrap');
+  const input = document.getElementById('tagInput');
+  wrap.querySelectorAll('.tag-item').forEach(t => t.remove());
+  modalTags.forEach((tag, i) => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-item';
+    chip.innerHTML = `${tag}<button onclick="window.removeTag(${i})" type="button">&times;</button>`;
+    wrap.insertBefore(chip, input);
   });
 }
-window.removeTag=function(i){modalTags.splice(i,1);renderModalTags();};
+window.removeTag = function(i) { modalTags.splice(i,1); renderModalTags(); };
 
-// ── STATUS CHANGE IN MODAL ──
-window.onStatusChange=function(){
-  const s=document.getElementById('f-status').value;
-  document.getElementById('roundSection').classList.toggle('visible',s==='interview');
-  document.getElementById('rejectSection').classList.toggle('visible',s==='rejected');
+window.onStatusChange = function() {
+  const s = document.getElementById('f-status').value;
+  document.getElementById('roundSection').classList.toggle('visible', s === 'interview');
+  document.getElementById('rejectSection').classList.toggle('visible', s === 'rejected');
 };
 
-// ── INTERVIEW ROUND ──
-window.selectRound=function(r){
-  currentRound=r;
-  document.querySelectorAll('.round-btn').forEach((b,i)=>b.classList.toggle('active',i+1===r));
+window.selectRound = function(r) {
+  currentRound = r;
+  document.querySelectorAll('.round-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === r));
 };
-function renderRoundBtns(selected){
-  currentRound=selected||0;
-  document.querySelectorAll('.round-btn').forEach((b,i)=>b.classList.toggle('active',i+1===selected));
-}
 
-// ── DUPLICATE CHECK ──
-window.checkDuplicate=function(){
-  if(editingJobId)return; // skip when editing
-  const title=(document.getElementById('f-title').value||'').trim().toLowerCase();
-  const company=(document.getElementById('f-company').value||'').trim().toLowerCase();
-  if(!title||!company){document.getElementById('dupWarning').classList.remove('visible');return;}
-  const dup=jobs.find(j=>j.title.toLowerCase()===title&&j.company.toLowerCase()===company);
-  const warn=document.getElementById('dupWarning');
-  if(dup){
-    document.getElementById('dupWarningText').textContent=`Possible duplicate: "${dup.title}" at ${dup.company} (${SM[dup.status]?.label})`;
+window.checkDuplicate = function() {
+  if (editingJobId) return;
+  const title = (document.getElementById('f-title').value || '').trim().toLowerCase();
+  const company = (document.getElementById('f-company').value || '').trim().toLowerCase();
+  if (!title || !company) { document.getElementById('dupWarning').classList.remove('visible'); return; }
+  
+  const dup = jobs.find(j => j.title.toLowerCase() === title && j.company.toLowerCase() === company);
+  const warn = document.getElementById('dupWarning');
+  if (dup) {
+    document.getElementById('dupWarningText').textContent = `Possible duplicate: "${dup.title}" at ${dup.company} (${SM[dup.status]?.label})`;
     warn.classList.add('visible');
-  }else{
+  } else {
     warn.classList.remove('visible');
   }
 };
 
-// ── ADD / EDIT MODAL ──
-window.openAdd=function(){
-  editingJobId=null;
-  modalTags=[];
-  currentRound=0;
-  document.getElementById('modalTitle').textContent='Add new application';
-  document.getElementById('saveBtn').textContent='Save application';
-  document.getElementById('dupWarning').classList.remove('visible');
-  ['f-title','f-company','f-location','f-salary','f-notes','f-url','f-followup','f-recruiter','f-resumeUrl','f-resumeVersion'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  document.getElementById('f-status').value='applied';
-  document.getElementById('f-rejectreason').value='';
-  document.getElementById('roundSection').classList.remove('visible');
-  document.getElementById('rejectSection').classList.remove('visible');
-  renderRoundBtns(0);
-  const today=new Date();
-  document.getElementById('f-date').value=today.toISOString().split('T')[0];
+window.openAdd = function() {
+  editingJobId = null;
+  modalTags = [];
+  currentRound = 0;
+  window.setMatchScore(0);
+  document.getElementById('modalTitle').textContent = "Track New Job";
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-company').value = '';
+  document.getElementById('f-location').value = '';
+  document.getElementById('f-status').value = 'applied';
+  document.getElementById('f-salary').value = '';
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('f-recruiter').value = '';
+  document.getElementById('f-followup').value = '';
+  document.getElementById('f-notes').value = '';
+  document.getElementById('f-rejectReason').value = 'ghosted';
+  document.getElementById('f-resumeUrl').value = '';
+  document.getElementById('f-resumeVersion').value = '';
+  
+  window.onStatusChange();
   renderModalTags();
-  document.getElementById('addModal').classList.add('open');
-  setTimeout(()=>document.getElementById('f-title').focus(),50);
-};
-window.closeAdd=function(){
-  document.getElementById('addModal').classList.remove('open');
-  editingJobId=null;modalTags=[];currentRound=0;
-};
-window.openEdit=function(){
-  if(!openJobId)return;
-  const j=jobs.find(x=>x.id===openJobId);if(!j)return;
-  editingJobId=openJobId;
-  modalTags=[...(j.tags||[])];
-  currentRound=j.interviewRound||0;
-  document.getElementById('modalTitle').textContent='Edit application';
-  document.getElementById('saveBtn').textContent='Save changes';
   document.getElementById('dupWarning').classList.remove('visible');
-  document.getElementById('f-title').value=j.title||'';
-  document.getElementById('f-company').value=j.company||'';
-  document.getElementById('f-location').value=j.location||'';
-  document.getElementById('f-salary').value=j.salary||'';
-  document.getElementById('f-notes').value=j.notes||'';
-  document.getElementById('f-url').value=j.url||'';
-  document.getElementById('f-recruiter').value=j.recruiter||'';
-  document.getElementById('f-resumeUrl').value=j.resumeUrl||'';
-  document.getElementById('f-resumeVersion').value=j.resumeVersion||'';
-  document.getElementById('f-status').value=j.status||'applied';
-  document.getElementById('f-rejectreason').value=j.rejectReason||'';
-  document.getElementById('f-date').value=toDateInput(j.date);
-  document.getElementById('f-followup').value=toDateInput(j.followupDate);
-  document.getElementById('roundSection').classList.toggle('visible',j.status==='interview');
-  document.getElementById('rejectSection').classList.toggle('visible',j.status==='rejected');
-  renderRoundBtns(currentRound);
-  renderModalTags();
-  document.getElementById('addModal').classList.add('open');
+  document.getElementById('modalOverlay').classList.add('open');
 };
 
-window.saveJob=async function(){
-  if(!currentUser)return;
-  const title=document.getElementById('f-title').value.trim();
-  const company=document.getElementById('f-company').value.trim();
-  if(!title||!company){alert('Please enter a job title and company.');return;}
-  // duplicate guard on new entries
-  if(!editingJobId){
-    const dup=jobs.find(j=>j.title.toLowerCase()===title.toLowerCase()&&j.company.toLowerCase()===company.toLowerCase());
-    if(dup&&!confirm(`"${title}" at ${company} already exists. Save anyway?`))return;
-  }
+window.openEdit = function() {
+  const j = jobs.find(x => x.id === openJobId);
+  if(!j) return;
+  editingJobId = j.id;
+  modalTags = [...(j.tags || [])];
+  currentRound = j.interviewRound || 0;
+  window.setMatchScore(j.matchScore || 0);
+
+  document.getElementById('modalTitle').textContent = `Modify Entry — ${j.company}`;
+  document.getElementById('f-title').value = j.title || '';
+  document.getElementById('f-company').value = j.company || '';
+  document.getElementById('f-location').value = j.location || '';
+  document.getElementById('f-status').value = j.status || 'applied';
+  document.getElementById('f-salary').value = j.salary || '';
+  document.getElementById('f-date').value = fmtInputDate(j.date);
+  document.getElementById('f-recruiter').value = j.recruiter || '';
+  document.getElementById('f-followup').value = fmtInputDate(j.followupDate);
+  document.getElementById('f-notes').value = j.notes || '';
+  document.getElementById('f-rejectReason').value = j.rejectReason || 'ghosted';
+  document.getElementById('f-resumeUrl').value = j.resumeUrl || '';
+  document.getElementById('f-resumeVersion').value = j.resumeVersion || '';
+
+  window.onStatusChange();
+  renderModalTags();
+  document.querySelectorAll('.round-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === currentRound));
+  document.getElementById('dupWarning').classList.remove('visible');
+  document.getElementById('modalOverlay').classList.add('open');
+};
+
+window.closeAdd = function() { document.getElementById('modalOverlay').classList.remove('open'); };
+
+window.saveJob = async function() {
+  const title = document.getElementById('f-title').value.trim();
+  const company = document.getElementById('f-company').value.trim();
+  if(!title || !company) { alert('Title and Company fields are structurally absolute data points.'); return; }
+
   setSyncState('syncing');
-  const status=document.getElementById('f-status').value;
-  const dateVal=document.getElementById('f-date').value;
-  const followupVal=document.getElementById('f-followup').value;
-  const dateTs=dateVal?Timestamp.fromDate(parseLocalDate(dateVal)):serverTimestamp();
-  const followupTs=followupVal?Timestamp.fromDate(parseLocalDate(followupVal)):null;
-  const data={
-    title,company,
-    location:document.getElementById('f-location').value.trim(),
-    status,
-    salary:document.getElementById('f-salary').value.trim(),
-    notes:document.getElementById('f-notes').value.trim(),
-    url:document.getElementById('f-url').value.trim(),
-    recruiter:document.getElementById('f-recruiter').value.trim(),
-    resumeUrl:document.getElementById('f-resumeUrl').value.trim(),
-    resumeVersion:document.getElementById('f-resumeVersion').value.trim(),
-    tags:modalTags,
-    followupDate:followupTs,
-    date:dateTs,
-    interviewRound:status==='interview'?currentRound:0,
-    rejectReason:status==='rejected'?(document.getElementById('f-rejectreason').value||''):''
+  const status = document.getElementById('f-status').value;
+  const rawDate = document.getElementById('f-date').value;
+  const date = rawDate ? Timestamp.fromDate(new Date(rawDate)) : serverTimestamp();
+  
+  const rawFollow = document.getElementById('f-followup').value;
+  const followupDate = rawFollow ? Timestamp.fromDate(new Date(rawFollow)) : null;
+
+  const payload = {
+    title, company, status, date, followupDate,
+    location: document.getElementById('f-location').value.trim(),
+    salary: document.getElementById('f-salary').value.trim(),
+    recruiter: document.getElementById('f-recruiter').value.trim(),
+    notes: document.getElementById('f-notes').value.trim(),
+    tags: modalTags,
+    interviewRound: status === 'interview' ? currentRound : 0,
+    rejectReason: status === 'rejected' ? document.getElementById('f-rejectReason').value : '',
+    resumeUrl: document.getElementById('f-resumeUrl').value.trim(),
+    resumeVersion: document.getElementById('f-resumeVersion').value.trim(),
+    matchScore: window.currentMatchScore || 0
   };
-  if(editingJobId){
-    await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,editingJobId),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${editingJobId}/activity`),{
-      text:'Application details updated',ts:serverTimestamp()
+
+  if (editingJobId) {
+    const old = jobs.find(x => x.id === editingJobId);
+    await updateDoc(doc(db, `users/${currentUser.uid}/jobs`, editingJobId), payload);
+    if(old && old.status !== status) {
+      await addDoc(collection(db, `users/${currentUser.uid}/jobs/${editingJobId}/activity`), {
+        text: `Pipeline status set manually to "${SM[status]?.label}" via update sequence`, ts: serverTimestamp()
+      });
+    }
+    if(openJobId === editingJobId) window._openDetail(editingJobId);
+  } else {
+    const ref = await addDoc(collection(db, `users/${currentUser.uid}/jobs`), payload);
+    await addDoc(collection(db, `users/${currentUser.uid}/jobs/${ref.id}/activity`), {
+      text: `Application initialized inside tracking environment as "${SM[status]?.label}"`, ts: serverTimestamp()
     });
-    window.closeAdd();
-    await window._openDetail(editingJobId);
-  }else{
-    const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-      text:`Application added as "${SM[status]?.label}"`,ts:serverTimestamp()
-    });
-    window.closeAdd();
   }
+  window.closeAdd();
 };
 
-// ── DETAIL PANEL ──
-window._openDetail=async function(id){
-  openJobId=id;
-  const j=jobs.find(x=>x.id===id);if(!j)return;
-  document.getElementById('d-title').textContent=j.title||'';
-  document.getElementById('d-company').textContent=j.company||'';
-  document.getElementById('d-location').textContent=j.location||'—';
-  document.getElementById('d-salary').textContent=j.salary||'—';
-  document.getElementById('d-notes').textContent=j.notes||'No notes.';
-  document.getElementById('d-date').textContent=`${fmt(j.date)} — ${daysBadgeHtml(j.date).replace(/<[^>]+>/g,'')}`;
-  // Recruiter
-  const recWrap=document.getElementById('d-recruiter-wrap');
-  if(j.recruiter){document.getElementById('d-recruiter').textContent=j.recruiter;recWrap.style.display='block';}
-  else{recWrap.style.display='none';}
-  // URL
-  const urlWrap=document.getElementById('d-url-wrap');
-  if(j.url){
-    document.getElementById('d-url').innerHTML=`<a href="${j.url}" target="_blank" rel="noopener">${j.url}</a>`;
-    urlWrap.style.display='block';
-  }else{urlWrap.style.display='none';}
-  // Resume
-  const resumeWrap=document.getElementById('d-resume-wrap');
-  if(j.resumeUrl||j.resumeVersion){
-    const link=j.resumeUrl?`<a href="${j.resumeUrl}" target="_blank" rel="noopener">${j.resumeVersion||j.resumeUrl}</a>`:(j.resumeVersion||'');
-    document.getElementById('d-resume').innerHTML=link;
-    resumeWrap.style.display='block';
-  }else{resumeWrap.style.display='none';}
-  // Follow-up
-  const fuWrap=document.getElementById('d-followup-wrap');
-  if(j.followupDate){
-    const fu=fmtFollowup(j.followupDate);
-    const base=fmt(j.followupDate);
-    document.getElementById('d-followup').textContent=fu?`${base} — ${fu.label}`:base;
-    fuWrap.style.display='block';
-  }else{fuWrap.style.display='none';}
-  // Tags
-  const tagsWrap=document.getElementById('d-tags-wrap');
-  if(j.tags&&j.tags.length){
-    document.getElementById('d-tags').innerHTML=j.tags.map(tagChipHtml).join('');
-    tagsWrap.style.display='block';
-  }else{tagsWrap.style.display='none';}
-  // Interview round
-  const roundWrap=document.getElementById('d-round-wrap');
-  if(j.status==='interview'){
-    const btns=document.getElementById('d-round-btns');
-    btns.innerHTML=[1,2,3,4].map(r=>`<button class="round-btn${j.interviewRound===r?' active':''}" onclick="window._setRound(${r})">${ROUND_LABELS[r]}</button>`).join('');
-    roundWrap.style.display='block';
-  }else{roundWrap.style.display='none';}
-  // Rejection reason
-  const rejWrap=document.getElementById('d-reject-wrap');
-  if(j.status==='rejected'){
-    const btns=document.getElementById('d-reject-btns');
-    btns.innerHTML=Object.entries(REJECT_REASONS).map(([k,v])=>
-      `<button class="reject-reason-btn${j.rejectReason===k?' active':''}" onclick="window._setRejectReason('${k}')">${v}</button>`
+window.handleCardClick = function(e, id) {
+  if(e.target.closest('input[type="checkbox"]') || e.target.closest('.cb-wrap')) return;
+  window._openDetail(id);
+};
+
+window._openDetail = async function(id) {
+  const j = jobs.find(x => x.id === id);
+  if(!j) return;
+  openJobId = id;
+  renderPipelineDashboard();
+
+  document.getElementById('d-role').textContent = j.title || 'Untitled';
+  document.getElementById('d-company').textContent = j.company || 'Unknown';
+  document.getElementById('d-location').textContent = j.location || '—';
+  document.getElementById('d-salary').textContent = j.salary || '—';
+  document.getElementById('d-date').textContent = fmtFull(j.date);
+  
+  const recWrap = document.getElementById('d-recruiter-wrap');
+  if(j.recruiter) { document.getElementById('d-recruiter').textContent = j.recruiter; recWrap.style.display='block'; }
+  else recWrap.style.display='none';
+
+  const resWrap = document.getElementById('d-resume-wrap');
+  if(j.resumeUrl) {
+    document.getElementById('d-resume').innerHTML = `<a href="${j.resumeUrl}" target="_blank" rel="noopener"><i class="fa-solid fa-file-pdf"></i> ${j.resumeVersion || 'Linked Asset Source'}</a>`;
+    resWrap.style.display='block';
+  } else resWrap.style.display='none';
+
+  document.getElementById('d-followup').textContent = fmtFull(j.followupDate) || '—';
+  document.getElementById('d-notes').textContent = j.notes || '—';
+  document.getElementById('d-tags').innerHTML = (j.tags || []).map(t => `<span class="tag-chip tag-custom">${t}</span>`).join('');
+  
+  const labels = ['Not rated','Poor fit','Below average','Average fit','Good fit','Great fit!'];
+  document.getElementById('d-matchDisplay').textContent = j.matchScore ? `Fit Profile: ${labels[j.matchScore]}` : '';
+
+  // Handle panel action contexts inside status sub-menus
+  const roundWrap = document.getElementById('d-round-wrap');
+  if (j.status === 'interview') {
+    const btns = document.getElementById('d-round-btns');
+    btns.innerHTML = [1, 2, 3, 4].map(r => `<button class="round-btn${j.interviewRound === r ? ' active' : ''}" onclick="window._setRound(${r})">${ROUND_LABELS[r]}</button>`).join('');
+    roundWrap.style.display = 'block';
+  } else { roundWrap.style.display = 'none'; }
+
+  const rejWrap = document.getElementById('d-reject-wrap');
+  if (j.status === 'rejected') {
+    const btns = document.getElementById('d-reject-btns');
+    btns.innerHTML = Object.entries(REJECT_REASONS).map(([k, v]) =>
+      `<button class="reject-reason-btn${j.rejectReason === k ? ' active' : ''}" onclick="window._setRejectReason('${k}')">${v}</button>`
     ).join('');
-    rejWrap.style.display='block';
-  }else{rejWrap.style.display='none';}
-  // Status buttons
-  document.getElementById('d-statusbtns').innerHTML=Object.entries(SM).map(([k,v])=>
-    `<button class="status-btn ${k} ${j.status===k?'active':''}" onclick="window._changeStatus('${k}')">${v.label}</button>`
+    rejWrap.style.display = 'block';
+  } else { rejWrap.style.display = 'none'; }
+
+  document.getElementById('d-statusbtns').innerHTML = Object.entries(SM).map(([k, v]) =>
+    `<button class="status-btn ${k} ${j.status === k ? 'active' : ''}" onclick="window._changeStatus('${k}')">${v.label}</button>`
   ).join('');
+
   document.getElementById('detailPanel').classList.add('open');
   await loadActivity(id);
 };
 
-// set interview round from detail panel
-window._setRound=async function(r){
-  if(!currentUser||!openJobId)return;
+window.closeDetail = function() {
+  openJobId = null;
+  document.getElementById('detailPanel').classList.remove('open');
+  renderPipelineDashboard();
+};
+
+window._changeStatus = async function(newStatus) {
+  if(!currentUser || !openJobId) return;
   setSyncState('syncing');
-  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{interviewRound:r});
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{
-    text:`Interview stage set to: ${ROUND_LABELS[r]||`Round ${r}`}`,ts:serverTimestamp()
+  const updatePayload = { status: newStatus };
+  if(newStatus !== 'interview') updatePayload.interviewRound = 0;
+  if(newStatus !== 'rejected') updatePayload.rejectReason = '';
+  
+  await updateDoc(doc(db, `users/${currentUser.uid}/jobs`, openJobId), updatePayload);
+  await addDoc(collection(db, `users/${currentUser.uid}/jobs/${openJobId}/activity`), {
+    text: `Shifted pipeline tracking phase state into "${SM[newStatus]?.label}"`, ts: serverTimestamp()
+  });
+  window._openDetail(openJobId);
+};
+
+window._setRound = async function(r) {
+  if (!currentUser || !openJobId) return;
+  setSyncState('syncing');
+  await updateDoc(doc(db, `users/${currentUser.uid}/jobs`, openJobId), { interviewRound: r });
+  await addDoc(collection(db, `users/${currentUser.uid}/jobs/${openJobId}/activity`), {
+    text: `Interview stage set to: ${ROUND_LABELS[r] || `Round ${r}`}`, ts: serverTimestamp()
   });
   await window._openDetail(openJobId);
 };
 
-// set rejection reason from detail panel
-window._setRejectReason=async function(reason){
-  if(!currentUser||!openJobId)return;
+window._setRejectReason = async function(reason) {
+  if (!currentUser || !openJobId) return;
   setSyncState('syncing');
-  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{rejectReason:reason});
-  await window._openDetail(openJobId);
-};
-
-async function loadActivity(jobId){
-  if(!currentUser)return;
-  const log=document.getElementById('d-activitylog');
-  log.innerHTML='<div style="font-size:12px;color:var(--c4)">Loading…</div>';
-  const snap=await getDocs(query(collection(db,`users/${currentUser.uid}/jobs/${jobId}/activity`),orderBy('ts','desc')));
-  if(snap.empty){log.innerHTML='<div style="font-size:12px;color:var(--c4)">No activity yet.</div>';return;}
-  log.innerHTML=snap.docs.map(d=>{
-    const data=d.data();
-    return`<div class="activity-item"><div class="activity-text">${data.text||''}</div><div class="activity-time">${fmtFull(data.ts)}</div></div>`;
-  }).join('');
-}
-
-window.addActivity=async function(){
-  if(!currentUser||!openJobId)return;
-  const input=document.getElementById('activityInput');
-  const text=input.value.trim();if(!text)return;
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{text,ts:serverTimestamp()});
-  input.value='';await loadActivity(openJobId);
-};
-window.closeDetail=function(){document.getElementById('detailPanel').classList.remove('open');openJobId=null;};
-window._changeStatus=async function(s){
-  if(!currentUser||!openJobId)return;
-  setSyncState('syncing');
-  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{status:s});
-  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{
-    text:`Status changed to "${SM[s]?.label}"`,ts:serverTimestamp()
+  await updateDoc(doc(db, `users/${currentUser.uid}/jobs`, openJobId), { rejectReason: reason });
+  await addDoc(collection(db, `users/${currentUser.uid}/jobs/${openJobId}/activity`), {
+    text: `Rejection tracking code signature assigned: ${REJECT_REASONS[reason]||reason}`, ts: serverTimestamp()
   });
   await window._openDetail(openJobId);
 };
-window.deleteJob=async function(){
-  if(!currentUser||!openJobId||!confirm('Delete this application?'))return;
+
+window.deleteJob = async function() {
+  if(!confirm('Scrub application file permanently from datastore metrics?')) return;
   setSyncState('syncing');
-  await deleteDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId));
+  await deleteDoc(doc(db, `users/${currentUser.uid}/jobs`, openJobId));
   window.closeDetail();
 };
 
-// ── ADMIN ──
-window.openAdmin=async function(){
-  if(!currentUser||!(await isAdmin(currentUser)))return;
-  document.getElementById('adminOverlay').classList.add('open');
-  const body=document.getElementById('adminBody');
-  body.innerHTML='<div class="admin-loading"><div class="spinner"></div> Loading users…</div>';
-  try{
-    const usersSnap=await getDocs(collection(db,'users'));
-    const donutC={applied:'#3b82f6',screening:'#8b5cf6',interview:'#f59e0b',offer:'#10b981',rejected:'#ef4444'};
+async function loadActivity(jobId) {
+  if (!currentUser) return;
+  const log = document.getElementById('d-activitylog');
+  log.innerHTML = '<div style="font-size:12px;color:var(--c4)">Loading…</div>';
+  const snap = await getDocs(query(collection(db, `users/${currentUser.uid}/jobs/${jobId}/activity`), orderBy('ts', 'desc')));
+  if (snap.empty) { log.innerHTML = '<div style="font-size:12px;color:var(--c4)">No activity yet.</div>'; return; }
+  log.innerHTML = snap.docs.map(d => {
+    const data = d.data();
+    return `<div class="activity-item"><div class="activity-text">${data.text || ''}</div><div class="activity-time">${fmtFull(data.ts)}</div></div>`;
+  }).join('');
+}
 
-    const rowData=await Promise.all(usersSnap.docs.map(async d=>{
-      const u=d.data();const uid=d.id;
-      const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
-      const jobCount=jobsSnap.size;
-      const lastLogin=u.lastLoginAt?.toDate?.()
-        ?u.lastLoginAt.toDate().toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
-      const sc={applied:0,screening:0,interview:0,offer:0,rejected:0};
-      jobsSnap.docs.forEach(jd=>{const s=jd.data().status;if(sc[s]!==undefined)sc[s]++;});
-      const funnelTip=Object.entries(sc).map(([s,v])=>`${SM[s]?.label||s}: ${v}`).join(' · ');
-      // Per-user mini funnel bar (shown under job list toggle)
-      const perUserFunnel=Object.entries(sc).map(([s,v])=>{
-        const pct=jobCount>0?Math.round((v/jobCount)*100):0;
-        return`<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-          <div style="font-size:10px;color:${donutC[s]};width:70px;text-align:right">${SM[s]?.label||s}</div>
-          <div style="flex:1;background:var(--c3);border-radius:20px;height:6px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${donutC[s]};border-radius:20px"></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--c4);width:18px">${v}</div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--c4);width:30px;text-align:right">${pct}%</div>
-        </div>`;
-      }).join('');
-      const isYou=uid===currentUser.uid;
-      const bannedBadge=u.banned?'<span style="color:var(--rejected);font-size:11px;margin-left:4px">BANNED</span>':'';
-      const jobRows=jobsSnap.docs.map(jd=>{
-        const jj=jd.data();
-        const days=daysSince(jj.date);
-        const daysStr=days!==null?`${days}d ago`:'';
-        return`<div class="admin-job-row"><strong>${jj.title||'?'}</strong> @ ${jj.company||'?'} <span class="job-status ${jj.status}" style="font-size:10px;padding:1px 7px">${SM[jj.status]?.label||jj.status}</span>${daysStr?` <span style="color:var(--c4);font-size:11px;font-family:'DM Mono',monospace">${daysStr}</span>`:''}</div>`;
-      }).join('')||'<div style="color:var(--c4);font-size:12px">No jobs.</div>';
-      const html=`<tr data-uid="${uid}" data-name="${(u.displayName||'').toLowerCase()}" data-email="${(u.email||'').toLowerCase()}" data-banned="${!!u.banned}">
-        <td><div class="admin-user-cell"><img class="admin-avatar" src="${u.photoURL||''}" onerror="this.style.display='none'" alt=""/><div><div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}${bannedBadge}</div><div class="admin-email">${u.email||''}</div></div></div></td>
-        <td><span class="ip-badge">${u.lastLoginIP||'—'}</span></td>
-        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${lastLogin}</td>
-        <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
-        <td style="white-space:nowrap">
-          <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')"><i class="fa-solid fa-briefcase" style="font-size:10px"></i> Jobs</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="toggleAdminFunnel('${uid}')" title="${funnelTip}"><i class="fa-solid fa-chart-bar" style="font-size:10px"></i> Funnel</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="adminExportCSV('${uid}')"><i class="fa-solid fa-download" style="font-size:10px"></i> CSV</button>
-          ${!isYou?`<button class="admin-ban-btn" style="margin-left:4px" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'<i class="fa-solid fa-unlock" style="font-size:10px"></i> Unban':'<i class="fa-solid fa-ban" style="font-size:10px"></i> Ban'}</button>`:''}
-        </td>
-      </tr>
-      <tr id="admin-jobs-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open">${jobRows}</div></td></tr>
-      <tr id="admin-funnel-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open" style="padding:10px 14px">${perUserFunnel}</div></td></tr>`;
-      return{html,counts:sc,jobCount};
-    }));
+window.addActivityItem = async function() {
+  const el = document.getElementById('activityInput');
+  const text = el.value.trim();
+  if(!text || !openJobId) return;
+  el.value = '';
+  await addDoc(collection(db, `users/${currentUser.uid}/jobs/${openJobId}/activity`), {
+    text, ts: serverTimestamp()
+  });
+  await loadActivity(openJobId);
+};
 
-    // Aggregate counts across all users
-    const aggCounts={applied:0,screening:0,interview:0,offer:0,rejected:0};
-    let aggTotal=0;
-    rowData.forEach(r=>{
-      Object.entries(r.counts).forEach(([s,v])=>{aggCounts[s]=(aggCounts[s]||0)+v;});
-      aggTotal+=r.jobCount;
+// ── PHASE 7: DRAG AND DROP KANBAN DRIVERS ──
+let dragId = null;
+function initKanbanDragDrop() {
+  document.querySelectorAll('.kanban-card[draggable]').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      dragId = card.dataset.id;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
     });
-    const totalUsers=usersSnap.size;
-    const bannedCount=usersSnap.docs.filter(d=>d.data().banned).length;
-    const aggFunnelHtml=Object.entries(aggCounts).map(([s,v])=>{
-      const pct=aggTotal>0?Math.round((v/aggTotal)*100):0;
-      return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-        <div style="font-size:11px;color:${donutC[s]};width:76px;text-align:right;font-weight:600">${SM[s]?.label||s}</div>
-        <div style="flex:1;background:var(--c3);border-radius:20px;height:8px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${donutC[s]};border-radius:20px;transition:width .4s"></div></div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c5);width:24px">${v}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:36px;text-align:right">${pct}%</div>
-      </div>`;
-    }).join('');
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+    });
+  });
+  document.querySelectorAll('.kanban-col').forEach(col => {
+    col.addEventListener('dragover', e => {
+      e.preventDefault();
+      document.querySelectorAll('.kanban-col').forEach(c => c.classList.remove('drag-over'));
+      col.classList.add('drag-over');
+    });
+    col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+    col.addEventListener('drop', async e => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const newStatus = col.dataset.status;
+      if (!dragId || !newStatus || !currentUser) return;
+      const job = jobs.find(j => j.id === dragId);
+      if (!job || job.status === newStatus) { dragId = null; return; }
+      
+      setSyncState('syncing');
+      await updateDoc(doc(db, `users/${currentUser.uid}/jobs`, dragId), { status: newStatus });
+      await addDoc(collection(db, `users/${currentUser.uid}/jobs/${dragId}/activity`), {
+        text: `Moved to "${SM[newStatus]?.label}" via Kanban drag event`, ts: serverTimestamp()
+      });
+      dragId = null;
+    });
+  });
+}
 
-    body.innerHTML=`
-      <!-- Aggregate stats bar -->
-      <div style="display:flex;align-items:stretch;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <div class="admin-stat-card"><div class="admin-stat-val">${totalUsers}</div><div class="admin-stat-label">Total users</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val">${aggTotal}</div><div class="admin-stat-label">Total jobs</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--offer)">${aggCounts.offer}</div><div class="admin-stat-label">Offers</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--interview)">${aggCounts.interview}</div><div class="admin-stat-label">Interviews</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--rejected)">${bannedCount}</div><div class="admin-stat-label">Banned</div></div>
-        <div class="admin-stat-card" style="flex:1;min-width:220px">
-          <div style="font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-weight:600">Platform funnel</div>
-          ${aggFunnelHtml}
+// ── PHASE 8: MULTI-SELECT BULK ACTION DRIVERS ──
+window.handleBulkCheckbox = function(cb) {
+  const id = cb.dataset.id;
+  if(cb.checked) { if(!bulkSelectedIds.includes(id)) bulkSelectedIds.push(id); }
+  else { bulkSelectedIds = bulkSelectedIds.filter(x => x !== id); }
+  updateBulkBarUI();
+};
+function updateBulkBarUI() {
+  const bar = document.getElementById('bulkBar');
+  if(bulkSelectedIds.length > 0) {
+    bar.classList.add('visible');
+    document.getElementById('bulkInfo').textContent = `${bulkSelectedIds.length} job logs selected`;
+  } else bar.classList.remove('visible');
+}
+window.clearBulkSelection = function() {
+  bulkSelectedIds = [];
+  document.querySelectorAll('.cb-wrap input[type="checkbox"]').forEach(c => c.checked = false);
+  updateBulkBarUI();
+};
+window.bulkUpdateStatus = async function(status) {
+  if(!bulkSelectedIds.length) return;
+  setSyncState('syncing');
+  const batch = writeBatch(db);
+  for(let id of bulkSelectedIds) {
+    batch.update(doc(db, `users/${currentUser.uid}/jobs`, id), { status, interviewRound: 0, rejectReason: '' });
+    // Sequential tracking entries are committed independently
+    await addDoc(collection(db, `users/${currentUser.uid}/jobs/${id}/activity`), {
+      text: `Batch action update set state into "${SM[status]?.label}"`, ts: serverTimestamp()
+    });
+  }
+  await batch.commit();
+  window.clearBulkSelection();
+};
+window.bulkDeleteJobs = async function() {
+  if(!confirm(`Scrub ${bulkSelectedIds.length} applications completely from the dataset profile?`)) return;
+  setSyncState('syncing');
+  const batch = writeBatch(db);
+  bulkSelectedIds.forEach(id => batch.delete(doc(db, `users/${currentUser.uid}/jobs`, id)));
+  await batch.commit();
+  window.clearBulkSelection();
+};
+
+// ── PHASE 9: EXTENDED PLATFORM ANALYTICS ──
+window.openAnalytics = function() {
+  document.getElementById('analyticsOverlay').classList.add('open');
+  const body = document.getElementById('analyticsModalBody');
+  if(!jobs.length) { body.innerHTML='<div class="analytics-empty">Insufficient telemetry logs mapped. Index data first.</div>'; return; }
+
+  const total = jobs.length;
+  const now = new Date();
+  
+  // Compute rolling application cadence
+  const weekBuckets = Array(8).fill(0);
+  jobs.forEach(j => {
+    const d = j.date?.toDate ? j.date.toDate() : (j.date ? new Date(j.date) : null);
+    if (!d || isNaN(d)) return;
+    const diffDays = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+    const week = Math.floor(diffDays / 7);
+    if (week >= 0 && week < 8) weekBuckets[week]++;
+  });
+  const maxWeek = Math.max(...weekBuckets, 1);
+  const weekLabels = ['now', '1w', '2w', '3w', '4w', '5w', '6w', '7w'];
+
+  const statusCounts = { applied: 0, screening: 0, interview: 0, offer: 0, rejected: 0 };
+  jobs.forEach(j => { if (statusCounts[j.status] !== undefined) statusCounts[j.status]++; });
+
+  const rejectBreakdown = {};
+  jobs.filter(j => j.status === 'rejected').forEach(j => {
+    const r = j.rejectReason || 'unknown';
+    rejectBreakdown[r] = (rejectBreakdown[r] || 0) + 1;
+  });
+  const rejectEntries = Object.entries(rejectBreakdown).sort((a, b) => b[1] - a[1]);
+  const maxReject = rejectEntries.length > 0 ? rejectEntries[0][1] : 1;
+
+  const tagFreq = {};
+  jobs.forEach(j => (j.tags || []).forEach(t => { tagFreq[t] = (tagFreq[t] || 0) + 1; }));
+  const topTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+  const responseRate = total ? Math.round(((statusCounts.screening + statusCounts.interview + statusCounts.offer) / total) * 100) : 0;
+  const offerRate = total ? Math.round((statusCounts.offer / total) * 100) : 0;
+
+  body.innerHTML = `
+    <div class="analytics-kpi-row">
+      <div class="analytics-kpi"><div class="analytics-kpi-val">${total}</div><div class="analytics-kpi-label">Indexed Applications</div></div>
+      <div class="analytics-kpi"><div class="analytics-kpi-val">${responseRate}%</div><div class="analytics-kpi-label">Pipeline Progression Rate</div></div>
+      <div class="analytics-kpi"><div class="analytics-kpi-val">${offerRate}%</div><div class="analytics-kpi-label">Offer Success Yield</div></div>
+      <div class="analytics-kpi"><div class="analytics-kpi-val" style="color:var(--offer)">${statusCounts.offer}</div><div class="analytics-kpi-label">Active Offers Collected</div></div>
+    </div>
+    <div class="analytics-grid">
+      <div class="analytics-section">
+        <div class="analytics-section-title">Application Frequency — 8 Week Rolling Cadence</div>
+        <div class="weekly-chart">
+          ${weekBuckets.map((v, i) => `
+            <div class="weekly-col">
+              <div class="weekly-bar" style="height:${Math.round((v/maxWeek)*100)}%"></div>
+              <div class="weekly-bar-label">${weekLabels[i]}</div>
+            </div>
+          `).join('')}
         </div>
       </div>
-      <!-- User search filter -->
-      <div style="margin-bottom:10px;position:relative">
-        <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--c4);font-size:12px"></i>
-        <input id="adminSearch" placeholder="Filter by name or email…" oninput="filterAdminRows(this.value)"
-          style="width:100%;background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:8px 12px 8px 30px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none"/>
+      <div class="analytics-section">
+        <div class="analytics-section-title">Top Custom Tags Usage Frequency</div>
+        ${topTags.length ? `<div style="display:flex;flex-direction:column;gap:6px">
+          ${topTags.map(([t, v]) => `
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px">
+              <span class="tag-chip tag-custom">${t}</span>
+              <span style="font-family:'DM Mono',monospace;color:var(--c4)">${v} matches</span>
+            </div>
+          `).join('')}
+        </div>` : '<div style="color:var(--c4);font-size:12px">No customized metadata tags used yet.</div>'}
       </div>
-      <!-- Users table -->
-      <div style="overflow-x:auto">
-        <table class="admin-table" id="adminTable">
-          <thead><tr><th>User</th><th>Last IP</th><th>Last Login</th><th>Jobs</th><th>Actions</th></tr></thead>
-          <tbody id="adminTableBody">${rowData.map(r=>r.html).join('')}</tbody>
-        </table>
-      </div>
-      <div id="adminNoResults" style="display:none;text-align:center;padding:2rem;color:var(--c4);font-size:13px">No users match your filter.</div>`;
-  }catch(e){
-    body.innerHTML=`<div class="admin-loading" style="color:var(--rejected)"><i class="fa-solid fa-triangle-exclamation"></i> Error: ${e.message}</div>`;
+    </div>
+  `;
+};
+window.closeAnalytics = function() { document.getElementById('analyticsOverlay').classList.remove('open'); };
+
+// ── PHASE 10: SUPERUSER SUITE ARCHITECTURE ──
+window.openAdmin = async function() {
+  document.getElementById('adminOverlay').classList.add('open');
+  const b = document.getElementById('adminModalBody');
+  b.innerHTML = '<div class="admin-loading"><div class="spinner" style="margin:0 auto 10px"></div>Decoding user dataset parameters across instances...</div>';
+  try {
+    const fetchStats = httpsCallable(functions, 'getPlatformAdminStats');
+    const res = await fetchStats();
+    renderAdminTable(res.data);
+  } catch(e) {
+    b.innerHTML = `<div style="font-size:12px;color:var(--rejected);padding:1rem">Administrative function sandbox returned execution fault:<br/><code>${e.message}</code></div>`;
   }
 };
-window.toggleAdminJobs=function(uid){
-  const row=document.getElementById(`admin-jobs-${uid}`);
-  if(row)row.style.display=row.style.display==='none'?'table-row':'none';
-};
-window.toggleAdminFunnel=function(uid){
-  const row=document.getElementById(`admin-funnel-${uid}`);
-  if(row)row.style.display=row.style.display==='none'?'table-row':'none';
-};
-window.filterAdminRows=function(q){
-  q=(q||'').toLowerCase().trim();
-  let shown=0;
-  document.querySelectorAll('#adminTableBody tr[data-uid]').forEach(tr=>{
-    const match=!q||(tr.dataset.name||'').includes(q)||(tr.dataset.email||'').includes(q)||(tr.dataset.uid||'').includes(q);
-    tr.style.display=match?'':'none';
-    const uid=tr.dataset.uid||'';
-    const jr=document.getElementById(`admin-jobs-${uid}`);
-    const fr=document.getElementById(`admin-funnel-${uid}`);
-    if(jr&&!match)jr.style.display='none';
-    if(fr&&!match)fr.style.display='none';
-    if(match)shown++;
-  });
-  const noRes=document.getElementById('adminNoResults');
-  if(noRes)noRes.style.display=shown===0?'block':'none';
-};
-window.toggleBan=async function(uid,isBanned){
-  if(!confirm(isBanned?`Unban this user?`:`Ban this user? They won't be able to sign in.`))return;
-  await setDoc(doc(db,'users',uid),{banned:!isBanned},{merge:true});
-  await window.openAdmin();
-};
-window.closeAdmin=()=>document.getElementById('adminOverlay').classList.remove('open');
+window.closeAdmin = function() { document.getElementById('adminOverlay').classList.remove('open'); };
 
-// Admin: export a specific user's jobs as CSV
-window.adminExportCSV=async function(uid){
-  try{
-    const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
-    if(!jobsSnap.size){alert('No jobs for this user.');return;}
-    const rows=[['Title','Company','Location','Status','Interview Round','Rejection Reason','Salary','Recruiter','URL','Tags','Follow-up','Notes','Resume URL','Resume Version','Date']];
-    jobsSnap.docs.forEach(jd=>{
-      const j=jd.data();
-      rows.push([
-        j.title||'',j.company||'',j.location||'',j.status||'',
-        j.interviewRound?ROUND_LABELS[j.interviewRound]||`Round ${j.interviewRound}`:'',
-        j.rejectReason?REJECT_REASONS[j.rejectReason]||j.rejectReason:'',
-        j.salary||'',j.recruiter||'',j.url||'',
-        (j.tags||[]).join('; '),
-        j.followupDate?fmt(j.followupDate):'',
-        (j.notes||'').replace(/"/g,'""'),
-        j.resumeUrl||'',j.resumeVersion||'',
-        j.date?.toDate?j.date.toDate().toISOString().split('T')[0]:''
-      ]);
-    });
-    const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-    const a=document.createElement('a');
-    a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-    a.download=`huntlog-user-${uid.slice(0,8)}.csv`;a.click();
-  }catch(e){alert('Export failed: '+e.message);}
-};
+function renderAdminTable(data) {
+  const b = document.getElementById('adminModalBody');
+  const totalUsers = data.users?.length || 0;
+  const aggCounts = data.aggregateStatusCounts || { applied:0, screening:0, interview:0, offer:0, rejected:0 };
+  const aggTotal = Object.values(aggCounts).reduce((x,y)=>x+y,0);
+  const bannedCount = data.bannedUsersCount || 0;
 
-// ── EXPORT (updated with new fields) ──
-window.exportCSV=function(){
-  if(!jobs.length){alert('No jobs to export.');return;}
-  const rows=[['Title','Company','Location','Status','Interview Round','Rejection Reason','Salary','Recruiter','URL','Resume URL','Resume Version','Tags','Follow-up','Notes','Date','Days Since']];
-  jobs.forEach(j=>rows.push([
-    j.title||'',j.company||'',j.location||'',j.status||'',
-    j.interviewRound?ROUND_LABELS[j.interviewRound]||`Round ${j.interviewRound}`:'',
-    j.rejectReason?REJECT_REASONS[j.rejectReason]||j.rejectReason:'',
-    j.salary||'',j.recruiter||'',j.url||'',
-    j.resumeUrl||'',j.resumeVersion||'',
-    (j.tags||[]).join('; '),
-    j.followupDate?fmt(j.followupDate):'',
-    (j.notes||'').replace(/"/g,'""'),
-    j.date?.toDate?j.date.toDate().toISOString().split('T')[0]:'',
-    daysSince(j.date)??''
-  ]));
-  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-  const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-  a.download='huntlog-export.csv';a.click();
-};
+  const funnelStages = ['applied', 'screening', 'interview', 'offer'];
+  const aggFunnelHtml = funnelStages.map(s => {
+    const val = aggCounts[s] || 0;
+    const pct = aggTotal ? Math.round((val / aggTotal) * 100) : 0;
+    return `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <div style="width:70px;font-size:11px;text-transform:uppercase;color:var(--c4)">${s}</div>
+        <div style="flex:1;background:var(--c3);height:6px;border-radius:3px;overflow:hidden">
+          <div style="background:${SM[s]?.color || '#fff'};width:${pct}%;height:100%"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:36px;text-align:right">${pct}%</div>
+      </div>`;
+  }).join('');
 
-// ── ANALYTICS ──
-const REJECT_REASONS_ANALYTICS={no_response:'No response',skills_gap:'Skills gap',salary_mismatch:'Salary mismatch',position_filled:'Pos. filled',culture_fit:'Culture fit',withdrew:'Withdrew',other:'Other'};
-
-window.openAnalytics=function(){
-  document.getElementById('analyticsOverlay').classList.add('open');
-  renderAnalytics();
-};
-window.closeAnalytics=function(){
-  document.getElementById('analyticsOverlay').classList.remove('open');
-};
-
-function renderAnalytics(){
-  const body=document.getElementById('analyticsBody');
-  if(!jobs.length){body.innerHTML='<div class="analytics-empty">No data yet — add some applications first.</div>';return;}
-
-  // --- KPIs ---
-  const total=jobs.length;
-  const offers=jobs.filter(j=>j.status==='offer').length;
-  const rejected=jobs.filter(j=>j.status==='rejected').length;
-  const interviews=jobs.filter(j=>j.status==='interview'||j.status==='offer').length;
-  const screenings=jobs.filter(j=>j.status==='screening'||j.status==='interview'||j.status==='offer').length;
-
-  const successRate=total>0?Math.round((offers/total)*100):0;
-  const interviewRate=total>0?Math.round((interviews/total)*100):0;
-  const screenRate=total>0?Math.round((screenings/total)*100):0;
-  const rejRate=total>0?Math.round((rejected/total)*100):0;
-
-  // avg response time: days from applied to first status change (approximation via daysSince)
-  // We use: for offers+interviews, avg days since apply date
-  const responded=jobs.filter(j=>j.status!=='applied'&&j.date);
-  const avgResponse=responded.length>0
-    ?Math.round(responded.reduce((acc,j)=>{
-        const n=daysSince(j.date);return acc+(n??0);
-      },0)/responded.length)
-    :null;
-
-  // stalest active jobs
-  const active=jobs.filter(j=>j.status==='applied'||j.status==='screening');
-  const avgStale=active.length>0
-    ?Math.round(active.reduce((acc,j)=>acc+(daysSince(j.date)??0),0)/active.length)
-    :null;
-
-  // weekly activity (last 8 weeks)
-  const now=new Date();now.setHours(0,0,0,0);
-  const weekBuckets=Array(8).fill(0);
-  jobs.forEach(j=>{
-    const d=j.date?.toDate?j.date.toDate():(j.date?new Date(j.date):null);
-    if(!d||isNaN(d))return;
-    const diffDays=Math.floor((now-d)/(1000*60*60*24));
-    const week=Math.floor(diffDays/7);
-    if(week>=0&&week<8)weekBuckets[week]++;
-  });
-  const weekLabels=['now','1w','2w','3w','4w','5w','6w','7w'];
-  const maxWeek=Math.max(...weekBuckets,1);
-
-  // funnel
-  const statusCounts={applied:0,screening:0,interview:0,offer:0,rejected:0};
-  jobs.forEach(j=>{if(statusCounts[j.status]!==undefined)statusCounts[j.status]++;});
-
-  // rejection reasons
-  const rejectBreakdown={};
-  jobs.filter(j=>j.status==='rejected').forEach(j=>{
-    const r=j.rejectReason||'unknown';
-    rejectBreakdown[r]=(rejectBreakdown[r]||0)+1;
-  });
-  const rejectEntries=Object.entries(rejectBreakdown).sort((a,b)=>b[1]-a[1]);
-  const maxReject=rejectEntries.length>0?rejectEntries[0][1]:1;
-
-  // tags frequency
-  const tagFreq={};
-  jobs.forEach(j=>(j.tags||[]).forEach(t=>{tagFreq[t]=(tagFreq[t]||0)+1;}));
-  const topTags=Object.entries(tagFreq).sort((a,b)=>b[1]-a[1]).slice(0,5);
-
-  // status donut via conic-gradient
-  const donutColors={applied:'#3b82f6',screening:'#8b5cf6',interview:'#f59e0b',offer:'#10b981',rejected:'#ef4444'};
-  const donutSegments=Object.entries(statusCounts).filter(([,v])=>v>0);
-  let cumulPct=0;
-  const conicParts=donutSegments.map(([s,v])=>{
-    const pct=(v/total)*100;
-    const part=`${donutColors[s]} ${cumulPct}% ${cumulPct+pct}%`;
-    cumulPct+=pct;
-    return part;
-  });
-
-  // insights
-  const insights=[];
-  if(successRate>=10)insights.push({cls:'good',icon:'fa-trophy',text:`${successRate}% offer rate — solid pipeline`});
-  else if(total>=5&&successRate===0)insights.push({cls:'warn',icon:'fa-triangle-exclamation',text:'No offers yet — keep pushing'});
-  if(interviewRate>=30)insights.push({cls:'good',icon:'fa-comments',text:`${interviewRate}% interview rate — strong signal`});
-  if(avgStale!==null&&avgStale>21)insights.push({cls:'bad',icon:'fa-clock',text:`Avg ${avgStale}d without update — follow up?`});
-  if(rejectBreakdown['no_response']>=3)insights.push({cls:'warn',icon:'fa-ghost',text:`${rejectBreakdown['no_response']} ghosted — diversify channels`});
-  if(topTags.length&&topTags[0][0]==='cold apply'&&topTags[0][1]>5)insights.push({cls:'warn',icon:'fa-ice-cream',text:'Mostly cold outreach — try referrals'});
-  if(avgResponse!==null&&avgResponse<14)insights.push({cls:'good',icon:'fa-bolt',text:`Avg ${avgResponse}d to hear back — fast pipeline`});
-
-  body.innerHTML=`
-    <!-- KPIs -->
-    <div class="analytics-kpi-row">
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--offer)">${successRate}%</div>
-        <div class="analytics-kpi-label">Offer rate</div>
-        <div class="analytics-kpi-sub">${offers} of ${total}</div>
-      </div>
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--interview)">${interviewRate}%</div>
-        <div class="analytics-kpi-label">Interview rate</div>
-        <div class="analytics-kpi-sub">${interviews} reached</div>
-      </div>
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--screen)">${screenRate}%</div>
-        <div class="analytics-kpi-label">Screen rate</div>
-        <div class="analytics-kpi-sub">${screenings} reached</div>
-      </div>
-      <div class="analytics-kpi">
-        <div class="analytics-kpi-val" style="color:var(--rejected)">${rejRate}%</div>
-        <div class="analytics-kpi-label">Rejection rate</div>
-        <div class="analytics-kpi-sub">${rejected} total</div>
+  b.innerHTML = `
+    <div style="display:flex;align-items:stretch;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <div class="admin-stat-card"><div class="admin-stat-val">${totalUsers}</div><div class="admin-stat-label">Total users</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-val">${aggTotal}</div><div class="admin-stat-label">Total jobs</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--offer)">${aggCounts.offer}</div><div class="admin-stat-label">Offers</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--interview)">${aggCounts.interview}</div><div class="admin-stat-label">Interviews</div></div>
+      <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--rejected)">${bannedCount}</div><div class="admin-stat-label">Banned</div></div>
+      <div class="admin-stat-card" style="flex:1;min-width:220px">
+        <div style="font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-weight:600">Platform funnel</div>
+        ${aggFunnelHtml}
       </div>
     </div>
-
-    ${insights.length?`
-    <!-- Insights -->
-    <div class="analytics-section">
-      <div class="analytics-section-title"><i class="fa-solid fa-lightbulb"></i> Insights</div>
-      <div class="insights-row">
-        ${insights.map(ins=>`<div class="insight-chip ${ins.cls}"><i class="fa-solid ${ins.icon}"></i>${ins.text}</div>`).join('')}
-      </div>
-    </div>`:'' }
-
-    <!-- Funnel + Donut -->
-    <div class="analytics-grid-2">
-      <div class="analytics-section">
-        <div class="analytics-section-title">Pipeline funnel</div>
-        <div class="funnel-rows">
-          ${Object.entries(statusCounts).map(([s,v])=>{
-            const pct=total>0?Math.round((v/total)*100):0;
-            const barColor=donutColors[s]||'var(--accent)';
-            return`<div class="funnel-row">
-              <div class="funnel-label" style="color:${barColor}">${SM[s]?.label||s}</div>
-              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:${pct}%;background:${barColor}"></div></div>
-              <div class="funnel-count">${v}</div>
-              <div class="funnel-pct" style="color:${barColor}">${pct}%</div>
-            </div>`;
-          }).join('')}
-        </div>
-      </div>
-
-      <div class="analytics-section">
-        <div class="analytics-section-title">Distribution</div>
-        <div class="donut-wrap">
-          <div class="donut" style="background:conic-gradient(${conicParts.join(',')})"></div>
-          <div class="donut-legend">
-            ${donutSegments.map(([s,v])=>`
-              <div class="donut-legend-item">
-                <div class="donut-swatch" style="background:${donutColors[s]}"></div>
-                <span>${SM[s]?.label||s} <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${v}</span></span>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Weekly activity + avg response -->
-    <div class="analytics-grid-2">
-      <div class="analytics-section">
-        <div class="analytics-section-title">Weekly applications (last 8 weeks)</div>
-        <div class="weekly-bars">
-          ${[...weekBuckets].reverse().map((v,i)=>`
-            <div class="weekly-bar-col">
-              <div class="weekly-bar" style="height:${Math.round((v/maxWeek)*50)+2}px;opacity:${.4+.6*(v/maxWeek)}"></div>
-              <div class="weekly-bar-label">${weekLabels[[...weekBuckets].length-1-i]}</div>
-            </div>`).join('')}
-        </div>
-      </div>
-      <div class="analytics-section">
-        <div class="analytics-section-title">Response timing</div>
-        ${avgResponse!==null?`
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div>
-              <div style="font-family:'DM Mono',monospace;font-size:2rem;color:var(--c6);line-height:1">${avgResponse}</div>
-              <div style="font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em">avg days to status change</div>
-            </div>
-            ${avgStale!==null?`<div>
-              <div style="font-family:'DM Mono',monospace;font-size:1.4rem;color:${avgStale>21?'var(--rejected)':'var(--c5)'};line-height:1">${avgStale}</div>
-              <div style="font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em">avg days stale (active jobs)</div>
-            </div>`:''}
-          </div>`:'<div style="color:var(--c4);font-size:12px">Not enough data yet.</div>'}
-      </div>
-    </div>
-
-    <!-- Rejection reasons + Top tags -->
-    <div class="analytics-grid-2">
-      ${rejectEntries.length?`
-      <div class="analytics-section">
-        <div class="analytics-section-title">Rejection breakdown</div>
-        <div class="reject-rows">
-          ${rejectEntries.map(([k,v])=>`
-            <div class="reject-row">
-              <div class="reject-label">${REJECT_REASONS_ANALYTICS[k]||k}</div>
-              <div class="reject-bar-wrap"><div class="reject-bar" style="width:${Math.round((v/maxReject)*100)}%"></div></div>
-              <div class="reject-count">${v}</div>
-            </div>`).join('')}
-        </div>
-      </div>`:`<div class="analytics-section"><div class="analytics-section-title">Rejection breakdown</div><div style="color:var(--c4);font-size:12px">No rejections recorded yet.</div></div>`}
-
-      <div class="analytics-section">
-        <div class="analytics-section-title">Top tags</div>
-        ${topTags.length?`<div class="reject-rows">
-          ${topTags.map(([t,v])=>`
-            <div class="reject-row">
-              <div class="reject-label">${t}</div>
-              <div class="reject-bar-wrap"><div class="reject-bar" style="width:${Math.round((v/topTags[0][1])*100)}%;background:var(--accent)"></div></div>
-              <div class="reject-count">${v}</div>
-            </div>`).join('')}
-        </div>`:'<div style="color:var(--c4);font-size:12px">No tags used yet.</div>'}
-      </div>
+    <div style="overflow-x:auto">
+      <table class="admin-table">
+        <thead><tr><th>User</th><th>Last Login</th><th>Jobs Count</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${data.users.map(u => `
+            <tr>
+              <td>
+                <div class="admin-user-cell">
+                  <img class="admin-avatar" src="${u.photoURL || ''}"/>
+                  <div>
+                    <div class="admin-name">${u.displayName || 'Anonymous'}${u.uid===currentUser.uid?' <span class="you-badge">You</span>':''}</div>
+                    <div class="admin-email">${u.email || 'No email shared'}</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-family:'DM Mono',monospace">${u.lastLoginTimestamp ? new Date(u.lastLoginTimestamp).toISOString().split('T')[0] : '—'}</td>
+              <td style="font-family:'DM Mono',monospace;font-weight:600;font-size:13px">${u.jobsCount || 0}</td>
+              <td><button class="admin-expand-btn" onclick="alert('Telemetry trace context targeted: '+ '${u.uid}')">Inspect Telemetry</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
     </div>
   `;
 }
 
-// ── IMPORT CSV ──
-let csvParsed=[];
-window.openImport=function(){document.getElementById('importModal').classList.add('open');};
-window.closeImport=function(){
-  document.getElementById('importModal').classList.remove('open');
-  document.getElementById('importPreview').innerHTML='';
-  document.getElementById('importConfirmBtn').style.display='none';
-  document.getElementById('csvFileInput').value='';
-  csvParsed=[];
+// ── PHASE 11: INTEGRATED AI COPILOT GENERATOR WRAPPERS ──
+window.openAIAssist = function() {
+  document.getElementById('aiAssistModal').classList.add('open');
+  aiCurrentJob = jobs.find(x => x.id === openJobId) || null;
+  const contextSpan = document.getElementById('aiJobContext');
+  if(aiCurrentJob) contextSpan.textContent = `Target Context: ${aiCurrentJob.title} at ${aiCurrentJob.company}`;
+  else contextSpan.textContent = "Target Context: General / Global Query mode";
+  setAIMode(aiMode);
 };
-window.handleCSVFile=function(file){
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const text=e.target.result;
-    const lines=text.split(/\r?\n/).filter(l=>l.trim());
-    if(!lines.length)return;
-    const headers=lines[0].split(',').map(h=>h.replace(/^"|"$/g,'').trim().toLowerCase());
-    csvParsed=[];
-    const preview=document.getElementById('importPreview');
-    preview.innerHTML='';
-    for(let i=1;i<Math.min(lines.length,200);i++){
-      const vals=parseCsvLine(lines[i]);
-      const row={};
-      headers.forEach((h,idx)=>{row[h]=(vals[idx]||'').replace(/^"|"$/g,'').trim();});
-      const title=row.title||row['job title']||row['position']||'';
-      const company=row.company||row['company name']||'';
-      if(!title&&!company)continue;
-      const status=normalizeStatus(row.status||row['application status']||'applied');
-      csvParsed.push({title,company,status,
-        location:row.location||row.city||'',
-        salary:row.salary||row['salary range']||'',
-        notes:row.notes||row['note']||'',
-        url:row.url||row['job url']||row['link']||''
+window.closeAIAssist = function() { document.getElementById('aiAssistModal').classList.remove('open'); };
+
+window.setAIMode = function(mode) {
+  aiMode = mode;
+  document.querySelectorAll('.ai-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`aiTab-${mode}`).classList.add('active');
+  const labels = { cover: 'Generated cover letter text', follow: 'Generated operational follow-up text', interview: 'Tailored interview prep metrics document' };
+  document.getElementById('aiOutputLabel').textContent = labels[mode] || 'AI Copilot Output';
+};
+
+window.runAIAssist = async function() {
+  const jdText = document.getElementById('aiJobDescription').value.trim();
+  const btn = document.getElementById('aiGenerateBtn');
+  const outputWrap = document.getElementById('aiOutputWrap');
+  const outputEl = document.getElementById('aiOutput');
+
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+  outputWrap.classList.remove('visible');
+  outputEl.textContent = '';
+
+  try {
+    const callAI = httpsCallable(functions, 'generateCareerAssistanceText');
+    const res = await callAI({
+      mode: aiMode,
+      jobDescription: jdText,
+      jobTitle: aiCurrentJob ? aiCurrentJob.title : '',
+      company: aiCurrentJob ? aiCurrentJob.company : '',
+      resumeNotes: aiCurrentJob ? aiCurrentJob.notes : ''
+    });
+    outputEl.textContent = res.data?.text || 'No return string parsed.';
+    outputWrap.classList.add('visible');
+  } catch(e) {
+    outputEl.textContent = `AI Copilot Generation error loop fallback triggered:\n\n[MOCK COPILOT GENERATION]\nTargeting ${aiMode} structure...\n\nAcme requirements provided look clean. Remember to emphasize skills listed in notes: "${aiCurrentJob ? aiCurrentJob.notes : 'General Skills'}".`;
+    outputWrap.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-sparkles"></i> Generate';
+  }
+};
+
+window.copyAIOutput = function() {
+  const txt = document.getElementById('aiOutput').textContent;
+  if(!txt) return;
+  navigator.clipboard.writeText(txt);
+  const copyBtn = document.getElementById('aiCopyBtn');
+  copyBtn.textContent = 'Copied!';
+  setTimeout(() => copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy', 2000);
+};
+
+// ── PHASE 12: DATA CONVERSION INTERFACES ──
+window.exportCSV = function() {
+  if(!jobs.length) return;
+  const headers = ['Job Title', 'Company', 'Location', 'Status', 'Salary', 'Date Applied', 'Recruiter', 'Notes', 'Tags'];
+  const rows = jobs.map(j => [
+    j.title || '', j.company || '', j.location || '', j.status || '', j.salary || '',
+    j.date ? (j.date.toDate ? j.date.toDate().toISOString() : new Date(j.date).toISOString()) : '',
+    j.recruiter || '', j.notes || '', (j.tags || []).join(';')
+  ]);
+  const content = [headers.join(','), ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))].join('\n');
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `huntlog_export_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+};
+
+window.openImport = function() { document.getElementById('importModal').classList.add('open'); };
+window.closeImport = function() {
+  document.getElementById('importModal').classList.remove('open');
+  document.getElementById('importPreview').innerHTML = '';
+  document.getElementById('importConfirmBtn').style.display = 'none';
+  document.getElementById('csvFileInput').value = '';
+  window.csvParsed = [];
+};
+
+window.handleCSVFile = function(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result;
+    const lines = text.split(/\r?\n/).filter(l => l.trim());
+    if (!lines.length) return;
+    const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim().toLowerCase());
+    window.csvParsed = [];
+    
+    for (let i = 1; i < lines.length; i++) {
+      const vals = parseCsvLine(lines[i]);
+      const row = {};
+      headers.forEach((h, idx) => { row[h] = (vals[idx] || '').replace(/^"|"$/g, '').trim(); });
+      
+      const title = row.title || row['job title'] || row['position'] || '';
+      const company = row.company || row['company name'] || '';
+      if (!title && !company) continue;
+      
+      window.csvParsed.push({
+        title, company,
+        location: row.location || '',
+        status: ['applied','screening','interview','offer','rejected'].includes(row.status?.toLowerCase()) ? row.status.toLowerCase() : 'applied',
+        salary: row.salary || '',
+        notes: row.notes || '',
+        tags: row.tags ? row.tags.split(';').map(x=>x.trim()).filter(Boolean) : []
       });
-      const div=document.createElement('div');
-      div.className='import-preview-row';
-      div.textContent=`${title} @ ${company} — ${status}`;
-      preview.appendChild(div);
     }
-    document.getElementById('importConfirmBtn').style.display=csvParsed.length?'block':'none';
-    document.getElementById('importConfirmBtn').textContent=`Import ${csvParsed.length} jobs`;
+    document.getElementById('importPreview').textContent = `Parsed ${window.csvParsed.length} rows successfully from logging stream structure files.`;
+    document.getElementById('importConfirmBtn').style.display = 'inline-flex';
   };
   reader.readAsText(file);
 };
-function parseCsvLine(line){
-  const result=[];let current='';let inQuotes=false;
-  for(let i=0;i<line.length;i++){
-    if(line[i]==='"'){inQuotes=!inQuotes;}
-    else if(line[i]===','&&!inQuotes){result.push(current);current='';}
-    else{current+=line[i];}
-  }
-  result.push(current);return result;
-}
-function normalizeStatus(s){
-  s=(s||'').toLowerCase().trim();
-  if(s.includes('screen')||s.includes('phone'))return'screening';
-  if(s.includes('interview'))return'interview';
-  if(s.includes('offer'))return'offer';
-  if(s.includes('reject')||s.includes('decline')||s.includes('no'))return'rejected';
-  return'applied';
-}
-window.confirmImport=async function(){
-  if(!currentUser||!csvParsed.length)return;
-  const btn=document.getElementById('importConfirmBtn');
-  btn.textContent='Importing…';btn.disabled=true;
+
+window.confirmImport = async function() {
+  if(!window.csvParsed || !window.csvParsed.length) return;
   setSyncState('syncing');
-  const today=new Date();
-  const dateTs=Timestamp.fromDate(new Date(today.getFullYear(),today.getMonth(),today.getDate()));
-  for(const row of csvParsed){
-    const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),{
-      title:row.title,company:row.company,status:row.status,
-      location:row.location,salary:row.salary,notes:row.notes,url:row.url,
-      tags:[],followupDate:null,recruiter:'',interviewRound:0,rejectReason:'',date:dateTs
+  const batch = writeBatch(db);
+  const today = new Date();
+  const dateTs = Timestamp.fromDate(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+
+  window.csvParsed.forEach(item => {
+    const docRef = doc(collection(db, `users/${currentUser.uid}/jobs`));
+    batch.set(docRef, {
+      ...item, date: dateTs, followupDate: null, recruiter: '', interviewRound: 0, rejectReason: '', resumeUrl: '', resumeVersion: '', matchScore: 0
     });
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-      text:'Imported from CSV',ts:serverTimestamp()
-    });
-  }
+  });
+  await batch.commit();
   window.closeImport();
 };
-// Drag-over on import drop zone
-(()=>{
-  const drop=document.getElementById('importDrop');
-  if(!drop)return;
-  drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('drag-over');});
-  drop.addEventListener('dragleave',()=>drop.classList.remove('drag-over'));
-  drop.addEventListener('drop',e=>{
-    e.preventDefault();drop.classList.remove('drag-over');
-    const file=e.dataTransfer.files[0];
-    if(file){document.getElementById('csvFileInput').files=e.dataTransfer.files;window.handleCSVFile(file);}
+
+function parseCsvLine(text) {
+  let p = false, r = [""];
+  for (let i=0; i<text.length; i++) {
+    let c = text[i], next = text[i+1];
+    if (c === '"') { if (p && next === '"') { r[r.length - 1] += '"'; i++; } else p = !p; }
+    else if (c === ',' && !p) r.push("");
+    else r[r.length - 1] += c;
+  }
+  return r;
+}
+
+// ── PHASE 13: CORE UI EVENT LISTENERS & HOOKS ──
+window.setView = function(view) {
+  currentView = view;
+  document.getElementById('listViewBtn').classList.toggle('active-view', view === 'list');
+  document.getElementById('kanbanViewBtn').classList.toggle('active-view', view === 'kanban');
+  renderPipelineDashboard();
+};
+window.setFilter = function(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.stat').forEach(el => el.classList.remove('active'));
+  document.getElementById(`st-${filter}`).classList.add('active');
+  renderPipelineDashboard();
+};
+window.onSearchChange = function() { renderPipelineDashboard(); };
+window.onSortChange = function() {
+  currentSort = document.getElementById('sortSelect').value;
+  renderPipelineDashboard();
+};
+window.toggleTheme = function() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  document.getElementById('themeBtn').innerHTML = next === 'dark' ? '<i class="fa-solid fa-moon"></i>' : '<i class="fa-solid fa-sun"></i>';
+};
+window.setMatchScore = function(n) {
+  window.currentMatchScore = n;
+  document.querySelectorAll('#modalStars .match-star').forEach((s, i) => {
+    s.classList.toggle('lit', i < n);
   });
-})();
+  const labels = ['Not rated', 'Poor fit', 'Below average', 'Average fit', 'Good fit', 'Great fit!'];
+  const el = document.getElementById('matchScoreLabel');
+  if (el) el.textContent = labels[n] || 'Not rated';
+};
 
-// ── PHASE 4: CLOUD FUNCTIONS (deploy separately via Firebase CLI) ──
-// These functions enhance HuntLog with server-side automation.
-// Deploy with: firebase deploy --only functions
-//
-// functions/index.js stubs:
-//
-// 1. FOLLOW-UP REMINDER EMAILS
-//    exports.sendFollowUpReminders = functions.pubsub
-//      .schedule('every 24 hours').onRun(async ctx => {
-//        const today = new Date(); today.setHours(0,0,0,0);
-//        const usersSnap = await admin.firestore().collection('users').get();
-//        for (const userDoc of usersSnap.docs) {
-//          const uid = userDoc.id; const userData = userDoc.data();
-//          if (!userData.email || userData.banned) continue;
-//          const jobsSnap = await admin.firestore()
-//            .collection(`users/${uid}/jobs`)
-//            .where('followupDate', '<=', admin.firestore.Timestamp.fromDate(today))
-//            .where('status', 'in', ['applied','screening']).get();
-//          if (!jobsSnap.empty) {
-//            // send email via SendGrid / Resend / nodemailer
-//          }
-//        }
-//      });
-//
-// 2. BAN ENFORCEMENT (block sign-in for banned users)
-//    exports.enforceUserBan = functions.auth.user().beforeSignIn(async (user) => {
-//      const doc = await admin.firestore().doc(`users/${user.uid}`).get();
-//      if (doc.exists && doc.data().banned) {
-//        throw new functions.auth.HttpsError('permission-denied','Your account has been suspended.');
-//      }
-//    });
-//
-// 3. SET ADMIN CUSTOM CLAIM (call once per admin user)
-//    exports.setAdminClaim = functions.https.onCall(async (data, ctx) => {
-//      if (!ctx.auth || ctx.auth.token.admin !== true) throw new Error('Unauthorized');
-//      await admin.auth().setCustomUserClaims(data.uid, { admin: true });
-//      return { success: true };
-//    });
-//
-// 4. STALE JOB DIGEST (weekly email summary)
-//    exports.weeklyDigest = functions.pubsub.schedule('every monday 08:00').onRun(...);
+// ── TIME FORMATTING ENGINE UTILS ──
+function tsMs(ts) { if(!ts) return 0; if(ts.toMillis) return ts.toMillis(); return new Date(ts).getTime(); }
+function fmtInputDate(ts) {
+  if(!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  if(isNaN(d)) return '';
+  return d.toISOString().split('T')[0];
+}
+function fmtFull(ts) {
+  if(!ts) return null;
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  if(isNaN(d)) return null;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+function fmtFollowup(ts) {
+  if (!ts) return null;
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  if (isNaN(d)) return null;
+  const now = new Date(); now.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  const diff = Math.round((d - now) / (1000 * 60 * 60 * 24));
+  if (diff < 0) return { label: `Overdue by ${-diff}d`, overdue: true };
+  if (diff === 0) return { label: 'Follow up today', overdue: true };
+  return { label: `Follow up in ${diff}d`, overdue: false };
+}
+function daysSince(ts) {
+  if (!ts) return null;
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  if (isNaN(d)) return null;
+  const now = new Date(); now.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((now - d) / (1000 * 60 * 60 * 24));
+}
+function daysBadgeHtml(ts) {
+  const n = daysSince(ts);
+  if (n === null) return '';
+  const cls = n > 30 ? 'very-stale' : n > 14 ? 'stale' : '';
+  const label = n === 0 ? 'today' : n === 1 ? '1d ago' : `${n}d ago`;
+  return `<span class="days-badge ${cls}">${label}</span>`;
+}
+function updateCounts() {
+  document.getElementById('cnt-all').textContent = jobs.length;
+  ['applied', 'screening', 'interview', 'offer'].forEach(s => {
+    const el = document.getElementById('cnt-' + (s === 'screening' ? 'screen' : s));
+    if (el) el.textContent = jobs.filter(j => j.status === s).length;
+  });
+}
+function sortedJobs(arr) {
+  const a = [...arr];
+  switch (currentSort) {
+    case 'date-asc': return a.sort((x, y) => tsMs(x.date) - tsMs(y.date));
+    case 'company-asc': return a.sort((x, y) => (x.company || '').localeCompare(y.company || ''));
+    case 'company-desc': return a.sort((x, y) => (y.company || '').localeCompare(x.company || ''));
+    case 'title-asc': return a.sort((x, y) => (x.title || '').localeCompare(y.title || ''));
+    case 'status': return a.sort((x, y) => Object.keys(SM).indexOf(x.status) - Object.keys(SM).indexOf(y.status));
+    case 'date-desc': default: return a.sort((x, y) => tsMs(y.date) - tsMs(x.date));
+  }
+}
 
-// ── KEYBOARD SHORTCUTS ──
-document.addEventListener('keydown',e=>{
-  const tag=document.activeElement.tagName.toLowerCase();
-  const inInput=tag==='input'||tag==='textarea'||tag==='select';
-
-  if(e.key==='Escape'){
-    window.closeAdd();window.closeDetail();window.closeAdmin();window.closeAnalytics();
-    if(quickAddOpen)toggleQuickAdd();
+// ── GLOBAL SHORTCUT SYSTEM INTERCEPTS ──
+document.addEventListener('keydown', e => {
+  const tag = document.activeElement.tagName.toLowerCase();
+  const inInput = tag === 'input' || tag === 'textarea' || tag === 'select';
+  if (e.key === 'Escape') {
+    window.closeAdd(); window.closeDetail(); closeAdmin(); closeAnalytics(); closeAIAssist(); window.closeImport();
+    if (quickAddOpen) window.toggleQuickAdd();
     return;
   }
-  if(inInput)return; // don't fire shortcuts when typing
-
-  switch(e.key){
-    case'n':case'N':e.preventDefault();window.openAdd();break;
-    case'q':case'Q':e.preventDefault();window.toggleQuickAdd();break;
-    case'/':e.preventDefault();document.getElementById('searchInput').focus();break;
-    case't':case'T':window.toggleTheme();break;
-    case'l':case'L':window.setView('list');break;
-    case'k':case'K':window.setView('kanban');break;
-    case'a':case'A':window.openAnalytics();break;
+  if (inInput) return;
+  switch (e.key) {
+    case 'n': case 'N': e.preventDefault(); window.openAdd(); break;
+    case 'q': case 'Q': e.preventDefault(); window.toggleQuickAdd(); break;
+    case 't': case 'T': e.preventDefault(); window.toggleTheme(); break;
+    case 'a': case 'A': e.preventDefault(); window.openAnalytics(); break;
   }
 });
-
-// restore view after everything is defined
-window.setView(savedView);
 </script>
 </body>
 </html>
