@@ -233,6 +233,7 @@ import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app
 import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
 import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
 
+const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
 const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
 const fbApp=initializeApp(cfg);
 const auth=getAuth(fbApp);
@@ -313,7 +314,7 @@ onAuthStateChanged(auth,user=>{
   }
 });
 
-const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
+
 
 async function getClientIP(){
   try{const r=await fetch('https://api.ipify.org?format=json');const d=await r.json();return d.ip||'unknown';}
