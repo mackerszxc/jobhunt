@@ -576,7 +576,7 @@ option{background:var(--c1)}
   /* ── add/edit modal: full-screen on mobile ── */
   .modal-overlay{padding:0;align-items:flex-end}
   .modal{
-    border-radius:16px 16px 0 0;max-height:96vh;
+    border-radius:16px 16px 0 0;max-height:88vh;
     padding:1.25rem 1rem;
   }
 
@@ -837,7 +837,10 @@ option{background:var(--c1)}
 <!-- ADD / EDIT MODAL -->
 <div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAdd()">
   <div class="modal">
-    <div class="modal-title" id="modalTitle">Add new application</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+      <div class="modal-title" id="modalTitle" style="margin:0">Add new application</div>
+      <button class="detail-close" onclick="closeAdd()" style="flex-shrink:0"><i class="fa-solid fa-xmark"></i></button>
+    </div>
 
     <!-- duplicate warning -->
     <div class="dup-warning" id="dupWarning"><i class="fa-solid fa-triangle-exclamation"></i><span id="dupWarningText"></span></div>
