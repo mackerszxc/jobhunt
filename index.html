@@ -635,6 +635,54 @@ option{background:var(--c1)}
 .import-preview{max-height:180px;overflow-y:auto;margin:12px 0;font-size:12px;color:var(--c5)}
 .import-preview-row{padding:4px 0;border-bottom:.5px solid var(--c2)}
 .import-actions{display:flex;gap:8px;margin-top:1rem}
+
+/* ── SETTINGS PANEL ── */
+.settings-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:flex-start;justify-content:flex-end;padding:0}
+.settings-overlay.open{display:flex}
+.settings-panel{background:var(--c1);border-left:.5px solid var(--c3);width:360px;height:100vh;overflow-y:auto;display:flex;flex-direction:column;animation:slideInRight .22s cubic-bezier(.4,0,.2,1)}
+@keyframes slideInRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@media(max-width:640px){
+  .settings-overlay{align-items:flex-end;justify-content:stretch}
+  .settings-panel{width:100%;height:92vh;border-left:none;border-top:.5px solid var(--c3);border-radius:16px 16px 0 0;animation:slideInUp .22s cubic-bezier(.4,0,.2,1)}
+  @keyframes slideInUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+}
+.settings-header{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.25rem 1rem;border-bottom:.5px solid var(--c3);position:sticky;top:0;background:var(--c1);z-index:1}
+.settings-title{font-size:1rem;font-weight:700;color:var(--c6);display:flex;align-items:center;gap:8px}
+.settings-title i{color:var(--accent);font-size:.9rem}
+.settings-body{flex:1;padding:1rem 1.25rem 2rem;display:flex;flex-direction:column;gap:1.5rem}
+.settings-section{display:flex;flex-direction:column;gap:.5rem}
+.settings-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--c4);padding-bottom:.4rem;border-bottom:.5px solid var(--c3)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:.55rem 0;gap:12px}
+.settings-row-label{font-size:13px;color:var(--c5);display:flex;flex-direction:column;gap:2px}
+.settings-row-label small{font-size:11px;color:var(--c4)}
+.settings-toggle{position:relative;width:38px;height:22px;flex-shrink:0}
+.settings-toggle input{opacity:0;width:0;height:0;position:absolute}
+.settings-toggle-track{position:absolute;inset:0;background:var(--c3);border-radius:20px;transition:.2s;cursor:pointer}
+.settings-toggle input:checked + .settings-toggle-track{background:var(--accent)}
+.settings-toggle-track::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.settings-toggle input:checked + .settings-toggle-track::after{left:19px}
+.settings-select{background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--c5);font-family:'Syne',sans-serif;outline:none;cursor:pointer;transition:.15s}
+.settings-select:focus{border-color:var(--accent)}
+.settings-input{background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;width:100%;transition:.15s;margin-top:4px}
+.settings-input:focus{border-color:var(--accent)}
+.accent-swatches{display:flex;gap:6px;flex-wrap:wrap}
+.accent-swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s;flex-shrink:0}
+.accent-swatch.active{border-color:var(--c6);transform:scale(1.15)}
+.settings-btn{background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:7px 14px;font-size:12px;color:var(--c5);font-family:'Syne',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s;width:100%;justify-content:flex-start}
+.settings-btn:hover{border-color:var(--c4);color:var(--c6)}
+.settings-btn.danger{border-color:var(--rejected);color:var(--rejected)}
+.settings-btn.danger:hover{background:var(--rejected-bg)}
+.settings-btn i{width:14px;text-align:center;font-size:11px}
+.settings-profile-row{display:flex;align-items:center;gap:12px;padding:.6rem 0 .8rem}
+.settings-avatar{width:44px;height:44px;border-radius:50%;border:.5px solid var(--c3);object-fit:cover;background:var(--c2);flex-shrink:0}
+.settings-avatar-placeholder{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;flex-shrink:0;border:.5px solid var(--c3)}
+.settings-user-info{flex:1;min-width:0}
+.settings-user-name{font-size:14px;font-weight:600;color:var(--c6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.settings-user-email{font-size:12px;color:var(--c4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.settings-badge{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--c2);color:var(--c4);font-weight:600;letter-spacing:.04em;border:.5px solid var(--c3);flex-shrink:0}
+.settings-danger-zone{background:var(--rejected-bg);border:.5px solid rgba(239,68,68,.3);border-radius:10px;padding:.75rem 1rem;display:flex;flex-direction:column;gap:6px}
+.settings-danger-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--rejected);margin-bottom:2px;opacity:.8}
+.settings-footer{font-size:11px;color:var(--c4);text-align:center;padding:.5rem 1.25rem 1.5rem}
 </style>
 </head>
 <body>
@@ -686,6 +734,7 @@ option{background:var(--c1)}
       <button class="icon-btn" onclick="openImport()"><i class="fa-solid fa-upload"></i> Import</button>
       <button class="icon-btn" onclick="openAnalytics()" title="Analytics (A)"><i class="fa-solid fa-chart-line"></i></button>
       <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
+      <button class="icon-btn" onclick="openSettings()" title="Settings"><i class="fa-solid fa-gear"></i></button>
       <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
       <button class="icon-btn" onclick="document.getElementById('shortcutsModal').classList.add('open')" title="Keyboard shortcuts (?)"><i class="fa-solid fa-keyboard"></i></button>
       <!-- mobile only hamburger -->
@@ -2738,6 +2787,176 @@ window.addEventListener('resize',()=>{
 // restore view after everything is defined
 window.setView(savedView);
 updateMobileNav();
+
+// ── SETTINGS PANEL ──
+(function(){
+
+  function getPrefs(){
+    try{return JSON.parse(localStorage.getItem('huntlogPrefs')||'{}')}catch(e){return{}}
+  }
+  function savePrefs(p){localStorage.setItem('huntlogPrefs',JSON.stringify(p))}
+
+  window.openSettings=function(){
+    const overlay=document.getElementById('settingsOverlay');
+    overlay.classList.add('open');
+    _populateSettings();
+  };
+
+  window.closeSettings=function(){
+    document.getElementById('settingsOverlay').classList.remove('open');
+  };
+
+  function _populateSettings(){
+    // Profile
+    const u=window.currentUser;
+    if(u){
+      const avatar=document.getElementById('settingsAvatar');
+      const placeholder=document.getElementById('settingsAvatarPlaceholder');
+      if(u.photoURL){
+        avatar.src=u.photoURL;
+        avatar.style.display='block';
+        placeholder.style.display='none';
+      } else {
+        avatar.style.display='none';
+        const initials=(u.displayName||u.email||'?').slice(0,1).toUpperCase();
+        placeholder.textContent=initials;
+        placeholder.style.display='flex';
+        placeholder.style.background='var(--accent)';
+        placeholder.style.color='#fff';
+      }
+      document.getElementById('settingsUserName').textContent=u.displayName||'Anonymous';
+      document.getElementById('settingsUserEmail').textContent=u.email||'';
+      const providers=(u.providerData||[]).map(p=>p.providerId);
+      const badge=providers.includes('google.com')?'Google':providers.includes('password')?'Email':'—';
+      document.getElementById('settingsProviderBadge').textContent=badge;
+    }
+
+    // Theme toggle — checked = light
+    const isLight=document.documentElement.getAttribute('data-theme')==='light';
+    const themeToggle=document.getElementById('settingsThemeToggle');
+    themeToggle.checked=isLight;
+    // label it
+    themeToggle.closest('.settings-row').querySelector('.settings-row-label').innerHTML=
+      `<span>${isLight?'Light mode':'Dark mode'}</span><small>Toggle interface theme</small>`;
+
+    // Accent
+    const saved=localStorage.getItem('accentColor')||'#6366f1';
+    document.querySelectorAll('.accent-swatch').forEach(s=>{
+      s.classList.toggle('active',s.dataset.color===saved);
+    });
+
+    // Prefs
+    const p=getPrefs();
+    const density=p.density||'comfortable';
+    document.getElementById('settingsDensity').value=density;
+    const defStatus=p.defaultStatus||'applied';
+    document.getElementById('settingsDefaultStatus').value=defStatus;
+    const defSort=p.defaultSort||'date-desc';
+    document.getElementById('settingsDefaultSort').value=defSort;
+    const weeklyGoal=localStorage.getItem('weeklyGoal')||'5';
+    document.getElementById('settingsWeeklyGoal').value=weeklyGoal;
+    const staleAfter=p.staleAfter||'14';
+    document.getElementById('settingsStaleAfter').value=staleAfter;
+    const followup=p.followupReminders!==false;
+    document.getElementById('settingsFollowupReminders').checked=followup;
+    const staleAlerts=p.staleAlerts!==false;
+    document.getElementById('settingsStaleAlerts').checked=staleAlerts;
+
+    // footer with version/uid
+    const uid=window.currentUser?.uid||'';
+    document.getElementById('settingsFooter').textContent=
+      uid?`HuntLog · uid: ${uid.slice(0,8)}…`:'HuntLog · your data is synced securely';
+  }
+
+  window.settingsToggleTheme=function(checkbox){
+    // reuse the existing toggleTheme but sync the checkbox
+    window.toggleTheme();
+    const isLight=document.documentElement.getAttribute('data-theme')==='light';
+    checkbox.checked=isLight;
+    checkbox.closest('.settings-row').querySelector('.settings-row-label').innerHTML=
+      `<span>${isLight?'Light mode':'Dark mode'}</span><small>Toggle interface theme</small>`;
+  };
+
+  window.setAccent=function(el){
+    const color=el.dataset.color;
+    document.documentElement.style.setProperty('--accent',color);
+    localStorage.setItem('accentColor',color);
+    document.querySelectorAll('.accent-swatch').forEach(s=>s.classList.toggle('active',s===el));
+  };
+
+  window.setDensity=function(val){
+    document.documentElement.setAttribute('data-density',val);
+    const p=getPrefs();p.density=val;savePrefs(p);
+    // Apply density to job cards
+    document.querySelectorAll('.job-card').forEach(c=>{
+      c.style.padding=val==='compact'?'8px 12px':'14px 16px';
+    });
+  };
+
+  window.saveSettingsPref=function(){
+    const p=getPrefs();
+    p.defaultStatus=document.getElementById('settingsDefaultStatus').value;
+    p.defaultSort=document.getElementById('settingsDefaultSort').value;
+    p.staleAfter=document.getElementById('settingsStaleAfter').value;
+    p.followupReminders=document.getElementById('settingsFollowupReminders').checked;
+    p.staleAlerts=document.getElementById('settingsStaleAlerts').checked;
+    const wg=parseInt(document.getElementById('settingsWeeklyGoal').value,10);
+    if(wg>=1&&wg<=50){
+      localStorage.setItem('weeklyGoal',String(wg));
+      window._renderGoal&&window._renderGoal();
+    }
+    savePrefs(p);
+    // Apply default sort live
+    const sortEl=document.getElementById('sortSelect');
+    if(sortEl&&p.defaultSort){sortEl.value=p.defaultSort;window.onSort&&window.onSort(p.defaultSort);}
+  };
+
+  window.settingsCopyUID=function(){
+    const uid=window.currentUser?.uid||'';
+    if(!uid){alert('Not signed in');return;}
+    navigator.clipboard.writeText(uid).then(()=>{
+      const btn=event.target.closest('button');
+      const orig=btn.innerHTML;btn.innerHTML='<i class="fa-solid fa-check"></i> Copied!';
+      setTimeout(()=>{btn.innerHTML=orig;},1800);
+    });
+  };
+
+  window.settingsClearData=function(){
+    if(!confirm('Delete ALL your job applications? This cannot be undone.'))return;
+    if(!confirm('Are you absolutely sure? All your data will be permanently deleted.'))return;
+    // Use existing bulk-delete pattern if available
+    if(window.jobs&&window.db&&window.currentUser){
+      const batch=[];
+      window.jobs.forEach(j=>{
+        batch.push(window.db.collection('users').doc(window.currentUser.uid).collection('jobs').doc(j.id).delete());
+      });
+      Promise.all(batch).then(()=>{
+        window.jobs=[];
+        window.render&&window.render();
+        closeSettings();
+      });
+    }
+  };
+
+  // On load: apply saved accent + density
+  const savedAccent=localStorage.getItem('accentColor');
+  if(savedAccent)document.documentElement.style.setProperty('--accent',savedAccent);
+  const savedPrefs=getPrefs();
+  if(savedPrefs.density)document.documentElement.setAttribute('data-density',savedPrefs.density);
+
+  // Keyboard shortcut: S
+  document.addEventListener('keydown',e=>{
+    if(e.key==='S'&&!e.ctrlKey&&!e.metaKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){
+      const overlay=document.getElementById('settingsOverlay');
+      if(overlay.classList.contains('open'))closeSettings();
+      else openSettings();
+    }
+    if(e.key==='Escape'&&document.getElementById('settingsOverlay').classList.contains('open')){
+      closeSettings();
+    }
+  });
+
+})();
 </script>
 <!-- MOBILE MENU SCRIM -->
 <div class="mobile-menu-scrim" id="mobileMenuScrim" onclick="closeMobileMenu()"></div>
@@ -2758,6 +2977,7 @@ updateMobileNav();
   <button class="mobile-menu-item" onclick="closeMobileMenu();openImport()"><i class="fa-solid fa-upload"></i> Import CSV</button>
   <button class="mobile-menu-item" onclick="closeMobileMenu();openAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button>
   <button class="mobile-menu-item" onclick="closeMobileMenu();toggleTheme()"><i class="fa-solid fa-moon" id="mobileThemeIcon"></i> <span id="mobileThemeLabel">Toggle theme</span></button>
+  <button class="mobile-menu-item" onclick="closeMobileMenu();openSettings()"><i class="fa-solid fa-gear"></i> Settings</button>
   <button class="mobile-menu-item" onclick="closeMobileMenu();document.getElementById('shortcutsModal').classList.add('open')"><i class="fa-solid fa-keyboard"></i> Shortcuts</button>
   <div class="mobile-menu-divider"></div>
   <button class="mobile-menu-item" id="mobileAdminBtn" style="display:none" onclick="closeMobileMenu();openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
@@ -2800,9 +3020,147 @@ updateMobileNav();
       <div style="display:flex;align-items:center;justify-content:space-between"><span>List view</span><kbd class="kbd">L</kbd></div>
       <div style="display:flex;align-items:center;justify-content:space-between"><span>Kanban view</span><kbd class="kbd">K</kbd></div>
       <div style="display:flex;align-items:center;justify-content:space-between"><span>Analytics</span><kbd class="kbd">A</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Settings</span><kbd class="kbd">S</kbd></div>
       <div style="display:flex;align-items:center;justify-content:space-between"><span>This cheatsheet</span><kbd class="kbd">?</kbd></div>
       <div style="display:flex;align-items:center;justify-content:space-between"><span>Close / dismiss</span><kbd class="kbd">Esc</kbd></div>
     </div>
+  </div>
+</div>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-overlay" id="settingsOverlay" onclick="if(event.target===this)closeSettings()">
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-header">
+      <div class="settings-title"><i class="fa-solid fa-gear"></i> Settings</div>
+      <button class="detail-close" onclick="closeSettings()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="settings-body">
+
+      <!-- PROFILE -->
+      <div class="settings-section">
+        <div class="settings-section-title">Profile</div>
+        <div class="settings-profile-row">
+          <img class="settings-avatar" id="settingsAvatar" src="" alt="" style="display:none"/>
+          <div class="settings-avatar-placeholder" id="settingsAvatarPlaceholder" style="display:none"></div>
+          <div class="settings-user-info">
+            <div class="settings-user-name" id="settingsUserName">—</div>
+            <div class="settings-user-email" id="settingsUserEmail">—</div>
+          </div>
+          <span class="settings-badge" id="settingsProviderBadge">Google</span>
+        </div>
+      </div>
+
+      <!-- APPEARANCE -->
+      <div class="settings-section">
+        <div class="settings-section-title">Appearance</div>
+        <div class="settings-row">
+          <span class="settings-row-label">Theme<small>Light or dark interface</small></span>
+          <label class="settings-toggle" title="Toggle theme">
+            <input type="checkbox" id="settingsThemeToggle" onchange="settingsToggleTheme(this)"/>
+            <span class="settings-toggle-track"></span>
+          </label>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <span class="settings-row-label">Accent colour</span>
+          <div class="accent-swatches" id="accentSwatches">
+            <div class="accent-swatch active" style="background:#6366f1" data-color="#6366f1" onclick="setAccent(this)" title="Indigo"></div>
+            <div class="accent-swatch" style="background:#3b82f6" data-color="#3b82f6" onclick="setAccent(this)" title="Blue"></div>
+            <div class="accent-swatch" style="background:#8b5cf6" data-color="#8b5cf6" onclick="setAccent(this)" title="Violet"></div>
+            <div class="accent-swatch" style="background:#ec4899" data-color="#ec4899" onclick="setAccent(this)" title="Pink"></div>
+            <div class="accent-swatch" style="background:#10b981" data-color="#10b981" onclick="setAccent(this)" title="Emerald"></div>
+            <div class="accent-swatch" style="background:#f59e0b" data-color="#f59e0b" onclick="setAccent(this)" title="Amber"></div>
+            <div class="accent-swatch" style="background:#ef4444" data-color="#ef4444" onclick="setAccent(this)" title="Red"></div>
+            <div class="accent-swatch" style="background:#14b8a6" data-color="#14b8a6" onclick="setAccent(this)" title="Teal"></div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-row-label">Card density<small>Spacing between job cards</small></span>
+          <select class="settings-select" id="settingsDensity" onchange="setDensity(this.value)">
+            <option value="comfortable">Comfortable</option>
+            <option value="compact">Compact</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- JOB SEARCH -->
+      <div class="settings-section">
+        <div class="settings-section-title">Job Search</div>
+        <div class="settings-row">
+          <span class="settings-row-label">Default status<small>Pre-selected when adding a job</small></span>
+          <select class="settings-select" id="settingsDefaultStatus" onchange="saveSettingsPref()">
+            <option value="applied">Applied</option>
+            <option value="screening">Screening</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span class="settings-row-label">Default sort<small>How jobs are ordered on load</small></span>
+          <select class="settings-select" id="settingsDefaultSort" onchange="saveSettingsPref()">
+            <option value="date-desc">Newest first</option>
+            <option value="date-asc">Oldest first</option>
+            <option value="company-asc">Company A–Z</option>
+            <option value="status">Status</option>
+            <option value="stale">Most stale</option>
+          </select>
+        </div>
+        <div class="settings-row">
+          <span class="settings-row-label">Weekly goal<small>Target applications per week</small></span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="number" class="settings-select" id="settingsWeeklyGoal" min="1" max="50" value="5" style="width:60px;text-align:center" onchange="saveSettingsPref()"/>
+            <span style="font-size:12px;color:var(--c4)">/wk</span>
+          </div>
+        </div>
+        <div class="settings-row">
+          <span class="settings-row-label">Show stale warning after<small>Days since last update</small></span>
+          <select class="settings-select" id="settingsStaleAfter" onchange="saveSettingsPref()">
+            <option value="7">7 days</option>
+            <option value="14" selected>14 days</option>
+            <option value="21">21 days</option>
+            <option value="30">30 days</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div class="settings-section">
+        <div class="settings-section-title">Notifications</div>
+        <div class="settings-row">
+          <span class="settings-row-label">Follow-up reminders<small>Badge overdue follow-ups on cards</small></span>
+          <label class="settings-toggle">
+            <input type="checkbox" id="settingsFollowupReminders" checked onchange="saveSettingsPref()"/>
+            <span class="settings-toggle-track"></span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <span class="settings-row-label">Stale application alerts<small>Highlight apps with no updates</small></span>
+          <label class="settings-toggle">
+            <input type="checkbox" id="settingsStaleAlerts" checked onchange="saveSettingsPref()"/>
+            <span class="settings-toggle-track"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- DATA -->
+      <div class="settings-section">
+        <div class="settings-section-title">Data</div>
+        <button class="settings-btn" onclick="closeSettings();exportCSV()"><i class="fa-solid fa-download"></i> Export all jobs as CSV</button>
+        <button class="settings-btn" onclick="closeSettings();openImport()"><i class="fa-solid fa-upload"></i> Import jobs from CSV</button>
+        <button class="settings-btn" onclick="settingsCopyUID()"><i class="fa-solid fa-fingerprint"></i> Copy user ID</button>
+      </div>
+
+      <!-- DANGER ZONE -->
+      <div class="settings-section">
+        <div class="settings-section-title">Danger Zone</div>
+        <div class="settings-danger-zone">
+          <div class="settings-danger-label"><i class="fa-solid fa-triangle-exclamation"></i> Irreversible actions</div>
+          <button class="settings-btn danger" onclick="settingsClearData()"><i class="fa-solid fa-trash"></i> Delete all my jobs</button>
+          <button class="settings-btn danger" onclick="closeSettings();signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="settings-footer" id="settingsFooter">HuntLog · your data is synced securely</div>
   </div>
 </div>
 
