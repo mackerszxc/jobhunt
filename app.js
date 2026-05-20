@@ -618,7 +618,7 @@ window.saveJob=async function(){
 
 // ── DETAIL PANEL ──
 window._openDetail=async function(id){
-  openJobId=id;
+  openJobId=id;window._currentOpenJobId=id;
   const j=jobs.find(x=>x.id===id);if(!j)return;
   document.getElementById('d-title').textContent=j.title||'';
   document.getElementById('d-company').textContent=j.company||'';
@@ -719,7 +719,7 @@ window.addActivity=async function(){
   await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{text,ts:serverTimestamp()});
   input.value='';await loadActivity(openJobId);
 };
-window.closeDetail=function(){document.getElementById('detailPanel').classList.remove('open');openJobId=null;};
+window.closeDetail=function(){document.getElementById('detailPanel').classList.remove('open');openJobId=null;window._currentOpenJobId=null;};
 window._changeStatus=async function(s){
   if(!currentUser||!openJobId)return;
   setSyncState('syncing');
