@@ -451,6 +451,18 @@ option{background:var(--c1)}
 .match-score-label{font-size:11px;color:var(--c4);margin-left:4px}
 .card-match-score{font-size:11px;color:#f59e0b;display:flex;align-items:center;gap:2px}
 
+/* ── GOAL TRACKER ── */
+.goal-tracker{margin-bottom:1rem}
+.goal-tracker-inner{display:flex;align-items:center;gap:12px;background:var(--c1);border:.5px solid var(--c3);border-radius:10px;padding:10px 14px;flex-wrap:wrap}
+.goal-left{display:flex;flex-direction:column;gap:1px;min-width:130px;flex-shrink:0}
+.goal-label{font-size:10px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.goal-nums{font-size:13px;color:var(--c5);font-family:'DM Mono',monospace}
+.goal-bar-wrap{flex:1;background:var(--c3);border-radius:20px;height:8px;overflow:hidden;min-width:80px}
+.goal-bar{height:100%;border-radius:20px;transition:width .5s cubic-bezier(.4,0,.2,1),background .3s}
+.goal-right{flex-shrink:0}
+.goal-popover{background:var(--c1);border:.5px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:1rem}
+.goal-popover.hidden{display:none}
+
 /* ── IMPORT CSV ── */
 .import-drop{border:1.5px dashed var(--c3);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:.2s;color:var(--c4);font-size:13px}
 .import-drop:hover,.import-drop.drag-over{border-color:var(--accent);color:var(--accent)}
@@ -505,9 +517,9 @@ option{background:var(--c1)}
       <button class="icon-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> CSV</button>
       <button class="icon-btn" onclick="openImport()"><i class="fa-solid fa-upload"></i> Import</button>
       <button class="icon-btn" onclick="openAnalytics()" title="Analytics (A)"><i class="fa-solid fa-chart-line"></i></button>
-      <button class="icon-btn" onclick="openAIAssist()" title="AI writing assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
       <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
       <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+      <button class="icon-btn" onclick="document.getElementById('shortcutsModal').classList.add('open')" title="Keyboard shortcuts (?)"><i class="fa-solid fa-keyboard"></i></button>
     </div>
   </div>
 
@@ -529,10 +541,35 @@ option{background:var(--c1)}
     <div class="stat s-offer" onclick="filterStat(this,'offer')"><div class="stat-num" id="cnt-offer">0</div><div class="stat-label">Offers</div></div>
   </div>
 
-  <div class="toolbar">
+  <!-- Weekly Goal Tracker -->
+  <div id="goalTracker" class="goal-tracker" style="display:none">
+    <div class="goal-tracker-inner">
+      <div class="goal-left">
+        <span class="goal-label">Weekly goal</span>
+        <span class="goal-nums"><span id="goalThisWeek">0</span> / <span id="goalTarget">5</span> applications</span>
+      </div>
+      <div class="goal-bar-wrap">
+        <div class="goal-bar" id="goalBar" style="width:0%"></div>
+      </div>
+      <div class="goal-right">
+        <button class="icon-btn" onclick="openGoalEdit()" title="Set goal"><i class="fa-solid fa-gear"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Goal edit popover -->
+  <div id="goalPopover" class="goal-popover hidden">
+    <label class="form-label" style="font-size:11px">Applications per week</label>
+    <div style="display:flex;gap:6px;align-items:center;margin-top:4px">
+      <input type="number" id="goalInput" min="1" max="50" value="5" class="form-input" style="width:70px;padding:6px 8px"/>
+      <button class="btn-save" style="padding:6px 14px;font-size:12px" onclick="saveGoal()">Set</button>
+      <button class="btn-cancel" style="padding:6px 12px;font-size:12px" onclick="document.getElementById('goalPopover').classList.add('hidden')">Cancel</button>
+    </div>
+  </div>
     <div class="search-wrap">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <input class="search-input" id="searchInput" type="text" placeholder="Search jobs, companies, notes… (/)" oninput="onSearch(this.value)"/>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search jobs, companies, notes… (/)" oninput="onSearch(this.value);document.getElementById('searchClear').style.display=this.value?'flex':'none'"/>
+      <button id="searchClear" onclick="document.getElementById('searchInput').value='';onSearch('');this.style.display='none'" style="display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--c4);cursor:pointer;padding:2px 4px;font-size:13px;align-items:center"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <select class="sort-select" onchange="onSort(this.value)" id="sortSelect">
       <option value="date-desc">Newest first</option>
@@ -645,7 +682,10 @@ option{background:var(--c1)}
         <input class="tag-text-input" id="tagInput" placeholder="priority, referral, cold apply…" onkeydown="handleTagInput(event)"/>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, deadlines, impressions…"></textarea></div>
+    <div class="form-group">
+      <label class="form-label" style="display:flex;justify-content:space-between"><span>Notes</span><span id="notesCounter" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--c4)">0 / 2000</span></label>
+      <textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, deadlines, impressions…" maxlength="2000" oninput="document.getElementById('notesCounter').textContent=this.value.length+' / 2000'"></textarea>
+    </div>
     <div class="form-group">
       <label class="form-label">Fit score <span style="color:var(--c4);font-weight:400;text-transform:none">— how well does this role match your goals?</span></label>
       <div class="match-score-wrap">
@@ -671,7 +711,6 @@ option{background:var(--c1)}
     <div class="detail-header">
       <div><div class="detail-role" id="d-title"></div><div class="detail-co" id="d-company"></div></div>
       <div style="display:flex;gap:6px;flex-shrink:0">
-        <button class="edit-btn" onclick="openAIAssist(openJobId)" title="AI writing assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
         <button class="edit-btn" onclick="openEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
       </div>
     </div>
@@ -854,6 +893,7 @@ self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil
 </script>
 
 
+<script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
 import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
 import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
@@ -884,6 +924,7 @@ let selectedIds=new Set();
 let editingJobId=null;
 let modalTags=[];
 let currentRound=0; // 0 = not set
+let currentMatchScore=0; // 1-5 stars, 0 = not set
 let currentView='list'; // 'list' or 'kanban'
 
 // ── THEME ──
@@ -931,10 +972,10 @@ function toDateInput(ts){
 }
 function fmtFollowup(ts){
   if(!ts)return null;
-  const d=ts.toDate?ts.toDate():new Date(ts);
-  if(isNaN(d))return null;
+  const raw=ts.toDate?ts.toDate():new Date(ts);
+  if(isNaN(raw))return null;
+  const d=new Date(raw.getFullYear(),raw.getMonth(),raw.getDate());
   const now=new Date();now.setHours(0,0,0,0);
-  d.setHours(0,0,0,0);
   const diff=Math.round((d-now)/(1000*60*60*24));
   if(diff<0)return{label:`Overdue by ${-diff}d`,overdue:true};
   if(diff===0)return{label:'Follow up today',overdue:true};
@@ -1454,7 +1495,8 @@ window.saveJob=async function(){
     followupDate:followupTs,
     date:dateTs,
     interviewRound:status==='interview'?currentRound:0,
-    rejectReason:status==='rejected'?(document.getElementById('f-rejectreason').value||''):''
+    rejectReason:status==='rejected'?(document.getElementById('f-rejectreason').value||''):'',
+    matchScore:currentMatchScore||0
   };
   if(editingJobId){
     await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,editingJobId),data);
@@ -1484,8 +1526,12 @@ window._openDetail=async function(id){
   document.getElementById('d-date').textContent=`${fmt(j.date)} — ${daysBadgeHtml(j.date).replace(/<[^>]+>/g,'')}`;
   // Recruiter
   const recWrap=document.getElementById('d-recruiter-wrap');
-  if(j.recruiter){document.getElementById('d-recruiter').textContent=j.recruiter;recWrap.style.display='block';}
-  else{recWrap.style.display='none';}
+  if(j.recruiter){
+    const emailMatch=j.recruiter.match(/[\w.+-]+@[\w-]+\.[a-z]{2,}/i);
+    const copyBtn=emailMatch?` <button onclick="navigator.clipboard.writeText('${emailMatch[0]}').then(()=>{this.innerHTML='<i class=\\'fa-solid fa-check\\'></i>';setTimeout(()=>{this.innerHTML='<i class=\\'fa-solid fa-copy\\'></i> Copy email';},1800)})" style="background:transparent;border:.5px solid var(--c3);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--c4);cursor:pointer;margin-left:6px;font-family:\\'Syne\\',sans-serif;vertical-align:middle"><i class='fa-solid fa-copy'></i> Copy email</button>`:'';
+    document.getElementById('d-recruiter').innerHTML=j.recruiter+copyBtn;
+    recWrap.style.display='block';
+  }else{recWrap.style.display='none';}
   // URL
   const urlWrap=document.getElementById('d-url-wrap');
   if(j.url){
@@ -2132,7 +2178,6 @@ window.confirmImport=async function(){
 //    exports.weeklyDigest = functions.pubsub.schedule('every monday 08:00').onRun(...);
 
 // ── MATCH / FIT SCORE ──
-let currentMatchScore=0;
 window.setMatchScore=function(n){
   currentMatchScore=n;
   document.querySelectorAll('.match-star').forEach((s,i)=>{
@@ -2156,61 +2201,6 @@ window.openEdit=function(){
   const j=jobs.find(x=>x.id===openJobId);
   currentMatchScore=j?.matchScore||0;
   window.setMatchScore(currentMatchScore);
-};
-
-// Patch saveJob to persist matchScore
-const _origSaveJob=window.saveJob;
-window.saveJob=async function(){
-  // inject matchScore into data before save
-  const _origAddDoc=window._patchedAddDoc||addDoc;
-  // We hook by temporarily overriding the data construction
-  // Simpler: patch after the fact — intercept by wrapping at Firestore level is complex,
-  // so instead we re-implement the save with matchScore included.
-  if(!currentUser)return;
-  const title=document.getElementById('f-title').value.trim();
-  const company=document.getElementById('f-company').value.trim();
-  if(!title||!company){alert('Please enter a job title and company.');return;}
-  if(!editingJobId){
-    const dup=jobs.find(j=>j.title.toLowerCase()===title.toLowerCase()&&j.company.toLowerCase()===company.toLowerCase());
-    if(dup&&!confirm(`"${title}" at ${company} already exists. Save anyway?`))return;
-  }
-  setSyncState('syncing');
-  const status=document.getElementById('f-status').value;
-  const dateVal=document.getElementById('f-date').value;
-  const followupVal=document.getElementById('f-followup').value;
-  const dateTs=dateVal?Timestamp.fromDate(parseLocalDate(dateVal)):serverTimestamp();
-  const followupTs=followupVal?Timestamp.fromDate(parseLocalDate(followupVal)):null;
-  const data={
-    title,company,
-    location:document.getElementById('f-location').value.trim(),
-    status,
-    salary:document.getElementById('f-salary').value.trim(),
-    notes:document.getElementById('f-notes').value.trim(),
-    url:document.getElementById('f-url').value.trim(),
-    recruiter:document.getElementById('f-recruiter').value.trim(),
-    resumeUrl:document.getElementById('f-resumeUrl').value.trim(),
-    resumeVersion:document.getElementById('f-resumeVersion').value.trim(),
-    tags:modalTags,
-    followupDate:followupTs,
-    date:dateTs,
-    interviewRound:status==='interview'?currentRound:0,
-    rejectReason:status==='rejected'?(document.getElementById('f-rejectreason').value||''):'',
-    matchScore:currentMatchScore||0
-  };
-  if(editingJobId){
-    await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,editingJobId),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${editingJobId}/activity`),{
-      text:'Application details updated',ts:serverTimestamp()
-    });
-    window.closeAdd();
-    await window._openDetail(editingJobId);
-  }else{
-    const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-      text:`Application added as "${SM[status]?.label}"`,ts:serverTimestamp()
-    });
-    window.closeAdd();
-  }
 };
 
 // ── AI WRITING ASSISTANT ──
@@ -2419,6 +2409,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     window.closeAdd();window.closeDetail();window.closeAdmin();window.closeAnalytics();
     if(quickAddOpen)toggleQuickAdd();
+    document.getElementById('shortcutsModal').classList.remove('open');
     return;
   }
   if(inInput)return; // don't fire shortcuts when typing
@@ -2431,11 +2422,85 @@ document.addEventListener('keydown',e=>{
     case'l':case'L':window.setView('list');break;
     case'k':case'K':window.setView('kanban');break;
     case'a':case'A':window.openAnalytics();break;
+    case'?':document.getElementById('shortcutsModal').classList.add('open');break;
   }
 });
+
+// ── WEEKLY GOAL TRACKER ──
+(function(){
+  let goalTarget=parseInt(localStorage.getItem('weeklyGoal')||'5',10);
+
+  function getThisWeekCount(){
+    const now=new Date();
+    const dayOfWeek=now.getDay(); // 0=Sun
+    const startOfWeek=new Date(now);
+    startOfWeek.setDate(now.getDate()-dayOfWeek);
+    startOfWeek.setHours(0,0,0,0);
+    return jobs.filter(j=>{
+      const d=j.date?.toDate?j.date.toDate():(j.date?new Date(j.date):null);
+      return d&&d>=startOfWeek;
+    }).length;
+  }
+
+  window._renderGoal=function(){
+    const tracker=document.getElementById('goalTracker');
+    if(!tracker||!document.getElementById('mainApp')||document.getElementById('mainApp').style.display==='none')return;
+    tracker.style.display='block';
+    const count=getThisWeekCount();
+    const pct=Math.min(100,Math.round((count/goalTarget)*100));
+    document.getElementById('goalThisWeek').textContent=count;
+    document.getElementById('goalTarget').textContent=goalTarget;
+    const bar=document.getElementById('goalBar');
+    bar.style.width=pct+'%';
+    bar.style.background=pct>=100?'var(--offer)':pct>=60?'var(--interview)':'var(--accent)';
+    document.getElementById('goalInput').value=goalTarget;
+  };
+
+  window.openGoalEdit=function(){
+    const pop=document.getElementById('goalPopover');
+    pop.classList.toggle('hidden');
+  };
+
+  window.saveGoal=function(){
+    const val=parseInt(document.getElementById('goalInput').value,10);
+    if(val>=1&&val<=50){
+      goalTarget=val;
+      localStorage.setItem('weeklyGoal',String(val));
+    }
+    document.getElementById('goalPopover').classList.add('hidden');
+    window._renderGoal();
+  };
+
+  // Re-render goal whenever jobs update
+  const _origRender=window.render||(()=>{});
+  // Hook via jobs subscriber: patch render
+  const __origRender=render;
+  window.render=function(){__origRender();window._renderGoal&&window._renderGoal();};
+})();
 
 // restore view after everything is defined
 window.setView(savedView);
 </script>
+<!-- SHORTCUTS CHEATSHEET -->
+<div class="modal-overlay" id="shortcutsModal" onclick="if(event.target===this)document.getElementById('shortcutsModal').classList.remove('open')">
+  <div class="modal" style="max-width:380px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+      <div class="modal-title" style="margin:0">Keyboard shortcuts</div>
+      <button class="btn-cancel" style="padding:5px 10px" onclick="document.getElementById('shortcutsModal').classList.remove('open')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--c5)">
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Add new job</span><kbd class="kbd">N</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Quick capture</span><kbd class="kbd">Q</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Focus search</span><kbd class="kbd">/</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Toggle theme</span><kbd class="kbd">T</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>List view</span><kbd class="kbd">L</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Kanban view</span><kbd class="kbd">K</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Analytics</span><kbd class="kbd">A</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>This cheatsheet</span><kbd class="kbd">?</kbd></div>
+      <div style="display:flex;align-items:center;justify-content:space-between"><span>Close / dismiss</span><kbd class="kbd">Esc</kbd></div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
