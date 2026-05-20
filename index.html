@@ -1145,6 +1145,10 @@ self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil
 })();
 </script>
 
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
 
 // If any uncaught error happens before auth resolves, bail out to login screen
 window.addEventListener('error',()=>{
@@ -1163,9 +1167,6 @@ window.addEventListener('unhandledrejection',()=>{
     if(ls)ls.style.display='flex';
   }
 });
-
-import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
-import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
 
 const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
 const fbApp=initializeApp(cfg);
@@ -2695,7 +2696,7 @@ window.scheduleFollowUpReminders=async function(){
   const todayStr=now.toISOString().slice(0,10);
 
   // Find jobs with follow-up date today or overdue
-  const {jobs:currentJobs}=window._getAppState?..()||{};
+  const {jobs:currentJobs}=window._getAppState?.()||{};
   if(!currentJobs?.length)return;
 
   const due=currentJobs.filter(j=>{
@@ -2763,7 +2764,7 @@ window.scheduleStaleAlerts=async function(){
   const reg=await navigator.serviceWorker.ready.catch(()=>null);
   if(!reg)return;
 
-  const {jobs:currentJobs}=window._getAppState?..()||{};
+  const {jobs:currentJobs}=window._getAppState?.()||{};
   if(!currentJobs?.length)return;
 
   const staleDays=parseInt(prefs.staleAfter||'14',10);
@@ -3313,7 +3314,7 @@ updateMobileNav();
           <button class="settings-btn" style="width:auto;padding:6px 14px" onclick="settingsEnableNotifications()"><i class="fa-solid fa-bell"></i> Enable</button>
         </div>
         <!-- Blocked warning -->
-        <div id="notifBlockedRow" style="display:none;font-size:12px;color:var(--rejected);padding:.4rem 0;display:flex;align-items:center;gap:6px">
+        <div id="notifBlockedRow" style="display:none;font-size:12px;color:var(--rejected);padding:.4rem 0;align-items:center;gap:6px">
           <i class="fa-solid fa-ban"></i> Notifications blocked in browser settings
         </div>
         <div class="settings-row">
