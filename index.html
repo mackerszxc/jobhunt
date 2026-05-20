@@ -451,7 +451,168 @@ option{background:var(--c1)}
 .match-score-label{font-size:11px;color:var(--c4);margin-left:4px}
 .card-match-score{font-size:11px;color:#f59e0b;display:flex;align-items:center;gap:2px}
 
-/* ── GOAL TRACKER ── */
+/* ══════════════════════════════════════════
+   MOBILE — full responsive overhaul ≤ 640px
+   ══════════════════════════════════════════ */
+@media(max-width:640px){
+
+  /* ── app shell ── */
+  .app{padding:.75rem .75rem 80px;min-height:100vh} /* bottom padding for nav bar */
+
+  /* ── topbar: logo + icons only, no wrapping ── */
+  .topbar{margin-bottom:1rem;flex-wrap:nowrap;overflow:visible}
+  .user-name{display:none}          /* hide name, keep avatar */
+  .top-right{gap:5px;flex-wrap:nowrap}
+
+  /* hide less-used topbar buttons; keep critical ones */
+  .top-right .icon-btn:not(#themeBtn):not(#listViewBtn):not(#kanbanViewBtn){display:none}
+  /* show a hamburger menu button instead */
+  #mobileMenuBtn{display:flex !important}
+
+  /* ── mobile menu drawer ── */
+  .mobile-menu-drawer{
+    position:fixed;top:0;right:0;bottom:0;width:260px;
+    background:var(--c1);border-left:.5px solid var(--c3);
+    z-index:500;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column;padding:1.25rem 1rem;gap:8px;overflow-y:auto;
+  }
+  .mobile-menu-drawer.open{transform:translateX(0)}
+  .mobile-menu-scrim{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:499;
+  }
+  .mobile-menu-scrim.open{display:block}
+  .mobile-menu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+  .mobile-menu-title{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--c6)}
+  .mobile-menu-item{
+    display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+    background:transparent;border:none;color:var(--c5);font-size:13px;font-family:'Syne',sans-serif;
+    cursor:pointer;text-align:left;width:100%;transition:.15s;
+  }
+  .mobile-menu-item:hover{background:var(--c2);color:var(--c6)}
+  .mobile-menu-item i{width:16px;text-align:center;color:var(--c4);font-size:13px}
+  .mobile-menu-divider{height:.5px;background:var(--c3);margin:4px 0}
+
+  /* ── bottom nav bar ── */
+  .mobile-bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;
+    background:var(--c1);border-top:.5px solid var(--c3);
+    z-index:400;padding:0;height:64px;
+    padding-bottom:env(safe-area-inset-bottom,0);
+  }
+  .mobile-nav-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;background:transparent;border:none;color:var(--c4);font-size:9px;
+    font-family:'Syne',sans-serif;cursor:pointer;padding:8px 4px;letter-spacing:.04em;
+    text-transform:uppercase;font-weight:600;transition:.15s;
+  }
+  .mobile-nav-item i{font-size:18px}
+  .mobile-nav-item.active{color:var(--accent)}
+  .mobile-nav-item.nav-add{color:#fff}
+  .mobile-nav-add-wrap{
+    flex:1;display:flex;align-items:center;justify-content:center;
+  }
+  .mobile-nav-add-btn{
+    width:48px;height:48px;border-radius:50%;background:var(--accent);border:none;
+    color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;box-shadow:0 4px 16px rgba(99,102,241,.4);transition:.15s;
+  }
+  .mobile-nav-add-btn:active{transform:scale(.93)}
+
+  /* ── stats row: horizontal scroll strip ── */
+  .stats-row{
+    display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    margin-bottom:1rem;
+    /* hide scrollbar */
+    scrollbar-width:none;
+  }
+  .stats-row::-webkit-scrollbar{display:none}
+  .stat{
+    flex:0 0 auto;width:90px;scroll-snap-align:start;
+    padding:10px 12px;border-radius:10px;
+  }
+  .stat-num{font-size:1.2rem}
+  .stat-label{font-size:10px}
+
+  /* ── goal tracker ── */
+  .goal-tracker-inner{gap:8px;padding:8px 12px}
+  .goal-left{min-width:100px}
+  .goal-nums{font-size:12px}
+
+  /* ── toolbar: search full width, sort+add on second row ── */
+  .toolbar{flex-wrap:wrap;gap:8px}
+  .search-wrap{flex:1 1 100%;order:1}  /* search takes full width */
+  .sort-select{flex:1;order:2;min-width:0}
+  .add-btn{order:3;flex-shrink:0}
+  #quickAddBtn{order:4;flex-shrink:0}
+
+  /* ── quick add bar ── */
+  .quick-add-bar{flex-direction:column;align-items:stretch}
+  .quick-input.qi-title,.quick-input.qi-company{min-width:0;width:100%}
+  .quick-hint{display:none} /* hide keyboard hints on touch */
+
+  /* ── job cards: larger touch targets ── */
+  .job-card{padding:12px 14px;border-radius:10px}
+  .job-card:hover{transform:none} /* disable hover translate on touch */
+  .job-title{font-size:13px}
+  .job-company{font-size:12px}
+
+  /* ── detail panel: full-screen bottom sheet on mobile ── */
+  .detail-overlay{align-items:flex-end;justify-content:stretch}
+  .detail-panel{
+    width:100%;max-width:100%;height:92vh;
+    border-left:none;border-top:.5px solid var(--c3);
+    border-radius:16px 16px 0 0;
+    padding:1rem;
+  }
+  /* drag handle hint */
+  .detail-panel::before{
+    content:'';display:block;width:36px;height:4px;
+    border-radius:2px;background:var(--c3);
+    margin:0 auto .75rem;flex-shrink:0;
+  }
+
+  /* ── add/edit modal: full-screen on mobile ── */
+  .modal-overlay{padding:0;align-items:flex-end}
+  .modal{
+    border-radius:16px 16px 0 0;max-height:96vh;
+    padding:1.25rem 1rem;
+  }
+
+  /* ── analytics overlay ── */
+  .analytics-overlay{padding:.5rem 0 0}
+  .analytics-modal{border-radius:16px 16px 0 0;padding:1.25rem 1rem;margin:0}
+  .analytics-kpi-row{grid-template-columns:1fr 1fr}
+  .analytics-grid-2{grid-template-columns:1fr}
+
+  /* ── kanban: single column scroll ── */
+  .kanban-board{grid-template-columns:repeat(5,minmax(150px,1fr))}
+
+  /* ── admin & import modals ── */
+  .admin-overlay{padding:0;align-items:flex-end}
+  .admin-modal{border-radius:16px 16px 0 0;max-height:92vh;padding:1.25rem 1rem}
+  .import-modal-overlay{padding:0;align-items:flex-end}
+  .import-modal{border-radius:16px 16px 0 0;padding:1.25rem 1rem}
+
+  /* ── pwa banner ── */
+  .pwa-banner{flex-wrap:nowrap;gap:8px}
+  .pwa-banner-text{font-size:12px}
+
+  /* ── login card ── */
+  .login-card{border-radius:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:2rem 1.5rem}
+
+  /* ── bulk bar ── */
+  .bulk-status-wrap{display:none} /* too cramped on mobile; status change via detail panel */
+}
+
+/* safe area for notched phones */
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  @media(max-width:640px){
+    .mobile-bottom-nav{padding-bottom:calc(env(safe-area-inset-bottom) + 4px)}
+    .app{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+  }
+}
+
 .goal-tracker{margin-bottom:1rem}
 .goal-tracker-inner{display:flex;align-items:center;gap:12px;background:var(--c1);border:.5px solid var(--c3);border-radius:10px;padding:10px 14px;flex-wrap:wrap}
 .goal-left{display:flex;flex-direction:column;gap:1px;min-width:130px;flex-shrink:0}
@@ -526,6 +687,8 @@ option{background:var(--c1)}
       <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
       <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
       <button class="icon-btn" onclick="document.getElementById('shortcutsModal').classList.add('open')" title="Keyboard shortcuts (?)"><i class="fa-solid fa-keyboard"></i></button>
+      <!-- mobile only hamburger -->
+      <button class="icon-btn" id="mobileMenuBtn" style="display:none" onclick="openMobileMenu()"><i class="fa-solid fa-bars"></i></button>
     </div>
   </div>
 
@@ -1270,11 +1433,16 @@ onAuthStateChanged(auth,async user=>{
     document.getElementById('userName').textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||'';
     setSyncState('syncing');
     subscribeJobs(user.uid);
+    showMobileNav(true);
+    syncMobileProfile(user);
     const admin=await isAdmin(user);
     document.getElementById('adminBtn').style.display=admin?'flex':'none';
+    const mba=document.getElementById('mobileAdminBtn');
+    if(mba)mba.style.display=admin?'flex':'none';
   }else{
     document.getElementById('loginScreen').style.display='flex';
     document.getElementById('mainApp').style.display='none';
+    showMobileNav(false);
     if(unsubJobs)unsubJobs();
     jobs=[];
   }
@@ -2447,6 +2615,61 @@ document.addEventListener('keydown',e=>{
   }
 });
 
+// ── MOBILE UI ──
+function isMobile(){return window.innerWidth<=640;}
+
+window.openMobileMenu=function(){
+  document.getElementById('mobileMenuDrawer').classList.add('open');
+  document.getElementById('mobileMenuScrim').classList.add('open');
+  // sync theme icon
+  const isDark=(document.documentElement.getAttribute('data-theme')||'dark')==='dark';
+  document.getElementById('mobileThemeIcon').className=isDark?'fa-solid fa-moon':'fa-solid fa-sun';
+  document.getElementById('mobileThemeLabel').textContent=isDark?'Light mode':'Dark mode';
+};
+window.closeMobileMenu=function(){
+  document.getElementById('mobileMenuDrawer').classList.remove('open');
+  document.getElementById('mobileMenuScrim').classList.remove('open');
+};
+
+window.updateMobileNav=function(){
+  document.getElementById('mobileNavList').classList.toggle('active',currentView==='list');
+  document.getElementById('mobileNavKanban').classList.toggle('active',currentView==='kanban');
+};
+
+function showMobileNav(show){
+  const nav=document.getElementById('mobileBottomNav');
+  if(!nav)return;
+  // Only show on mobile screen sizes
+  nav.style.display=(show&&isMobile())?'flex':'none';
+}
+
+// Sync mobile avatar/name when auth fires
+const _origOnAuth=window._onAuthSync||(()=>{});
+function syncMobileProfile(user){
+  const av=document.getElementById('mobileUserAvatar');
+  const nm=document.getElementById('mobileUserName');
+  const mb=document.getElementById('mobileAdminBtn');
+  if(av)av.src=user?.photoURL||'';
+  if(nm)nm.textContent=user?.displayName?.split(' ')[0]||user?.email?.split('@')[0]||'';
+}
+
+// Patch setView to also update mobile nav
+const _origSetView=window.setView;
+window.setView=function(v){
+  _origSetView(v);
+  updateMobileNav();
+};
+
+// Patch applyTheme to update mobile icon
+const _origApplyTheme=window.applyTheme||applyTheme;
+// (applyTheme is defined in same scope, already updates themeBtn)
+
+// Resize handler: show/hide bottom nav based on screen width
+window.addEventListener('resize',()=>{
+  const loggedIn=!!currentUser;
+  showMobileNav(loggedIn);
+});
+
 // ── WEEKLY GOAL TRACKER ──
 (function(){
   let goalTarget=parseInt(localStorage.getItem('weeklyGoal')||'5',10);
@@ -2501,7 +2724,54 @@ document.addEventListener('keydown',e=>{
 
 // restore view after everything is defined
 window.setView(savedView);
+updateMobileNav();
 </script>
+<!-- MOBILE MENU SCRIM -->
+<div class="mobile-menu-scrim" id="mobileMenuScrim" onclick="closeMobileMenu()"></div>
+
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu-drawer" id="mobileMenuDrawer">
+  <div class="mobile-menu-header">
+    <span class="mobile-menu-title">hunt<span style="color:var(--accent);font-style:italic">log</span></span>
+    <button class="detail-close" onclick="closeMobileMenu()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:4px">
+    <img class="user-avatar" id="mobileUserAvatar" src="" alt="avatar" style="width:28px;height:28px"/>
+    <span id="mobileUserName" style="font-size:13px;color:var(--c5)"></span>
+    <div class="sync-dot" id="mobileSyncDot" style="margin-left:auto"></div>
+  </div>
+  <div class="mobile-menu-divider"></div>
+  <button class="mobile-menu-item" onclick="closeMobileMenu();exportCSV()"><i class="fa-solid fa-download"></i> Export CSV</button>
+  <button class="mobile-menu-item" onclick="closeMobileMenu();openImport()"><i class="fa-solid fa-upload"></i> Import CSV</button>
+  <button class="mobile-menu-item" onclick="closeMobileMenu();openAnalytics()"><i class="fa-solid fa-chart-line"></i> Analytics</button>
+  <button class="mobile-menu-item" onclick="closeMobileMenu();toggleTheme()"><i class="fa-solid fa-moon" id="mobileThemeIcon"></i> <span id="mobileThemeLabel">Toggle theme</span></button>
+  <button class="mobile-menu-item" onclick="closeMobileMenu();document.getElementById('shortcutsModal').classList.add('open')"><i class="fa-solid fa-keyboard"></i> Shortcuts</button>
+  <div class="mobile-menu-divider"></div>
+  <button class="mobile-menu-item" id="mobileAdminBtn" style="display:none" onclick="closeMobileMenu();openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
+  <button class="mobile-menu-item" style="color:var(--rejected)" onclick="closeMobileMenu();signOutUser()"><i class="fa-solid fa-right-from-bracket" style="color:var(--rejected)"></i> Sign out</button>
+</div>
+
+<!-- MOBILE BOTTOM NAV (hidden on desktop via CSS) -->
+<nav class="mobile-bottom-nav" id="mobileBottomNav" style="display:none">
+  <button class="mobile-nav-item" id="mobileNavList" onclick="setView('list');updateMobileNav()">
+    <i class="fa-solid fa-list"></i>List
+  </button>
+  <button class="mobile-nav-item" id="mobileNavKanban" onclick="setView('kanban');updateMobileNav()">
+    <i class="fa-solid fa-table-columns"></i>Board
+  </button>
+  <div class="mobile-nav-add-wrap">
+    <button class="mobile-nav-add-btn" onclick="openAdd()" title="Add job">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+  <button class="mobile-nav-item" onclick="toggleQuickAdd()">
+    <i class="fa-solid fa-bolt"></i>Quick
+  </button>
+  <button class="mobile-nav-item" onclick="openMobileMenu()">
+    <i class="fa-solid fa-bars"></i>More
+  </button>
+</nav>
+
 <!-- SHORTCUTS CHEATSHEET -->
 <div class="modal-overlay" id="shortcutsModal" onclick="if(event.target===this)document.getElementById('shortcutsModal').classList.remove('open')">
   <div class="modal" style="max-width:380px">
