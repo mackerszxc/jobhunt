@@ -1463,18 +1463,18 @@ ${jd}`
   };
 
   try{
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
+    const response=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'llama-3.3-70b-versatile',
         max_tokens:1000,
         messages:[{role:'user',content:prompts[aiCurrentMode]}]
       })
     });
     const data=await response.json();
     if(data.error){throw new Error(data.error.message||'API error');}
-    const text=data.content?.map(b=>b.text||'').join('')||'';
+    const text=data.choices?.[0]?.message?.content||'';
     outputEl.textContent=text;
     outputWrap.classList.add('visible');
     // Log to activity if opened in job context
@@ -1485,7 +1485,7 @@ ${jd}`
       });
     }
   }catch(err){
-    outputEl.textContent='Error: '+err.message+'\n\nMake sure you have a valid Anthropic API key configured.';
+    outputEl.textContent='Error: '+err.message+'\n\nMake sure your Groq API key is valid.';
     outputWrap.classList.add('visible');
   }finally{
     btn.disabled=false;

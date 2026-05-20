@@ -1,21 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>HuntLog</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-<link rel="manifest" id="pwaManifest"/>
-<meta name="theme-color" content="#0b0b0f"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="HuntLog"/>
-<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --c0:#0b0b0f;--c1:#13131a;--c2:#1c1c27;--c3:#26263a;--c4:#8585a0;--c5:#b5b5cc;--c6:#e8e8f5;
+  --applied:#3b82f6;--applied-bg:#0d1f3c;
+  --screen:#8b5cf6;--screen-bg:#1e0d3c;
+  --interview:#f59e0b;--interview-bg:#2d1f00;
+  --offer:#10b981;--offer-bg:#0d2d1f;
+  --rejected:#ef4444;--rejected-bg:#2d0d0d;
+  --accent:#6366f1;
+}
+body.light{
+  --c0:#f0f0f6;--c1:#ffffff;--c2:#e8e8f0;--c3:#d0d0e0;--c4:#7070a0;--c5:#4a4a70;--c6:#1a1a2e;
+  --applied-bg:#dbeafe;--screen-bg:#ede9fe;--interview-bg:#fef3c7;--offer-bg:#d1fae5;--rejected-bg:#fee2e2;
+}
+body{background:var(--c0);color:var(--c6);font-family:'Syne',sans-serif;min-height:100vh}
+option{background:var(--c1);color:var(--c6)}
+
+/* ── LOGIN ── */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
+.login-card{background:var(--c1);border:0.5px solid var(--c3);border-radius:20px;padding:3rem 2.5rem;text-align:center;max-width:360px;width:100%}
+.login-logo{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--c6);letter-spacing:-.02em;margin-bottom:.5rem}
+.login-logo span{color:var(--accent);font-style:italic}
+.login-sub{font-size:13px;color:var(--c4);margin-bottom:2rem;line-height:1.6}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--c2);border:0.5px solid var(--c3);border-radius:10px;padding:12px 20px;color:var(--c5);font-size:14px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.2s}
+.google-btn:hover{background:var(--c3);color:var(--c6)}
+.google-icon{width:18px;height:18px;flex-shrink:0}
+
+/* ── LAYOUT ── */
+.main-wrap{display:none;flex-direction:column;min-height:100vh;padding:1.5rem 1.25rem}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:10px}
+.logo{font-family:'DM Serif Display',serif;font-size:1.4rem;color:var(--c6);letter-spacing:-.02em}
+.logo span{color:var(--accent);font-style:italic}
+.top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.user-avatar{width:32px;height:32px;border-radius:50%;border:0.5px solid var(--c3);object-fit:cover;background:var(--c2)}
+.user-name{font-size:12px;color:var(--c4)}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#10b981;flex-shrink:0}
+.sync-dot.syncing{background:#f59e0b;animation:pulse 1s infinite}
+.sync-dot.err{background:#ef4444}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.icon-btn{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:6px 10px;color:var(--c4);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;font-family:'Syne',sans-serif;transition:.15s;white-space:nowrap}
+.icon-btn:hover{color:var(--c5);border-color:var(--c4)}
+
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:2rem}
+@media(max-width:580px){.stats-row{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:380px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--c1);border:0.5px solid var(--c3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:.2s}
+.stat:hover{border-color:var(--c4);background:var(--c2)}
+.stat.active{border-width:1px}
+.stat-num{font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;line-height:1}
+.stat-label{font-size:11px;color:var(--c4);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.stat.s-all .stat-num{color:var(--c6)}.stat.s-all.active{border-color:var(--c5)}
+.stat.s-applied .stat-num{color:var(--applied)}.stat.s-applied.active{border-color:var(--applied)}
+.stat.s-screen .stat-num{color:var(--screen)}.stat.s-screen.active{border-color:var(--screen)}
+.stat.s-interview .stat-num{color:var(--interview)}.stat.s-interview.active{border-color:var(--interview)}
+.stat.s-offer .stat-num{color:var(--offer)}.stat.s-offer.active{border-color:var(--offer)}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:140px;position:relative}
+.search-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--c4);font-size:15px}
+.search-input{width:100%;background:var(--c1);border:0.5px solid var(--c3);border-radius:8px;padding:9px 12px 9px 36px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s}
+.search-input::placeholder{color:var(--c4)}
+.search-input:focus{border-color:var(--accent);background:var(--c2)}
+.sort-sel{background:var(--c1);border:0.5px solid var(--c3);border-radius:8px;padding:9px 10px;font-size:12px;color:var(--c5);font-family:'Syne',sans-serif;outline:none;cursor:pointer}
+.sort-sel:focus{border-color:var(--accent)}
+.add-btn{background:var(--accent);border:none;border-radius:8px;padding:9px 16px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:'Syne',sans-serif;white-space:nowrap;transition:.15s}
+.add-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+/* ── BULK BAR ── */
+.bulk-bar{display:none;align-items:center;gap:8px;background:var(--c2);border:0.5px solid var(--accent);border-radius:10px;padding:10px 14px;margin-bottom:1rem;flex-wrap:wrap}
+.bulk-bar.show{display:flex}
+.bulk-count{font-size:13px;color:var(--c6);font-weight:600;flex:1}
+.bulk-sel{background:var(--c1);border:0.5px solid var(--c3);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--c5);font-family:'Syne',sans-serif;outline:none;cursor:pointer}
+.bulk-btn{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--c4);cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.bulk-btn:hover{color:var(--c5);border-color:var(--c5)}
+.bulk-btn.red{color:var(--rejected);border-color:#3d1515}
+.bulk-btn.red:hover{background:var(--rejected-bg)}
+
+/* ── JOB LIST ── */
+.jobs-list{display:flex;flex-direction:column;gap:8px}
+.job-card{background:var(--c1);border:0.5px solid var(--c3);border-radius:12px;padding:14px 16px 14px 20px;transition:.18s;position:relative;overflow:hidden;display:flex;align-items:flex-start;gap:10px}
+.job-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px}
+.job-card.applied::before{background:var(--applied)}
+.job-card.screening::before{background:var(--screen)}
+.job-card.interview::before{background:var(--interview)}
+.job-card.offer::before{background:var(--offer)}
+.job-card.rejected::before{background:var(--rejected)}
+.job-card:hover{border-color:var(--c4);background:var(--c2)}
+.job-card.sel{border-color:var(--accent)}
+.jc-check{width:16px;height:16px;border:0.5px solid var(--c3);border-radius:4px;flex-shrink:0;margin-top:3px;cursor:pointer;accent-color:var(--accent)}
+.jc-body{flex:1;min-width:0;cursor:pointer}
+.job-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
+.job-title{font-size:14px;font-weight:600;color:var(--c6);line-height:1.3}
+.job-status{font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+.job-status.applied{color:var(--applied);background:var(--applied-bg)}
+.job-status.screening{color:var(--screen);background:var(--screen-bg)}
+.job-status.interview{color:var(--interview);background:var(--interview-bg)}
+.job-status.offer{color:var(--offer);background:var(--offer-bg)}
+.job-status.rejected{color:var(--rejected);background:var(--rejected-bg)}
+.job-company{font-size:13px;color:var(--c5);margin-bottom:6px}
+.job-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px}
+.job-tag{font-size:11px;color:var(--c4);display:flex;align-items:center;gap:3px}
+.tag-pill{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--c3);color:var(--c5);font-weight:600;letter-spacing:.02em}
+.tag-pill.priority{background:#2d1f00;color:#f59e0b}
+.tag-pill.referral{background:#0d2d1f;color:#10b981}
+.tag-pill.cold-apply{background:#1e0d3c;color:#8b5cf6}
+.tag-pill.remote{background:#0d1f3c;color:#3b82f6}
+.tag-pill.urgent{background:#2d0d0d;color:#ef4444}
+.fu-badge{font-size:10px;padding:2px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace}
+.fu-badge.ok{background:var(--c2);color:var(--c4)}
+.fu-badge.soon{background:#2d1f00;color:#f59e0b}
+.fu-badge.overdue{background:var(--rejected-bg);color:var(--rejected)}
+
+/* ── EMPTY STATE ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5rem 2rem;text-align:center;gap:12px}
+.empty-icon{font-size:3rem;line-height:1}
+.empty-title{font-size:1rem;font-weight:600;color:var(--c5)}
+.empty-sub{font-size:13px;color:var(--c4);line-height:1.7;max-width:300px}
+.no-results{text-align:center;padding:3rem;color:var(--c4);font-size:14px}
+.loading-state{text-align:center;padding:3rem;color:var(--c4);font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px}
+.spinner{width:16px;height:16px;border:2px solid var(--c3);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── MODALS ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.overlay.open{display:flex}
+.modal{background:var(--c1);border:0.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
+.modal-title{font-size:1.05rem;font-weight:600;margin-bottom:1.25rem;color:var(--c6);display:flex;align-items:center;gap:8px}
+.modal-title i{color:var(--accent)}
+.form-group{margin-bottom:.9rem}
+.form-label{font-size:11px;font-weight:600;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;display:block}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--c2);border:0.5px solid var(--c3);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none;transition:.2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
+.form-select{cursor:pointer}
+.form-textarea{resize:vertical;min-height:72px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:420px){.form-row{grid-template-columns:1fr}}
+.modal-actions{display:flex;gap:8px;margin-top:1.25rem}
+.btn-primary{flex:1;background:var(--accent);border:none;border-radius:8px;padding:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:10px 16px;color:var(--c4);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.btn-secondary:hover{border-color:var(--c5);color:var(--c5)}
+.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag-btn{padding:4px 12px;border-radius:20px;border:0.5px solid var(--c3);background:var(--c2);color:var(--c4);font-size:11px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.tag-btn:hover{border-color:var(--c5);color:var(--c5)}
+.tag-btn.on{border-color:var(--accent);background:rgba(99,102,241,.15);color:var(--accent)}
+
+/* ── DETAIL PANEL ── */
+.detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100;justify-content:flex-end}
+.detail-overlay.open{display:flex}
+.detail-panel{background:var(--c1);border-left:0.5px solid var(--c3);width:100%;max-width:440px;height:100dvh;padding:1.25rem;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+@media(max-width:500px){
+  .detail-overlay.open{align-items:flex-end}
+  .detail-panel{max-width:100%;height:88dvh;border-left:none;border-top:0.5px solid var(--c3);border-radius:18px 18px 0 0}
+}
+.detail-header{display:flex;align-items:center;gap:8px}
+.det-close{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:6px 10px;color:var(--c4);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;font-family:'Syne',sans-serif;transition:.15s}
+.det-close:hover{color:var(--c5)}
+.det-edit{margin-left:auto;background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:6px 10px;color:var(--c4);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;font-family:'Syne',sans-serif;transition:.15s}
+.det-edit:hover{color:var(--accent);border-color:var(--accent)}
+.det-ai{background:rgba(99,102,241,.12);border:0.5px solid rgba(99,102,241,.4);border-radius:8px;padding:6px 10px;color:var(--accent);cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;font-family:'Syne',sans-serif;transition:.15s}
+.det-ai:hover{background:rgba(99,102,241,.2)}
+.detail-role{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--c6);line-height:1.2}
+.detail-co{font-size:13px;color:var(--c5);margin-top:2px}
+.det-field{background:var(--c2);border-radius:10px;padding:10px 13px}
+.det-field-lbl{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.det-field-val{font-size:13px;color:var(--c5);white-space:pre-wrap;word-break:break-word}
+.det-field-val a{color:var(--accent);text-decoration:none}
+.det-field-val a:hover{text-decoration:underline}
+.det-tags{display:flex;flex-wrap:wrap;gap:5px}
+.status-lbl{font-size:11px;color:var(--c4);margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em}
+.status-btns{display:flex;flex-wrap:wrap;gap:6px}
+.st-btn{background:var(--c2);border:0.5px solid var(--c3);border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;color:var(--c5);font-family:'Syne',sans-serif;transition:.15s}
+.st-btn.applied.active{color:var(--applied);border-color:var(--applied);background:var(--applied-bg)}
+.st-btn.screening.active{color:var(--screen);border-color:var(--screen);background:var(--screen-bg)}
+.st-btn.interview.active{color:var(--interview);border-color:var(--interview);background:var(--interview-bg)}
+.st-btn.offer.active{color:var(--offer);border-color:var(--offer);background:var(--offer-bg)}
+.st-btn.rejected.active{color:var(--rejected);border-color:var(--rejected);background:var(--rejected-bg)}
+.act-header{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.act-log{display:flex;flex-direction:column;gap:5px;max-height:170px;overflow-y:auto;margin-bottom:10px}
+.act-item{background:var(--c2);border-radius:8px;padding:8px 11px}
+.act-text{font-size:12px;color:var(--c5)}
+.act-time{font-size:11px;color:var(--c4);margin-top:2px;font-family:'DM Mono',monospace}
+.act-row{display:flex;gap:6px}
+.act-input{flex:1;background:var(--c2);border:0.5px solid var(--c3);border-radius:8px;padding:8px 11px;font-size:12px;color:var(--c6);font-family:'Syne',sans-serif;outline:none}
+.act-input:focus{border-color:var(--accent)}
+.act-add{background:var(--accent);border:none;border-radius:8px;padding:8px 12px;color:#fff;font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;white-space:nowrap}
+.del-btn{background:transparent;border:0.5px solid #2d0d0d;border-radius:8px;padding:8px 14px;color:var(--rejected);font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;display:flex;align-items:center;gap:6px;transition:.15s}
+.del-btn:hover{background:var(--rejected-bg)}
+
+/* ── AI MODAL ── */
+.ai-modal{background:var(--c1);border:0.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:560px;max-height:92vh;overflow-y:auto}
+.ai-tabs{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.ai-tab{padding:6px 14px;border-radius:20px;border:0.5px solid var(--c3);background:var(--c2);color:var(--c4);font-size:12px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.ai-tab:hover{color:var(--c5)}
+.ai-tab.on{background:rgba(99,102,241,.15);border-color:var(--accent);color:var(--accent)}
+.ai-output{background:var(--c2);border-radius:10px;padding:1rem;font-size:13px;color:var(--c5);line-height:1.7;white-space:pre-wrap;min-height:120px;word-break:break-word}
+.ai-output.loading{display:flex;align-items:center;gap:10px;color:var(--c4)}
+.ai-actions{display:flex;gap:8px;margin-top:10px}
+.copy-btn{background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:7px 14px;font-size:12px;color:var(--c4);cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.copy-btn:hover{color:var(--c5);border-color:var(--c5)}
+
+/* ── ADMIN ── */
+.admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.admin-overlay.open{display:flex}
+.admin-modal{background:var(--c1);border:0.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:740px;max-height:92vh;overflow-y:auto}
+.admin-modal h2{font-size:1.05rem;font-weight:600;color:var(--c6);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.admin-modal h2 i{color:var(--accent)}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px}
+.admin-table th{text-align:left;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;font-size:11px;padding:6px 10px;border-bottom:0.5px solid var(--c3)}
+.admin-table td{padding:9px 10px;border-bottom:0.5px solid var(--c2);color:var(--c5);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.adm-user{display:flex;align-items:center;gap:8px}
+.adm-av{width:26px;height:26px;border-radius:50%;object-fit:cover;background:var(--c2);flex-shrink:0}
+.adm-name{color:var(--c6);font-weight:600;font-size:12px}
+.adm-email{font-size:11px;color:var(--c4)}
+.ip-badge{background:var(--c2);border:0.5px solid var(--c3);border-radius:6px;padding:2px 8px;font-family:'DM Mono',monospace;font-size:11px;color:var(--accent)}
+.adm-load{display:flex;align-items:center;justify-content:center;gap:8px;padding:2rem;color:var(--c4);font-size:13px}
+.adm-close{margin-top:1rem;background:transparent;border:0.5px solid var(--c3);border-radius:8px;padding:8px 16px;color:var(--c4);font-size:13px;cursor:pointer;font-family:'Syne',sans-serif}
+.adm-close:hover{color:var(--c5);border-color:var(--c5)}
+.you-badge{font-size:10px;background:var(--accent);color:#fff;border-radius:20px;padding:1px 7px;margin-left:4px;font-weight:600}
+.adm-view{background:transparent;border:0.5px solid var(--c3);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--c4);cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.adm-view:hover{color:var(--accent);border-color:var(--accent)}
+.adm-ban{background:transparent;border:0.5px solid #3d1515;border-radius:6px;padding:3px 9px;font-size:11px;color:var(--rejected);cursor:pointer;font-family:'Syne',sans-serif;transition:.15s}
+.adm-ban:hover{background:var(--rejected-bg)}
+.adm-jobs{margin-top:1rem;background:var(--c2);border-radius:10px;padding:1rem}
+.adm-jobs h3{font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.adm-job-row{padding:7px 0;border-bottom:0.5px solid var(--c3);font-size:12px;color:var(--c5);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.adm-job-row:last-child{border-bottom:none}
+</style>
 </head>
 <body>
-
-<h2 class="sr-only">HuntLog — secure job application tracker</h2>
 
 <!-- LOGIN -->
 <div id="loginScreen" class="login-screen">
@@ -26,46 +252,22 @@
       <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Continue with Google
     </button>
-    <div class="auth-divider">or</div>
-    <div class="email-auth-form">
-      <input class="email-auth-input" id="authEmail" type="email" placeholder="Email address" autocomplete="email"/>
-      <input class="email-auth-input" id="authPassword" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')signInEmail()"/>
-      <div class="auth-error" id="authError"></div>
-      <button class="email-btn" onclick="signInEmail()">Sign in with Email</button>
-      <button class="email-btn secondary" onclick="signUpEmail()">Create account</button>
-      <button class="forgot-link" onclick="resetPassword()">Forgot password?</button>
-    </div>
   </div>
 </div>
 
 <!-- MAIN APP -->
-<div id="mainApp" class="app" style="display:none">
+<div id="mainApp" class="main-wrap">
   <div class="topbar">
     <div class="logo">hunt<span>log</span></div>
     <div class="top-right">
       <div class="sync-dot syncing" id="syncDot"></div>
-      <img class="user-avatar" id="userAvatar" src="" alt="avatar"/>
+      <img class="user-avatar" id="userAvatar" src="" alt=""/>
       <span class="user-name" id="userName"></span>
-      <div class="view-toggle">
-        <button class="icon-btn active-view" id="listViewBtn" onclick="setView('list')" title="List view"><i class="fa-solid fa-list"></i></button>
-        <button class="icon-btn" id="kanbanViewBtn" onclick="setView('kanban')" title="Kanban view"><i class="fa-solid fa-table-columns"></i></button>
-      </div>
-      <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme (T)" id="themeBtn"><i class="fa-solid fa-moon"></i></button>
-      <button class="icon-btn" onclick="exportCSV()"><i class="fa-solid fa-download"></i> CSV</button>
-      <button class="icon-btn" onclick="openImport()"><i class="fa-solid fa-upload"></i> Import</button>
-      <button class="icon-btn" onclick="openAnalytics()" title="Analytics (A)"><i class="fa-solid fa-chart-line"></i></button>
-      <button class="icon-btn" onclick="openAIAssist()" title="AI writing assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
-      <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="fa-solid fa-shield"></i> Admin</button>
-      <button class="icon-btn" onclick="signOutUser()"><i class="fa-solid fa-right-from-bracket"></i> Sign out</button>
+      <button class="icon-btn" onclick="toggleTheme()" id="themeBtn"><i class="ti ti-sun"></i></button>
+      <button class="icon-btn" onclick="exportCSV()"><i class="ti ti-download"></i> CSV</button>
+      <button class="icon-btn" id="adminBtn" style="display:none" onclick="openAdmin()"><i class="ti ti-shield"></i> Admin</button>
+      <button class="icon-btn" onclick="signOutUser()"><i class="ti ti-logout"></i></button>
     </div>
-  </div>
-
-  <!-- PWA Install Banner -->
-  <div class="pwa-banner" id="pwaBanner">
-    <i class="fa-solid fa-mobile-screen" style="color:var(--accent);font-size:1.1rem;flex-shrink:0"></i>
-    <span class="pwa-banner-text"><strong>Install HuntLog</strong> — add to your home screen for quick access and push reminders</span>
-    <button class="pwa-install-btn" onclick="pwaTriggerInstall()"><i class="fa-solid fa-download"></i> Install</button>
-    <button class="pwa-dismiss-btn" onclick="pwaDismiss()" title="Dismiss"><i class="fa-solid fa-xmark"></i></button>
   </div>
 
   <div class="stats-row">
@@ -78,65 +280,50 @@
 
   <div class="toolbar">
     <div class="search-wrap">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input class="search-input" id="searchInput" type="text" placeholder="Search jobs, companies, notes… (/)" oninput="onSearch(this.value)"/>
+      <i class="ti ti-search"></i>
+      <input class="search-input" type="text" placeholder="Search jobs, companies…" oninput="onSearch(this.value)"/>
     </div>
-    <select class="sort-select" onchange="onSort(this.value)" id="sortSelect">
-      <option value="date-desc">Newest first</option>
-      <option value="date-asc">Oldest first</option>
-      <option value="company-asc">Company A–Z</option>
-      <option value="company-desc">Company Z–A</option>
-      <option value="title-asc">Title A–Z</option>
-      <option value="status">Status</option>
-      <option value="salary-desc">Salary ↓</option>
-      <option value="stale">Most stale</option>
+    <select class="sort-sel" onchange="onSort(this.value)">
+      <option value="date-desc">Newest</option>
+      <option value="date-asc">Oldest</option>
+      <option value="company">Company A–Z</option>
+      <option value="status">By status</option>
     </select>
-    <button class="add-btn" onclick="openAdd()" title="Add job (N)"><i class="fa-solid fa-plus"></i> Add Job</button>
-    <button class="icon-btn" onclick="toggleQuickAdd()" id="quickAddBtn" title="Quick capture (Q)"><i class="fa-solid fa-bolt"></i></button>
+    <button class="add-btn" onclick="openAdd()"><i class="ti ti-plus"></i> Add Job</button>
   </div>
 
-  <!-- Quick Add Bar -->
-  <div class="quick-add-bar hidden" id="quickAddBar">
-    <input class="quick-input qi-title" id="qa-title" placeholder="Job title *" onkeydown="qaKeydown(event)"/>
-    <input class="quick-input qi-company" id="qa-company" placeholder="Company *" onkeydown="qaKeydown(event)"/>
-    <select class="quick-select" id="qa-status" onkeydown="qaKeydown(event)">
+  <div class="bulk-bar" id="bulkBar">
+    <span class="bulk-count" id="bulkCount">0 selected</span>
+    <select class="bulk-sel" id="bulkSel">
+      <option value="">Move to…</option>
       <option value="applied">Applied</option>
       <option value="screening">Screening</option>
       <option value="interview">Interview</option>
       <option value="offer">Offer</option>
       <option value="rejected">Rejected</option>
     </select>
-    <button class="quick-save-btn" onclick="saveQuickAdd()">Add <span class="kbd">↵</span></button>
-    <button class="quick-cancel-btn" onclick="toggleQuickAdd()"><i class="fa-solid fa-xmark"></i></button>
-    <span class="quick-hint"><span class="kbd">Tab</span> between fields · <span class="kbd">↵</span> to save · <span class="kbd">Esc</span> to close</span>
+    <button class="bulk-btn" onclick="bulkStatus()"><i class="ti ti-check"></i> Apply</button>
+    <button class="bulk-btn red" onclick="bulkDelete()"><i class="ti ti-trash"></i> Delete</button>
+    <button class="bulk-btn" onclick="clearSel()"><i class="ti ti-x"></i> Cancel</button>
   </div>
 
-  <!-- Bulk Action Bar -->
-  <div class="bulk-bar" id="bulkBar">
-    <span class="bulk-info" id="bulkInfo">0 selected</span>
-    <div class="bulk-status-wrap" id="bulkStatusWrap"></div>
-    <button class="bulk-del-btn" onclick="bulkDelete()"><i class="fa-solid fa-trash"></i> Delete</button>
-    <button class="bulk-clear" onclick="clearSelection()" title="Clear selection"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-
-  <div id="jobsList"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
+  <div class="jobs-list" id="jobsList"><div class="loading-state"><div class="spinner"></div> Loading…</div></div>
   <div class="no-results" id="noResults" style="display:none">No matching jobs found.</div>
 </div>
 
-<!-- ADD / EDIT MODAL -->
-<div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAdd()">
+<!-- ADD/EDIT MODAL -->
+<div class="overlay" id="addModal" onclick="if(event.target===this)closeAdd()">
   <div class="modal">
-    <div class="modal-title" id="modalTitle">Add new application</div>
-    <div class="dup-warning" id="dupWarning"><i class="fa-solid fa-triangle-exclamation"></i><span id="dupWarningText"></span></div>
+    <div class="modal-title" id="modalTitle"><i class="ti ti-briefcase"></i> Add application</div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Job title *</label><input class="form-input" id="f-title" placeholder="e.g. Senior Product Designer" oninput="checkDuplicate()"/></div>
-      <div class="form-group"><label class="form-label">Company *</label><input class="form-input" id="f-company" placeholder="e.g. Acme Corp" oninput="checkDuplicate()"/></div>
+      <div class="form-group"><label class="form-label">Job title *</label><input class="form-input" id="f-title" placeholder="e.g. Product Designer"/></div>
+      <div class="form-group"><label class="form-label">Company *</label><input class="form-input" id="f-company" placeholder="e.g. Acme Corp"/></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-location" placeholder="e.g. Remote / Manila"/></div>
+      <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-location" placeholder="Remote / Manila"/></div>
       <div class="form-group">
         <label class="form-label">Status</label>
-        <select class="form-select" id="f-status" onchange="onStatusChange()">
+        <select class="form-select" id="f-status">
           <option value="applied">Applied</option>
           <option value="screening">Screening</option>
           <option value="interview">Interview</option>
@@ -145,189 +332,504 @@
         </select>
       </div>
     </div>
-    <div class="form-group round-section" id="roundSection">
-      <label class="form-label">Interview round</label>
-      <div class="round-btns" id="roundBtns">
-        <button type="button" class="round-btn" onclick="selectRound(1)">Round 1 — Phone Screen</button>
-        <button type="button" class="round-btn" onclick="selectRound(2)">Round 2 — Technical</button>
-        <button type="button" class="round-btn" onclick="selectRound(3)">Round 3 — Final</button>
-        <button type="button" class="round-btn" onclick="selectRound(4)">Offer Stage</button>
-      </div>
-    </div>
-    <div class="form-group reject-section" id="rejectSection">
-      <label class="form-label">Rejection reason</label>
-      <select class="form-select" id="f-rejectreason">
-        <option value="">— select if known —</option>
-        <option value="no_response">No response / ghosted</option>
-        <option value="skills_gap">Skills gap / not qualified</option>
-        <option value="salary_mismatch">Salary mismatch</option>
-        <option value="position_filled">Position already filled</option>
-        <option value="culture_fit">Culture fit</option>
-        <option value="withdrew">I withdrew</option>
-        <option value="other">Other</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Applied on</label><input class="form-input" type="date" id="f-date"/></div>
+      <div class="form-group"><label class="form-label">Follow-up date</label><input class="form-input" type="date" id="f-followup"/></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label class="form-label">Salary range</label><input class="form-input" id="f-salary" placeholder="e.g. ₱80k–120k / yr"/></div>
-      <div class="form-group"><label class="form-label">Applied date</label><input class="form-input" id="f-date" type="date"/></div>
+      <div class="form-group"><label class="form-label">Salary range</label><input class="form-input" id="f-salary" placeholder="₱80k–120k"/></div>
+      <div class="form-group"><label class="form-label">Job posting URL</label><input class="form-input" id="f-url" placeholder="https://…"/></div>
     </div>
-    <div class="form-group"><label class="form-label">Recruiter name &amp; email</label><input class="form-input" id="f-recruiter" placeholder="e.g. Sarah Cruz · sarah@company.com"/></div>
-    <div class="form-group"><label class="form-label">Job posting URL</label><input class="form-input" id="f-url" type="url" placeholder="https://…"/></div>
-    <div class="form-row">
-      <div class="form-group"><label class="form-label">Resume URL</label><input class="form-input" id="f-resumeUrl" type="url" placeholder="Google Drive, Notion, etc."/></div>
-      <div class="form-group"><label class="form-label">Resume version</label><input class="form-input" id="f-resumeVersion" placeholder="e.g. v3 · SWE tailored"/></div>
-    </div>
-    <div class="form-group"><label class="form-label">Follow-up date</label><input class="form-input" id="f-followup" type="date"/></div>
     <div class="form-group">
-      <label class="form-label">Tags <span style="color:var(--c4);font-weight:400;text-transform:none">— type &amp; press Enter</span></label>
-      <div class="tags-input-wrap" id="tagsWrap" onclick="document.getElementById('tagInput').focus()">
-        <input class="tag-text-input" id="tagInput" placeholder="priority, referral, cold apply…" onkeydown="handleTagInput(event)"/>
+      <label class="form-label">Tags</label>
+      <div class="tags-row" id="tagRow">
+        <button type="button" class="tag-btn" data-tag="priority" onclick="toggleTag(this)">🔥 Priority</button>
+        <button type="button" class="tag-btn" data-tag="referral" onclick="toggleTag(this)">🤝 Referral</button>
+        <button type="button" class="tag-btn" data-tag="cold-apply" onclick="toggleTag(this)">❄️ Cold apply</button>
+        <button type="button" class="tag-btn" data-tag="remote" onclick="toggleTag(this)">🌐 Remote</button>
+        <button type="button" class="tag-btn" data-tag="urgent" onclick="toggleTag(this)">🚨 Urgent</button>
       </div>
     </div>
-    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, deadlines, impressions…"></textarea></div>
-    <div class="form-group">
-      <label class="form-label">Fit score <span style="color:var(--c4);font-weight:400;text-transform:none">— how well does this role match your goals?</span></label>
-      <div class="match-score-wrap">
-        <button type="button" class="match-star" data-star="1" onclick="setMatchScore(1)">★</button>
-        <button type="button" class="match-star" data-star="2" onclick="setMatchScore(2)">★</button>
-        <button type="button" class="match-star" data-star="3" onclick="setMatchScore(3)">★</button>
-        <button type="button" class="match-star" data-star="4" onclick="setMatchScore(4)">★</button>
-        <button type="button" class="match-star" data-star="5" onclick="setMatchScore(5)">★</button>
-        <span class="match-score-label" id="matchScoreLabel">Not rated</span>
-      </div>
-    </div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Recruiter name, links, anything important…"></textarea></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeAdd()">Cancel</button>
-      <button class="btn-save" id="saveBtn" onclick="saveJob()">Save application</button>
+      <button class="btn-secondary" onclick="closeAdd()">Cancel</button>
+      <button class="btn-primary" onclick="saveJob()" id="saveBtn"><i class="ti ti-check"></i> Save</button>
     </div>
   </div>
 </div>
 
 <!-- DETAIL PANEL -->
-<div class="detail-overlay" id="detailPanel" onclick="if(event.target===this)closeDetail()">
+<div class="detail-overlay" id="detailOverlay" onclick="if(event.target===this)closeDetail()">
   <div class="detail-panel">
-    <button class="detail-close" onclick="closeDetail()"><i class="fa-solid fa-xmark"></i> Close</button>
     <div class="detail-header">
-      <div><div class="detail-role" id="d-title"></div><div class="detail-co" id="d-company"></div></div>
-      <div style="display:flex;gap:6px;flex-shrink:0">
-        <button class="edit-btn" onclick="openAIAssist(openJobId)" title="AI writing assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> AI</button>
-        <button class="edit-btn" onclick="openEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
-      </div>
+      <button class="det-close" onclick="closeDetail()"><i class="ti ti-x"></i> Close</button>
+      <button class="det-ai" onclick="openAI()"><i class="ti ti-sparkles"></i> AI</button>
+      <button class="det-edit" onclick="openEdit()"><i class="ti ti-pencil"></i> Edit</button>
     </div>
-    <div class="detail-field"><div class="detail-field-label">Location</div><div class="detail-field-val" id="d-location"></div></div>
-    <div class="detail-field"><div class="detail-field-label">Salary</div><div class="detail-field-val" id="d-salary"></div></div>
-    <div class="detail-field"><div class="detail-field-label">Applied on</div><div class="detail-field-val" id="d-date"></div></div>
-    <div class="detail-field" id="d-recruiter-wrap"><div class="detail-field-label">Recruiter</div><div class="detail-field-val" id="d-recruiter"></div></div>
-    <div class="detail-field" id="d-url-wrap"><div class="detail-field-label">Job posting</div><div class="detail-field-val" id="d-url"></div></div>
-    <div class="detail-field" id="d-resume-wrap" style="display:none"><div class="detail-field-label">Resume sent</div><div class="detail-field-val" id="d-resume"></div></div>
-    <div class="detail-field" id="d-followup-wrap"><div class="detail-field-label">Follow-up date</div><div class="detail-field-val" id="d-followup"></div></div>
-    <div class="detail-field" id="d-tags-wrap"><div class="detail-field-label">Tags</div><div id="d-tags" class="job-tags-row" style="margin-top:6px"></div></div>
-    <div class="detail-field"><div class="detail-field-label">Notes</div><div class="detail-field-val" id="d-notes"></div></div>
-    <div class="detail-field" id="d-round-wrap" style="display:none">
-      <div class="detail-field-label">Interview stage</div>
-      <div class="detail-round-row" id="d-round-btns"></div>
-    </div>
-    <div class="reject-prompt" id="d-reject-wrap" style="display:none">
-      <div class="reject-prompt-label">Why was this rejected?</div>
-      <div class="reject-reason-btns" id="d-reject-btns"></div>
-    </div>
+    <div><div class="detail-role" id="d-title"></div><div class="detail-co" id="d-company"></div></div>
+    <div class="det-field"><div class="det-field-lbl">Location</div><div class="det-field-val" id="d-location"></div></div>
+    <div class="det-field"><div class="det-field-lbl">Salary</div><div class="det-field-val" id="d-salary"></div></div>
+    <div class="det-field"><div class="det-field-lbl">Job posting</div><div class="det-field-val" id="d-url"></div></div>
+    <div class="det-field"><div class="det-field-lbl">Applied on</div><div class="det-field-val" id="d-date"></div></div>
+    <div class="det-field" id="d-fu-wrap" style="display:none"><div class="det-field-lbl">Follow-up</div><div class="det-field-val" id="d-followup"></div></div>
+    <div class="det-field" id="d-tags-wrap" style="display:none"><div class="det-field-lbl">Tags</div><div class="det-tags" id="d-tags"></div></div>
+    <div class="det-field"><div class="det-field-lbl">Notes</div><div class="det-field-val" id="d-notes"></div></div>
     <div>
-      <div class="status-change-label">Move to</div>
+      <div class="status-lbl">Move to</div>
       <div class="status-btns" id="d-statusbtns"></div>
     </div>
-    <div class="activity-section">
-      <div class="activity-header">Activity log</div>
-      <div class="activity-log" id="d-activitylog"></div>
-      <div class="activity-input-row">
-        <input class="activity-input" id="activityInput" placeholder="Add a note, call, or update…" onkeydown="if(event.key==='Enter')addActivity()"/>
-        <button class="activity-add-btn" onclick="addActivity()">Log it</button>
+    <div>
+      <div class="act-header">Activity log</div>
+      <div class="act-log" id="d-actlog"></div>
+      <div class="act-row">
+        <input class="act-input" id="actInput" placeholder="Add a note, call, update…" onkeydown="if(event.key==='Enter')addActivity()"/>
+        <button class="act-add" onclick="addActivity()">Log it</button>
       </div>
     </div>
-    <button class="del-btn" onclick="deleteJob()"><i class="fa-solid fa-trash"></i> Delete application</button>
+    <button class="del-btn" onclick="deleteJob()"><i class="ti ti-trash"></i> Delete application</button>
   </div>
 </div>
 
-<!-- ANALYTICS OVERLAY -->
-<div class="analytics-overlay" id="analyticsOverlay" onclick="if(event.target===this)closeAnalytics()">
-  <div class="analytics-modal">
-    <div class="analytics-header">
-      <div class="analytics-title"><i class="fa-solid fa-chart-line"></i> Analytics</div>
-      <button class="analytics-close-btn" onclick="closeAnalytics()"><i class="fa-solid fa-xmark"></i> Close</button>
+<!-- AI MODAL -->
+<div class="overlay" id="aiModal" onclick="if(event.target===this)closeAI()">
+  <div class="ai-modal">
+    <div class="modal-title"><i class="ti ti-sparkles"></i> AI Assistant <span id="aiJobTitle" style="color:var(--c4);font-size:13px;font-weight:400"></span></div>
+    <div class="ai-tabs">
+      <button class="ai-tab on" onclick="switchAITab(this,'cover')">✉️ Cover Letter</button>
+      <button class="ai-tab" onclick="switchAITab(this,'prep')">🎯 Interview Prep</button>
+      <button class="ai-tab" onclick="switchAITab(this,'pitch')">⚡ Elevator Pitch</button>
     </div>
-    <div id="analyticsBody"><div class="analytics-empty">No data yet — add some applications first.</div></div>
-  </div>
-</div>
-
-<!-- IMPORT CSV MODAL -->
-<div class="import-modal-overlay" id="importModal" onclick="if(event.target===this)closeImport()">
-  <div class="import-modal">
-    <h3><i class="fa-solid fa-file-csv" style="color:var(--accent)"></i> Import from CSV</h3>
-    <p style="font-size:12px;color:var(--c4);margin-bottom:12px">Supports LinkedIn, Huntr, or any CSV with columns: title, company, status, date, location, salary, notes, url.</p>
-    <div class="import-drop" id="importDrop" onclick="document.getElementById('csvFileInput').click()">
-      <i class="fa-solid fa-cloud-arrow-up" style="font-size:1.5rem;margin-bottom:8px;display:block"></i>
-      Drop your CSV here or click to browse
-      <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCSVFile(this.files[0])"/>
+    <div class="form-group" id="aiJdWrap">
+      <label class="form-label">Job description (optional — paste for better results)</label>
+      <textarea class="form-textarea" id="aiJd" placeholder="Paste the job description here…" style="min-height:80px"></textarea>
     </div>
-    <div class="import-preview" id="importPreview"></div>
-    <div class="import-actions">
-      <button class="btn-cancel" onclick="closeImport()">Cancel</button>
-      <button class="btn-save" id="importConfirmBtn" style="display:none" onclick="confirmImport()">Import jobs</button>
+    <div class="modal-actions" style="margin-bottom:1rem">
+      <button class="btn-primary" onclick="runAI()" id="aiRunBtn"><i class="ti ti-sparkles"></i> Generate</button>
+    </div>
+    <div class="ai-output" id="aiOutput">Your AI-generated content will appear here.</div>
+    <div class="ai-actions">
+      <button class="copy-btn" onclick="copyAI()"><i class="ti ti-copy"></i> Copy</button>
+      <button class="btn-secondary" onclick="closeAI()">Close</button>
     </div>
   </div>
 </div>
 
-<!-- ADMIN OVERLAY -->
+<!-- ADMIN PANEL -->
 <div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
   <div class="admin-modal">
-    <h2><i class="fa-solid fa-shield"></i> Admin — All Users</h2>
-    <div id="adminBody" class="admin-loading"><div class="spinner"></div> Loading users…</div>
-    <div style="margin-top:1rem;display:flex;gap:8px">
-      <button class="admin-close-btn" onclick="closeAdmin()">Close</button>
-    </div>
+    <h2><i class="ti ti-shield"></i> Admin — All Users</h2>
+    <div id="adminBody" class="adm-load"><div class="spinner"></div> Loading users…</div>
+    <div id="adminJobsPanel"></div>
+    <div><button class="adm-close" onclick="closeAdmin()">Close</button></div>
   </div>
 </div>
 
-<!-- AI WRITING ASSISTANT MODAL -->
-<div class="ai-overlay" id="aiModal" onclick="if(event.target===this)closeAIAssist()">
-  <div class="ai-modal">
-    <div class="ai-modal-header">
-      <div class="ai-modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Writing Assistant</div>
-      <button class="detail-close" onclick="closeAIAssist()"><i class="fa-solid fa-xmark"></i> Close</button>
-    </div>
-    <div class="ai-mode-tabs">
-      <button class="ai-mode-tab active" id="aiTabCover" onclick="setAIMode('cover')"><i class="fa-solid fa-file-lines"></i> Cover letter</button>
-      <button class="ai-mode-tab" id="aiTabSummary" onclick="setAIMode('summary')"><i class="fa-solid fa-align-left"></i> Tailored summary</button>
-      <button class="ai-mode-tab" id="aiTabPrep" onclick="setAIMode('prep')"><i class="fa-solid fa-comments"></i> Interview prep</button>
-    </div>
-    <div>
-      <label class="form-label">Job description <span style="color:var(--c4);font-weight:400;text-transform:none">— paste the full JD</span></label>
-      <textarea class="ai-jd-textarea" id="aiJDInput" placeholder="Paste the full job description here…"></textarea>
-    </div>
-    <div class="ai-resume-note" id="aiResumeNote">
-      <i class="fa-solid fa-circle-info"></i>
-      <span id="aiResumeNoteText">Tip: add your resume URL in the job form so the AI can reference it.</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-      <button class="ai-generate-btn" id="aiGenerateBtn" onclick="runAIAssist()">
-        <i class="fa-solid fa-sparkles"></i> Generate
-      </button>
-      <span style="font-size:12px;color:var(--c4)" id="aiJobContext"></span>
-    </div>
-    <div class="ai-output-wrap" id="aiOutputWrap">
-      <div class="ai-output-label">
-        <span id="aiOutputLabel">Generated cover letter</span>
-        <button class="ai-copy-btn" id="aiCopyBtn" onclick="copyAIOutput()"><i class="fa-solid fa-copy"></i> Copy</button>
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
+import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,writeBatch,Timestamp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+
+/* ── CONSTANTS ── */
+const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
+const GROQ_KEY='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';
+const GROQ_MODEL='llama3-70b-8192';
+const TAG_LABELS={priority:'🔥 Priority',referral:'🤝 Referral','cold-apply':'❄️ Cold apply',remote:'🌐 Remote',urgent:'🚨 Urgent'};
+const SM={applied:'Applied',screening:'Screening',interview:'Interview',offer:'Offer',rejected:'Rejected'};
+const STATUS_ORDER=['offer','interview','screening','applied','rejected'];
+
+/* ── FIREBASE ── */
+const cfg={apiKey:"AIzaSyB-xA4vENp_eCgMdepm_GWqVlIqvC5McQM",authDomain:"jobhunt-e2f07.firebaseapp.com",projectId:"jobhunt-e2f07",storageBucket:"jobhunt-e2f07.firebasestorage.app",messagingSenderId:"598345435005",appId:"1:598345435005:web:cdffe4894b48b84d34ee14"};
+const fbApp=initializeApp(cfg);
+const auth=getAuth(fbApp);
+const db=getFirestore(fbApp);
+
+/* ── STATE ── */
+let jobs=[],filter='all',search='',sort='date-desc',openJobId=null,unsubJobs=null,currentUser=null,editingId=null,selectedIds=new Set(),aiTab='cover';
+
+/* ── THEME ── */
+const savedTheme=localStorage.getItem('hl-theme')||'dark';
+if(savedTheme==='light')document.body.classList.add('light');
+window.toggleTheme=()=>{
+  document.body.classList.toggle('light');
+  localStorage.setItem('hl-theme',document.body.classList.contains('light')?'light':'dark');
+  document.getElementById('themeBtn').innerHTML=document.body.classList.contains('light')?'<i class="ti ti-moon"></i>':'<i class="ti ti-sun"></i>';
+};
+if(savedTheme==='light')document.getElementById('themeBtn').innerHTML='<i class="ti ti-moon"></i>';
+
+/* ── HELPERS ── */
+const $=id=>document.getElementById(id);
+function setSync(s){const d=$('syncDot');d.className='sync-dot'+(s==='syncing'?' syncing':s==='err'?' err':'');}
+function fmt(ts){if(!ts)return'—';const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});}
+function fmtFull(ts){if(!ts)return'';const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleString('en-PH',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+function fuStatus(dateStr){
+  if(!dateStr)return null;
+  const today=new Date();today.setHours(0,0,0,0);
+  const fu=new Date(dateStr+'T00:00:00');
+  const diff=Math.ceil((fu-today)/86400000);
+  if(diff<0)return{label:`Overdue ${Math.abs(diff)}d`,cls:'overdue'};
+  if(diff===0)return{label:'Today',cls:'soon'};
+  if(diff<=5)return{label:`In ${diff}d`,cls:'soon'};
+  return{label:fu.toLocaleDateString('en-PH',{month:'short',day:'numeric'}),cls:'ok'};
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ── COUNTS & RENDER ── */
+function updateCounts(){
+  $('cnt-all').textContent=jobs.length;
+  ['applied','screening','interview','offer'].forEach(s=>{
+    const el=$('cnt-'+(s==='screening'?'screen':s));
+    if(el)el.textContent=jobs.filter(j=>j.status===s).length;
+  });
+}
+
+function sorted(arr){
+  const a=[...arr];
+  if(sort==='date-asc')return a.sort((x,y)=>(x.date?.seconds||0)-(y.date?.seconds||0));
+  if(sort==='company')return a.sort((x,y)=>(x.company||'').localeCompare(y.company||''));
+  if(sort==='status')return a.sort((x,y)=>STATUS_ORDER.indexOf(x.status)-STATUS_ORDER.indexOf(y.status));
+  return a.sort((x,y)=>(y.date?.seconds||0)-(x.date?.seconds||0));
+}
+
+function render(){
+  updateCounts();
+  const q=search.toLowerCase();
+  let vis=jobs.filter(j=>{
+    const mf=filter==='all'||j.status===filter;
+    const ms=!q||(j.title||'').toLowerCase().includes(q)||(j.company||'').toLowerCase().includes(q)||(j.location||'').toLowerCase().includes(q);
+    return mf&&ms;
+  });
+  vis=sorted(vis);
+
+  if(!jobs.length){
+    $('jobsList').innerHTML=`<div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">No applications yet</div>
+      <div class="empty-sub">Tap <strong>Add Job</strong> to start tracking your hunt. Every big career starts with one application.</div>
+    </div>`;
+    $('noResults').style.display='none';
+    return;
+  }
+  if(!vis.length){$('jobsList').innerHTML='';$('noResults').style.display='block';return;}
+  $('noResults').style.display='none';
+
+  $('jobsList').innerHTML=vis.map(j=>{
+    const fu=fuStatus(j.followup);
+    const tags=(j.tags||[]).map(t=>`<span class="tag-pill ${t}">${TAG_LABELS[t]||t}</span>`).join('');
+    const fuHtml=fu?`<span class="fu-badge ${fu.cls}"><i class="ti ti-bell"></i>${fu.label}</span>`:'';
+    const chk=selectedIds.has(j.id)?'checked':'';
+    return`<div class="job-card ${j.status}${selectedIds.has(j.id)?' sel':''}">
+      <input type="checkbox" class="jc-check" ${chk} onclick="event.stopPropagation();toggleSel('${j.id}',this)"/>
+      <div class="jc-body" onclick="window._openDetail('${j.id}')">
+        <div class="job-top"><div class="job-title">${esc(j.title)}</div><div class="job-status ${j.status}">${SM[j.status]||j.status}</div></div>
+        <div class="job-company">${esc(j.company)}</div>
+        <div class="job-meta">
+          ${j.location?`<span class="job-tag"><i class="ti ti-map-pin"></i>${esc(j.location)}</span>`:''}
+          ${j.salary?`<span class="job-tag"><i class="ti ti-currency-dollar"></i>${esc(j.salary)}</span>`:''}
+          <span class="job-tag"><i class="ti ti-calendar"></i>${fmt(j.date)}</span>
+          ${fuHtml}
+        </div>
+        ${tags?`<div class="job-meta" style="margin-top:5px">${tags}</div>`:''}
       </div>
-      <div class="ai-output" id="aiOutput"></div>
-    </div>
-  </div>
-</div>
+    </div>`;
+  }).join('');
+}
 
-<!-- PWA setup (plain script, no module) -->
-<script src="pwa.js"></script>
+/* ── SUBSCRIBE ── */
+function subscribeJobs(uid){
+  if(unsubJobs)unsubJobs();
+  const q=query(collection(db,`users/${uid}/jobs`),orderBy('date','desc'));
+  unsubJobs=onSnapshot(q,snap=>{
+    jobs=snap.docs.map(d=>({id:d.id,...d.data()}));
+    setSync('ok');render();
+  },()=>setSync('err'));
+}
 
-<!-- Firebase app (ES module) -->
-<script type="module" src="app.js"></script>
+/* ── AUTH ── */
+onAuthStateChanged(auth,user=>{
+  currentUser=user;
+  if(user){
+    $('loginScreen').style.display='none';
+    $('mainApp').style.display='flex';
+    $('userAvatar').src=user.photoURL||'';
+    $('userName').textContent=user.displayName?.split(' ')[0]||'';
+    setSync('syncing');
+    subscribeJobs(user.uid);
+    $('adminBtn').style.display=user.uid===ADMIN_UID?'flex':'none';
+  }else{
+    $('loginScreen').style.display='flex';
+    $('mainApp').style.display='none';
+    if(unsubJobs)unsubJobs();
+    jobs=[];
+  }
+});
 
+async function getIP(){try{const r=await fetch('https://api.ipify.org?format=json');const d=await r.json();return d.ip||'unknown';}catch{return'unknown';}}
+
+window.signInGoogle=async()=>{
+  try{
+    const res=await signInWithPopup(auth,new GoogleAuthProvider());
+    const u=res.user;const ip=await getIP();
+    await setDoc(doc(db,'users',u.uid),{displayName:u.displayName||'',email:u.email||'',photoURL:u.photoURL||'',lastLoginIP:ip,lastLoginAt:serverTimestamp()},{merge:true});
+  }catch(e){alert('Sign-in failed: '+e.message);}
+};
+window.signOutUser=()=>signOut(auth);
+
+/* ── FILTER / SORT / SEARCH ── */
+window.filterStat=function(el,f){filter=f;document.querySelectorAll('.stat').forEach(s=>s.classList.remove('active'));el.classList.add('active');render();};
+window.onSearch=v=>{search=v;render();};
+window.onSort=v=>{sort=v;render();};
+
+/* ── TAGS ── */
+window.toggleTag=btn=>btn.classList.toggle('on');
+function getTags(){return[...document.querySelectorAll('#tagRow .tag-btn.on')].map(b=>b.dataset.tag);}
+function setTags(tags){document.querySelectorAll('#tagRow .tag-btn').forEach(b=>b.classList.toggle('on',(tags||[]).includes(b.dataset.tag)));}
+
+/* ── ADD / EDIT ── */
+window.openAdd=()=>{
+  editingId=null;
+  $('modalTitle').innerHTML='<i class="ti ti-briefcase"></i> Add application';
+  $('saveBtn').innerHTML='<i class="ti ti-check"></i> Save';
+  clearForm();
+  $('f-date').value=new Date().toISOString().split('T')[0];
+  $('addModal').classList.add('open');
+};
+window.closeAdd=()=>{$('addModal').classList.remove('open');editingId=null;clearForm();};
+function clearForm(){['f-title','f-company','f-location','f-salary','f-url','f-date','f-followup','f-notes'].forEach(id=>{const el=$(id);if(el)el.value='';});$('f-status').value='applied';setTags([]);}
+
+window.openEdit=()=>{
+  const j=jobs.find(x=>x.id===openJobId);if(!j)return;
+  editingId=j.id;
+  $('modalTitle').innerHTML='<i class="ti ti-pencil"></i> Edit application';
+  $('saveBtn').innerHTML='<i class="ti ti-check"></i> Update';
+  $('f-title').value=j.title||'';$('f-company').value=j.company||'';$('f-location').value=j.location||'';
+  $('f-salary').value=j.salary||'';$('f-url').value=j.url||'';$('f-notes').value=j.notes||'';
+  $('f-status').value=j.status||'applied';$('f-followup').value=j.followup||'';
+  if(j.date){const d=j.date.toDate?j.date.toDate():new Date(j.date);$('f-date').value=d.toISOString().split('T')[0];}
+  setTags(j.tags||[]);
+  $('addModal').classList.add('open');
+};
+
+window.saveJob=async()=>{
+  if(!currentUser)return;
+  const title=$('f-title').value.trim(),company=$('f-company').value.trim();
+  if(!title||!company){alert('Job title and company are required.');return;}
+  setSync('syncing');
+  const status=$('f-status').value;
+  const dateVal=$('f-date').value;
+  const data={
+    title,company,
+    location:$('f-location').value.trim(),status,
+    url:$('f-url').value.trim(),salary:$('f-salary').value.trim(),
+    followup:$('f-followup').value||'',tags:getTags(),
+    notes:$('f-notes').value.trim(),
+  };
+  if(editingId){
+    await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,editingId),data);
+    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${editingId}/activity`),{text:'Details updated',ts:serverTimestamp()});
+    closeAdd();await window._openDetail(editingId);
+  }else{
+    data.date=dateVal?Timestamp.fromDate(new Date(dateVal+'T00:00:00')):serverTimestamp();
+    const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),data);
+    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{text:`Added as "${SM[status]}"`,ts:serverTimestamp()});
+    closeAdd();
+  }
+};
+
+/* ── DETAIL ── */
+window._openDetail=async function(id){
+  openJobId=id;const j=jobs.find(x=>x.id===id);if(!j)return;
+  $('d-title').textContent=j.title||'';
+  $('d-company').textContent=j.company||'';
+  $('d-location').textContent=j.location||'—';
+  $('d-salary').textContent=j.salary||'—';
+  $('d-notes').textContent=j.notes||'No notes.';
+  $('d-date').textContent=fmt(j.date);
+  $('d-url').innerHTML=j.url?`<a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.url)}</a>`:'—';
+  const fu=fuStatus(j.followup);
+  if(j.followup){$('d-fu-wrap').style.display='block';$('d-followup').innerHTML=`<span class="fu-badge ${fu?.cls||''}">${esc(j.followup)}${fu?` — ${fu.label}`:''}</span>`;}
+  else{$('d-fu-wrap').style.display='none';}
+  if(j.tags&&j.tags.length){$('d-tags-wrap').style.display='block';$('d-tags').innerHTML=j.tags.map(t=>`<span class="tag-pill ${t}">${TAG_LABELS[t]||t}</span>`).join('');}
+  else{$('d-tags-wrap').style.display='none';}
+  $('d-statusbtns').innerHTML=Object.entries(SM).map(([k,v])=>`<button class="st-btn ${k} ${j.status===k?'active':''}" onclick="window._changeStatus('${k}')">${v}</button>`).join('');
+  $('detailOverlay').classList.add('open');
+  await loadActivity(id);
+};
+
+async function loadActivity(jobId){
+  if(!currentUser)return;
+  const log=$('d-actlog');log.innerHTML='<div style="font-size:12px;color:var(--c4)">Loading…</div>';
+  const snap=await getDocs(query(collection(db,`users/${currentUser.uid}/jobs/${jobId}/activity`),orderBy('ts','desc')));
+  if(snap.empty){log.innerHTML='<div style="font-size:12px;color:var(--c4)">No activity yet.</div>';return;}
+  log.innerHTML=snap.docs.map(d=>{const x=d.data();return`<div class="act-item"><div class="act-text">${esc(x.text||'')}</div><div class="act-time">${fmtFull(x.ts)}</div></div>`;}).join('');
+}
+
+window.addActivity=async()=>{
+  if(!currentUser||!openJobId)return;
+  const input=$('actInput');const text=input.value.trim();if(!text)return;
+  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{text,ts:serverTimestamp()});
+  input.value='';await loadActivity(openJobId);
+};
+window.closeDetail=()=>{$('detailOverlay').classList.remove('open');openJobId=null;};
+window._changeStatus=async function(s){
+  if(!currentUser||!openJobId)return;
+  setSync('syncing');
+  await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId),{status:s});
+  await addDoc(collection(db,`users/${currentUser.uid}/jobs/${openJobId}/activity`),{text:`Status → "${SM[s]}"`,ts:serverTimestamp()});
+  await window._openDetail(openJobId);
+};
+window.deleteJob=async()=>{
+  if(!currentUser||!openJobId||!confirm('Delete this application?'))return;
+  setSync('syncing');await deleteDoc(doc(db,`users/${currentUser.uid}/jobs`,openJobId));closeDetail();
+};
+
+/* ── BULK ── */
+window.toggleSel=function(id,cb){if(cb.checked)selectedIds.add(id);else selectedIds.delete(id);updateBulk();render();};
+function updateBulk(){const n=selectedIds.size;$('bulkBar').classList.toggle('show',n>0);$('bulkCount').textContent=`${n} selected`;}
+window.clearSel=()=>{selectedIds.clear();updateBulk();render();};
+window.bulkStatus=async()=>{
+  const s=$('bulkSel').value;if(!s||!selectedIds.size)return;
+  if(!confirm(`Move ${selectedIds.size} job(s) to "${SM[s]}"?`))return;
+  setSync('syncing');const batch=writeBatch(db);
+  selectedIds.forEach(id=>batch.update(doc(db,`users/${currentUser.uid}/jobs`,id),{status:s}));
+  await batch.commit();selectedIds.clear();updateBulk();
+};
+window.bulkDelete=async()=>{
+  if(!selectedIds.size||!confirm(`Delete ${selectedIds.size} application(s)?`))return;
+  setSync('syncing');const batch=writeBatch(db);
+  selectedIds.forEach(id=>batch.delete(doc(db,`users/${currentUser.uid}/jobs`,id)));
+  await batch.commit();selectedIds.clear();updateBulk();
+};
+
+/* ── AI (GROQ) ── */
+window.openAI=()=>{
+  const j=jobs.find(x=>x.id===openJobId);if(!j)return;
+  $('aiJobTitle').textContent=`— ${j.title} @ ${j.company}`;
+  $('aiJd').value='';
+  $('aiOutput').textContent='Your AI-generated content will appear here.';
+  $('aiModal').classList.add('open');
+};
+window.closeAI=()=>$('aiModal').classList.remove('open');
+window.switchAITab=(btn,tab)=>{
+  aiTab=tab;
+  document.querySelectorAll('.ai-tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+};
+
+window.runAI=async()=>{
+  const j=jobs.find(x=>x.id===openJobId);if(!j)return;
+  const jd=$('aiJd').value.trim();
+  const out=$('aiOutput');
+  const btn=$('aiRunBtn');
+  out.className='ai-output loading';
+  out.innerHTML='<div class="spinner"></div> Generating…';
+  btn.disabled=true;
+
+  const prompts={
+    cover:`Write a professional, concise cover letter for this job application:
+Role: ${j.title}
+Company: ${j.company}
+${j.location?'Location: '+j.location:''}
+${j.salary?'Salary range: '+j.salary:''}
+${jd?'Job description:\n'+jd:''}
+${j.notes?'Additional context: '+j.notes:''}
+
+Keep it under 300 words. Be specific, enthusiastic, and professional. Do not include placeholder text.`,
+
+    prep:`Generate 8 targeted interview prep questions and brief answer frameworks for:
+Role: ${j.title}
+Company: ${j.company}
+${jd?'Job description:\n'+jd:''}
+${j.notes?'Notes: '+j.notes:''}
+
+Format each as:
+Q: [question]
+A: [brief answer framework / key points to hit]`,
+
+    pitch:`Write a sharp 30-second elevator pitch for someone applying for:
+Role: ${j.title}
+Company: ${j.company}
+${jd?'Job description:\n'+jd:''}
+
+Make it confident, memorable, and end with a clear ask. Under 80 words.`
+  };
+
+  try{
+    const res=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_KEY},
+      body:JSON.stringify({model:GROQ_MODEL,messages:[{role:'user',content:prompts[aiTab]}],max_tokens:800,temperature:0.7})
+    });
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    out.className='ai-output';
+    out.textContent=data.choices?.[0]?.message?.content||'No response.';
+  }catch(e){
+    out.className='ai-output';
+    out.textContent='Error: '+e.message;
+  }finally{btn.disabled=false;}
+};
+
+window.copyAI=()=>{
+  const text=$('aiOutput').textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    btn.innerHTML='<i class="ti ti-check"></i> Copied!';
+    setTimeout(()=>{btn.innerHTML='<i class="ti ti-copy"></i> Copy';},2000);
+  });
+};
+
+/* ── ADMIN ── */
+window.openAdmin=async()=>{
+  if(!currentUser||currentUser.uid!==ADMIN_UID)return;
+  $('adminOverlay').classList.add('open');
+  $('adminJobsPanel').innerHTML='';
+  const body=$('adminBody');
+  body.innerHTML='<div class="adm-load"><div class="spinner"></div> Loading…</div>';
+  try{
+    const snap=await getDocs(collection(db,'users'));
+    const rows=await Promise.all(snap.docs.map(async d=>{
+      const u=d.data();const uid=d.id;
+      const jSnap=await getDocs(collection(db,`users/${uid}/jobs`));
+      const lastLogin=u.lastLoginAt?.toDate?.()?u.lastLoginAt.toDate().toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
+      const isYou=uid===ADMIN_UID;
+      return`<tr>
+        <td><div class="adm-user"><img class="adm-av" src="${esc(u.photoURL||'')}" alt=""/><div><div class="adm-name">${esc(u.displayName||'—')}${isYou?'<span class="you-badge">you</span>':''}</div><div class="adm-email">${esc(u.email||'')}</div></div></div></td>
+        <td><span class="ip-badge">${esc(u.lastLoginIP||'—')}</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${lastLogin}</td>
+        <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jSnap.size}</td>
+        <td style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="adm-view" onclick="adminJobs('${uid}','${esc(u.displayName||'User')}')"><i class="ti ti-list"></i> Jobs</button>
+          ${!isYou?`<button class="adm-ban" onclick="adminBan('${uid}','${esc(u.displayName||'user')}')"><i class="ti ti-ban"></i> Remove</button>`:''}
+        </td>
+      </tr>`;
+    }));
+    body.innerHTML=`<table class="admin-table"><thead><tr><th>User</th><th>Last IP</th><th>Last Login</th><th>Jobs</th><th>Actions</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+  }catch(e){body.innerHTML=`<div class="adm-load" style="color:var(--rejected)">Error: ${e.message}</div>`;}
+};
+window.adminJobs=async(uid,name)=>{
+  const panel=$('adminJobsPanel');
+  panel.innerHTML='<div class="adm-jobs"><div class="adm-load"><div class="spinner"></div></div></div>';
+  const snap=await getDocs(query(collection(db,`users/${uid}/jobs`),orderBy('date','desc')));
+  if(snap.empty){panel.innerHTML=`<div class="adm-jobs"><h3>${name}'s jobs</h3><div style="font-size:12px;color:var(--c4)">No jobs found.</div></div>`;return;}
+  const rows=snap.docs.map(d=>{const j=d.data();return`<div class="adm-job-row"><strong style="color:var(--c6)">${esc(j.title||'—')}</strong><span style="color:var(--c4)">@</span>${esc(j.company||'—')}<span class="job-status ${j.status}" style="font-size:10px">${SM[j.status]||j.status}</span><span style="color:var(--c4);font-size:11px;font-family:'DM Mono',monospace">${fmt(j.date)}</span></div>`;}).join('');
+  panel.innerHTML=`<div class="adm-jobs"><h3>${esc(name)}'s applications (${snap.size})</h3>${rows}</div>`;
+};
+window.adminBan=async(uid,name)=>{
+  if(!confirm(`Remove all data for ${name}?`))return;
+  await deleteDoc(doc(db,'users',uid));alert(`${name}'s data removed.`);window.openAdmin();
+};
+window.closeAdmin=()=>$('adminOverlay').classList.remove('open');
+
+/* ── CSV ── */
+window.exportCSV=()=>{
+  if(!jobs.length){alert('No jobs to export.');return;}
+  const rows=[['Title','Company','Location','Status','Salary','URL','Tags','Follow-up','Notes','Date']];
+  jobs.forEach(j=>rows.push([j.title||'',j.company||'',j.location||'',j.status||'',j.salary||'',j.url||'',(j.tags||[]).join(';'),j.followup||'',(j.notes||'').replace(/"/g,'""'),j.date?.toDate?j.date.toDate().toISOString().split('T')[0]:'']));
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='huntlog-export.csv';a.click();
+};
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdd?.();closeDetail?.();closeAI?.();closeAdmin?.();}});
+</script>
 </body>
 </html>
