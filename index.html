@@ -1842,7 +1842,7 @@ window.openAdmin=async function(){
       const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
       const jobCount=jobsSnap.size;
       const lastLogin=u.lastLoginAt?.toDate?.()
-        ?u.lastLoginAt.toDate().toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
+        ?u.lastLoginAt.toDate().toLocaleString('en-PH',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
       const sc={applied:0,screening:0,interview:0,offer:0,rejected:0};
       jobsSnap.docs.forEach(jd=>{const s=jd.data().status;if(sc[s]!==undefined)sc[s]++;});
       const funnelTip=Object.entries(sc).map(([s,v])=>`${SM[s]?.label||s}: ${v}`).join(' · ');
@@ -1867,7 +1867,7 @@ window.openAdmin=async function(){
       const html=`<tr data-uid="${uid}" data-name="${(u.displayName||'').toLowerCase()}" data-email="${(u.email||'').toLowerCase()}" data-banned="${!!u.banned}">
         <td><div class="admin-user-cell"><img class="admin-avatar" src="${u.photoURL||''}" onerror="this.style.display='none'" alt=""/><div><div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}${bannedBadge}</div><div class="admin-email">${u.email||''}</div></div></div></td>
         <td><span class="ip-badge">${u.lastLoginIP||'—'}</span></td>
-        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${lastLogin}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);white-space:nowrap">${lastLogin}</td>
         <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
         <td style="white-space:nowrap">
           <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')"><i class="fa-solid fa-briefcase" style="font-size:10px"></i> Jobs</button>
