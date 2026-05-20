@@ -1106,7 +1106,7 @@ self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil
     `;
     const swBlob=new Blob([swCode],{type:'application/javascript'});
     const swUrl=URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl,{scope:'/'}).catch(()=>{});
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
   }
 
   // Install prompt
@@ -1138,8 +1138,24 @@ self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil
 </script>
 
 
-<script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
+// If any uncaught error happens before auth resolves, bail out to login screen
+window.addEventListener('error',()=>{
+  const shield=document.getElementById('authShield');
+  if(shield&&shield.style.display!=='none'){
+    shield.style.display='none';
+    const ls=document.getElementById('loginScreen');
+    if(ls)ls.style.display='flex';
+  }
+});
+window.addEventListener('unhandledrejection',()=>{
+  const shield=document.getElementById('authShield');
+  if(shield&&shield.style.display!=='none'){
+    shield.style.display='none';
+    const ls=document.getElementById('loginScreen');
+    if(ls)ls.style.display='flex';
+  }
+});
+
 import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
 import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
 
@@ -1148,8 +1164,10 @@ const fbApp=initializeApp(cfg);
 const auth=getAuth(fbApp);
 const db=getFirestore(fbApp);
 
-// Phase 1: Offline persistence (multi-tab safe)
-enableMultiTabIndexedDbPersistence(db).catch(()=>{});
+// Offline persistence (Firestore v11 — initializeFirestore approach is preferred
+// but enableMultiTabIndexedDbPersistence is available; wrap tightly so any error
+// never blocks the rest of the module)
+try{enableMultiTabIndexedDbPersistence(db);}catch(e){/* ignore — unsupported env */}
 
 // Phase 1: Admin check via custom claims (falls back to hardcoded UID during transition)
 const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
@@ -1488,15 +1506,14 @@ function subscribeJobs(uid){
   },()=>setSyncState('err'));
 }
 
-// ── AUTH ──
-// Safety net: if Firebase never calls back (network down etc), show login after 8s
+// Safety net: if Firebase never calls back (network issue, module crash, etc), show login after 3s
 const _authTimeout=setTimeout(()=>{
   const shield=document.getElementById('authShield');
   if(shield&&shield.style.display!=='none'){
     shield.style.display='none';
     document.getElementById('loginScreen').style.display='flex';
   }
-},8000);
+},3000);
 
 onAuthStateChanged(auth,async user=>{
   clearTimeout(_authTimeout);
