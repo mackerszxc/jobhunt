@@ -380,10 +380,11 @@
 <!-- ── ADMIN PANEL ── -->
 <div class="admin-overlay" id="adminOverlay" onclick="if(event.target===this)closeAdmin()">
   <div class="admin-modal">
-    <h2><i class="fa-solid fa-shield-halved"></i> Admin — All Users</h2>
+    <div class="admin-modal-header">
+      <h2><i class="fa-solid fa-shield-halved"></i> Admin</h2>
+      <button class="admin-close-btn" onclick="closeAdmin()"><i class="fa-solid fa-xmark"></i> Close</button>
+    </div>
     <div id="adminBody" class="admin-loading"><div class="spinner"></div> Loading users…</div>
-    <div id="adminNoResults" style="display:none;font-size:13px;color:var(--c4);padding:1rem 0"></div>
-    <button class="admin-close-btn" onclick="closeAdmin()">Close</button>
   </div>
 </div>
 

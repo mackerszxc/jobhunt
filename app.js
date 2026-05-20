@@ -751,46 +751,70 @@ window.openAdmin=async function(){
       const jobsSnap=await getDocs(collection(db,`users/${uid}/jobs`));
       const jobCount=jobsSnap.size;
       const lastLogin=u.lastLoginAt?.toDate?.()
-        ?u.lastLoginAt.toDate().toLocaleString('en-PH',{dateStyle:'medium',timeStyle:'short'}):'—';
+        ?u.lastLoginAt.toDate().toLocaleString('en-PH',{month:'short',day:'numeric',year:'numeric'}):'—';
       const sc={applied:0,screening:0,interview:0,offer:0,rejected:0};
       jobsSnap.docs.forEach(jd=>{const s=jd.data().status;if(sc[s]!==undefined)sc[s]++;});
-      const funnelTip=Object.entries(sc).map(([s,v])=>`${SM[s]?.label||s}: ${v}`).join(' · ');
-      // Per-user mini funnel bar (shown under job list toggle)
-      const perUserFunnel=Object.entries(sc).map(([s,v])=>{
+
+      // Funnel bars for expand panel
+      const funnelHtml=Object.entries(sc).map(([s,v])=>{
         const pct=jobCount>0?Math.round((v/jobCount)*100):0;
-        return`<div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
-          <div style="font-size:10px;color:${donutC[s]};width:70px;text-align:right">${SM[s]?.label||s}</div>
-          <div style="flex:1;background:var(--c3);border-radius:20px;height:6px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${donutC[s]};border-radius:20px"></div></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--c4);width:18px">${v}</div>
-          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--c4);width:30px;text-align:right">${pct}%</div>
+        return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="font-size:11px;color:${donutC[s]};width:72px;text-align:right">${SM[s]?.label||s}</span>
+          <div style="flex:1;background:var(--c3);border-radius:20px;height:6px;overflow:hidden">
+            <div style="width:${pct}%;height:100%;background:${donutC[s]};border-radius:20px"></div>
+          </div>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:20px">${v}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:34px;text-align:right">${pct}%</span>
         </div>`;
       }).join('');
-      const isYou=uid===currentUser.uid;
-      const bannedBadge=u.banned?'<span style="color:var(--rejected);font-size:11px;margin-left:4px">BANNED</span>':'';
-      const jobRows=jobsSnap.docs.map(jd=>{
+
+      // Job rows for expand panel
+      const jobRowsHtml=jobsSnap.docs.map(jd=>{
         const jj=jd.data();
         const days=daysSince(jj.date);
-        const daysStr=days!==null?`${days}d ago`:'';
-        return`<div class="admin-job-row"><strong>${jj.title||'?'}</strong> @ ${jj.company||'?'} <span class="job-status ${jj.status}" style="font-size:10px;padding:1px 7px">${SM[jj.status]?.label||jj.status}</span>${daysStr?` <span style="color:var(--c4);font-size:11px;font-family:'DM Mono',monospace">${daysStr}</span>`:''}</div>`;
-      }).join('')||'<div style="color:var(--c4);font-size:12px">No jobs.</div>';
-      const html=`<tr data-uid="${uid}" data-name="${(u.displayName||'').toLowerCase()}" data-email="${(u.email||'').toLowerCase()}" data-banned="${!!u.banned}">
-        <td><div class="admin-user-cell"><img class="admin-avatar" src="${u.photoURL||''}" onerror="this.style.display='none'" alt=""/><div><div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}${bannedBadge}</div><div class="admin-email">${u.email||''}</div></div></div></td>
-        <td><span class="ip-badge">${u.lastLoginIP||'—'}</span></td>
-        <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4)">${lastLogin}</td>
-        <td style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
-        <td style="white-space:nowrap">
-          <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')"><i class="fa-solid fa-briefcase" style="font-size:10px"></i> Jobs</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="toggleAdminFunnel('${uid}')" title="${funnelTip}"><i class="fa-solid fa-chart-bar" style="font-size:10px"></i> Funnel</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="adminExportCSV('${uid}')"><i class="fa-solid fa-download" style="font-size:10px"></i> CSV</button>
-          ${!isYou?`<button class="admin-ban-btn" style="margin-left:4px" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'<i class="fa-solid fa-unlock" style="font-size:10px"></i> Unban':'<i class="fa-solid fa-ban" style="font-size:10px"></i> Ban'}</button>`:''}
-        </td>
-      </tr>
-      <tr id="admin-jobs-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open">${jobRows}</div></td></tr>
-      <tr id="admin-funnel-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open" style="padding:10px 14px">${perUserFunnel}</div></td></tr>`;
+        return`<div class="admin-job-row">
+          <span class="admin-job-title">${jj.title||'—'}</span>
+          <span class="admin-job-co">${jj.company||''}</span>
+          <span class="job-status ${jj.status}" style="font-size:10px;padding:1px 7px">${SM[jj.status]?.label||jj.status}</span>
+          ${days!==null?`<span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);margin-left:auto">${days}d ago</span>`:''}
+        </div>`;
+      }).join('')||'<div style="font-size:12px;color:var(--c4);padding:4px 0">No jobs yet.</div>';
+
+      const isYou=uid===currentUser.uid;
+      const html=`<div class="admin-card" data-uid="${uid}" data-name="${(u.displayName||'').toLowerCase()}" data-email="${(u.email||'').toLowerCase()}" data-banned="${!!u.banned}">
+        <div class="admin-card-main">
+          <img class="admin-card-avatar" src="${u.photoURL||''}" onerror="this.style.display='none'" alt=""/>
+          <div class="admin-card-info">
+            <div class="admin-card-name">
+              ${u.displayName||'—'}
+              ${isYou?'<span class="you-badge">you</span>':''}
+              ${u.banned?'<span class="banned-badge">banned</span>':''}
+            </div>
+            <div class="admin-card-email">${u.email||''}</div>
+            <div class="admin-card-meta">
+              <span class="admin-card-meta-item"><i class="fa-solid fa-briefcase" style="font-size:10px;opacity:.5"></i> ${jobCount} job${jobCount!==1?'s':''}</span>
+              <span class="admin-card-meta-item"><i class="fa-solid fa-clock" style="font-size:10px;opacity:.5"></i> ${lastLogin}</span>
+              <span class="ip-badge">${u.lastLoginIP||'—'}</span>
+            </div>
+          </div>
+          <div class="admin-card-actions">
+            <button class="admin-action-btn" onclick="toggleAdminJobs('${uid}')"><i class="fa-solid fa-list"></i> Jobs</button>
+            <button class="admin-action-btn" onclick="toggleAdminFunnel('${uid}')"><i class="fa-solid fa-chart-bar"></i> Funnel</button>
+            <button class="admin-action-btn" onclick="adminExportCSV('${uid}')"><i class="fa-solid fa-download"></i></button>
+            ${!isYou?`<button class="admin-action-btn ban" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'<i class="fa-solid fa-unlock"></i> Unban':'<i class="fa-solid fa-ban"></i> Ban'}</button>`:''}
+          </div>
+        </div>
+        <div class="admin-card-expand" id="admin-jobs-${uid}">
+          <div class="admin-job-list">${jobRowsHtml}</div>
+        </div>
+        <div class="admin-card-expand" id="admin-funnel-${uid}">
+          <div class="admin-funnel-inner">${funnelHtml}</div>
+        </div>
+      </div>`;
       return{html,counts:sc,jobCount};
     }));
 
-    // Aggregate counts across all users
+    // Aggregate stats
     const aggCounts={applied:0,screening:0,interview:0,offer:0,rejected:0};
     let aggTotal=0;
     rowData.forEach(r=>{
@@ -799,59 +823,54 @@ window.openAdmin=async function(){
     });
     const totalUsers=usersSnap.size;
     const bannedCount=usersSnap.docs.filter(d=>d.data().banned).length;
+
     const aggFunnelHtml=Object.entries(aggCounts).map(([s,v])=>{
       const pct=aggTotal>0?Math.round((v/aggTotal)*100):0;
       return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-        <div style="font-size:11px;color:${donutC[s]};width:76px;text-align:right;font-weight:600">${SM[s]?.label||s}</div>
-        <div style="flex:1;background:var(--c3);border-radius:20px;height:8px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${donutC[s]};border-radius:20px;transition:width .4s"></div></div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c5);width:24px">${v}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:36px;text-align:right">${pct}%</div>
+        <span style="font-size:11px;color:${donutC[s]};width:76px;text-align:right;font-weight:600">${SM[s]?.label||s}</span>
+        <div style="flex:1;background:var(--c3);border-radius:20px;height:7px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${donutC[s]};border-radius:20px;transition:width .4s"></div>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c5);width:22px">${v}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);width:34px;text-align:right">${pct}%</span>
       </div>`;
     }).join('');
 
     body.innerHTML=`
-      <!-- Aggregate stats bar -->
-      <div style="display:flex;align-items:stretch;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <div class="admin-stat-card"><div class="admin-stat-val">${totalUsers}</div><div class="admin-stat-label">Total users</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val">${aggTotal}</div><div class="admin-stat-label">Total jobs</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--offer)">${aggCounts.offer}</div><div class="admin-stat-label">Offers</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--interview)">${aggCounts.interview}</div><div class="admin-stat-label">Interviews</div></div>
-        <div class="admin-stat-card"><div class="admin-stat-val" style="color:var(--rejected)">${bannedCount}</div><div class="admin-stat-label">Banned</div></div>
-        <div class="admin-stat-card" style="flex:1;min-width:220px">
-          <div style="font-size:11px;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-weight:600">Platform funnel</div>
-          ${aggFunnelHtml}
-        </div>
+      <div class="admin-kpi-row">
+        <div class="admin-kpi"><div class="admin-kpi-val">${totalUsers}</div><div class="admin-kpi-label">Users</div></div>
+        <div class="admin-kpi"><div class="admin-kpi-val">${aggTotal}</div><div class="admin-kpi-label">Total jobs</div></div>
+        <div class="admin-kpi"><div class="admin-kpi-val" style="color:var(--offer)">${aggCounts.offer}</div><div class="admin-kpi-label">Offers</div></div>
+        <div class="admin-kpi"><div class="admin-kpi-val" style="color:var(--interview)">${aggCounts.interview}</div><div class="admin-kpi-label">Interviews</div></div>
+        <div class="admin-kpi"><div class="admin-kpi-val" style="color:var(--rejected)">${bannedCount}</div><div class="admin-kpi-label">Banned</div></div>
       </div>
-      <!-- User search filter -->
-      <div style="margin-bottom:10px;position:relative">
-        <i class="fa-solid fa-magnifying-glass" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--c4);font-size:12px"></i>
-        <input id="adminSearch" placeholder="Filter by name or email…" oninput="filterAdminRows(this.value)"
-          style="width:100%;background:var(--c2);border:.5px solid var(--c3);border-radius:8px;padding:8px 12px 8px 30px;font-size:13px;color:var(--c6);font-family:'Syne',sans-serif;outline:none"/>
+      <div class="admin-funnel-strip">
+        <div class="admin-funnel-strip-title">Platform funnel</div>
+        ${aggFunnelHtml}
       </div>
-      <!-- Users table -->
-      <div style="overflow-x:auto">
-        <table class="admin-table" id="adminTable">
-          <thead><tr><th>User</th><th>Last IP</th><th>Last Login</th><th>Jobs</th><th>Actions</th></tr></thead>
-          <tbody id="adminTableBody">${rowData.map(r=>r.html).join('')}</tbody>
-        </table>
+      <div class="admin-search-wrap">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input class="admin-search-input" id="adminSearch" placeholder="Filter by name or email…" oninput="filterAdminRows(this.value)"/>
       </div>
-      <div id="adminNoResults" style="display:none;text-align:center;padding:2rem;color:var(--c4);font-size:13px">No users match your filter.</div>`;
+      <div class="admin-cards" id="adminTableBody">${rowData.map(r=>r.html).join('')}</div>
+      <div id="adminNoResults" style="display:none;text-align:center;padding:2rem;color:var(--c4);font-size:13px">No users match.</div>`;
   }catch(e){
     body.innerHTML=`<div class="admin-loading" style="color:var(--rejected)"><i class="fa-solid fa-triangle-exclamation"></i> Error: ${e.message}</div>`;
   }
 };
 window.toggleAdminJobs=function(uid){
-  const row=document.getElementById(`admin-jobs-${uid}`);
-  if(row)row.style.display=row.style.display==='none'?'table-row':'none';
+
+  const el=document.getElementById(`admin-jobs-${uid}`);
+  if(el){el.classList.toggle('open');const f=document.getElementById(`admin-funnel-${uid}`);if(f)f.classList.remove('open');}
 };
 window.toggleAdminFunnel=function(uid){
-  const row=document.getElementById(`admin-funnel-${uid}`);
-  if(row)row.style.display=row.style.display==='none'?'table-row':'none';
+  const el=document.getElementById(`admin-funnel-${uid}`);
+  if(el){el.classList.toggle('open');const j=document.getElementById(`admin-jobs-${uid}`);if(j)j.classList.remove('open');}
 };
 window.filterAdminRows=function(q){
   q=(q||'').toLowerCase().trim();
   let shown=0;
-  document.querySelectorAll('#adminTableBody tr[data-uid]').forEach(tr=>{
+  document.querySelectorAll('#adminTableBody .admin-user-row[data-uid]').forEach(tr=>{
     const match=!q||(tr.dataset.name||'').includes(q)||(tr.dataset.email||'').includes(q)||(tr.dataset.uid||'').includes(q);
     tr.style.display=match?'':'none';
     const uid=tr.dataset.uid||'';
@@ -1465,7 +1484,7 @@ ${jd}`
   try{
     const response=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
       body:JSON.stringify({
         model:'llama-3.3-70b-versatile',
         max_tokens:1000,
