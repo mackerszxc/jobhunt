@@ -291,12 +291,11 @@ option{background:var(--c1)}
 .admin-modal{background:var(--c1);border:.5px solid var(--c3);border-radius:16px;padding:1.5rem;width:100%;max-width:780px;max-height:90vh;overflow-y:auto}
 .admin-modal h2{font-size:1.1rem;font-weight:600;color:var(--c6);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
 .admin-modal h2 i{color:var(--accent)}
-.admin-table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px}
 .admin-table th{text-align:left;color:var(--c4);text-transform:uppercase;letter-spacing:.06em;font-size:11px;padding:6px 10px;border-bottom:.5px solid var(--c3);white-space:nowrap}
-.admin-table td{padding:10px;border-bottom:.5px solid var(--c2);color:var(--c5);vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
+.admin-table td{padding:10px;border-bottom:.5px solid var(--c2);color:var(--c5);vertical-align:middle}
 .admin-table tr:last-child td{border-bottom:none}
-@media(max-width:700px){.admin-col-ip,.admin-col-login{display:none}}
-@media(max-width:500px){.admin-col-jobs{display:none}}
+.admin-user-meta{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
 .admin-user-cell{display:flex;align-items:center;gap:8px}
 .admin-avatar{width:26px;height:26px;border-radius:50%;object-fit:cover;background:var(--c2);flex-shrink:0}
 .admin-name{color:var(--c6);font-weight:600}
@@ -1867,19 +1866,31 @@ window.openAdmin=async function(){
         return`<div class="admin-job-row"><strong>${jj.title||'?'}</strong> @ ${jj.company||'?'} <span class="job-status ${jj.status}" style="font-size:10px;padding:1px 7px">${SM[jj.status]?.label||jj.status}</span>${daysStr?` <span style="color:var(--c4);font-size:11px;font-family:'DM Mono',monospace">${daysStr}</span>`:''}</div>`;
       }).join('')||'<div style="color:var(--c4);font-size:12px">No jobs.</div>';
       const html=`<tr data-uid="${uid}" data-name="${(u.displayName||'').toLowerCase()}" data-email="${(u.email||'').toLowerCase()}" data-banned="${!!u.banned}">
-        <td><div class="admin-user-cell"><img class="admin-avatar" src="${u.photoURL||''}" onerror="this.style.display='none'" alt=""/><div><div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}${bannedBadge}</div><div class="admin-email">${u.email||''}</div></div></div></td>
-        <td class="admin-col-ip"><span class="ip-badge">${u.lastLoginIP||'—'}</span></td>
-        <td class="admin-col-login" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--c4);white-space:nowrap">${lastLogin}</td>
-        <td class="admin-col-jobs" style="font-family:'DM Mono',monospace;color:var(--c5)">${jobCount}</td>
-        <td style="white-space:nowrap">
-          <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')"><i class="fa-solid fa-briefcase" style="font-size:10px"></i> Jobs</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="toggleAdminFunnel('${uid}')" title="${funnelTip}"><i class="fa-solid fa-chart-bar" style="font-size:10px"></i> Funnel</button>
-          <button class="admin-expand-btn" style="margin-left:4px" onclick="adminExportCSV('${uid}')"><i class="fa-solid fa-download" style="font-size:10px"></i> CSV</button>
-          ${!isYou?`<button class="admin-ban-btn" style="margin-left:4px" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'<i class="fa-solid fa-unlock" style="font-size:10px"></i> Unban':'<i class="fa-solid fa-ban" style="font-size:10px"></i> Ban'}</button>`:''}
+        <td>
+          <div class="admin-user-cell">
+            <img class="admin-avatar" src="${u.photoURL||''}" onerror="this.style.display='none'" alt=""/>
+            <div>
+              <div class="admin-name">${u.displayName||'—'}${isYou?'<span class="you-badge">you</span>':''}${bannedBadge}</div>
+              <div class="admin-email">${u.email||''}</div>
+              <div class="admin-user-meta">
+                <span class="ip-badge">${u.lastLoginIP||'—'}</span>
+                <span style="color:var(--c4);font-size:10px;font-family:'DM Mono',monospace">${lastLogin}</span>
+                <span style="color:var(--c4);font-size:10px"><i class="fa-solid fa-briefcase" style="font-size:9px"></i> ${jobCount}</span>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td style="white-space:nowrap;vertical-align:middle">
+          <div style="display:flex;flex-wrap:wrap;gap:4px">
+            <button class="admin-expand-btn" onclick="toggleAdminJobs('${uid}')"><i class="fa-solid fa-briefcase" style="font-size:10px"></i> Jobs</button>
+            <button class="admin-expand-btn" onclick="toggleAdminFunnel('${uid}')" title="${funnelTip}"><i class="fa-solid fa-chart-bar" style="font-size:10px"></i> Funnel</button>
+            <button class="admin-expand-btn" onclick="adminExportCSV('${uid}')"><i class="fa-solid fa-download" style="font-size:10px"></i> CSV</button>
+            ${!isYou?`<button class="admin-ban-btn" onclick="toggleBan('${uid}',${!!u.banned})">${u.banned?'<i class="fa-solid fa-unlock" style="font-size:10px"></i> Unban':'<i class="fa-solid fa-ban" style="font-size:10px"></i> Ban'}</button>`:''}
+          </div>
         </td>
       </tr>
-      <tr id="admin-jobs-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open">${jobRows}</div></td></tr>
-      <tr id="admin-funnel-${uid}" style="display:none"><td colspan="5"><div class="admin-job-list open" style="padding:10px 14px">${perUserFunnel}</div></td></tr>`;
+      <tr id="admin-jobs-${uid}" style="display:none"><td colspan="2"><div class="admin-job-list open">${jobRows}</div></td></tr>
+      <tr id="admin-funnel-${uid}" style="display:none"><td colspan="2"><div class="admin-job-list open" style="padding:10px 14px">${perUserFunnel}</div></td></tr>`;
       return{html,counts:sc,jobCount};
     }));
 
@@ -1924,7 +1935,7 @@ window.openAdmin=async function(){
       <!-- Users table -->
       <div>
         <table class="admin-table" id="adminTable">
-          <thead><tr><th>User</th><th class="admin-col-ip">Last IP</th><th class="admin-col-login">Last Login</th><th class="admin-col-jobs">Jobs</th><th>Actions</th></tr></thead>
+          <thead><tr><th>User</th><th>Actions</th></tr></thead>
           <tbody id="adminTableBody">${rowData.map(r=>r.html).join('')}</tbody>
         </table>
       </div>
