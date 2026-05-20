@@ -845,10 +845,12 @@ option{background:var(--c1)}
 <!-- ADD / EDIT MODAL -->
 <div class="modal-overlay" id="addModal" onclick="if(event.target===this)closeAdd()">
   <div class="modal">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-shrink:0">
       <div class="modal-title" id="modalTitle" style="margin:0">Add new application</div>
       <button class="detail-close" onclick="closeAdd()" style="flex-shrink:0"><i class="fa-solid fa-xmark"></i></button>
     </div>
+
+    <div class="modal-scroll-body">
 
     <!-- duplicate warning -->
     <div class="dup-warning" id="dupWarning"><i class="fa-solid fa-triangle-exclamation"></i><span id="dupWarningText"></span></div>
@@ -929,6 +931,9 @@ option{background:var(--c1)}
         <span class="match-score-label" id="matchScoreLabel">Not rated</span>
       </div>
     </div>
+
+    </div><!-- end .modal-scroll-body -->
+
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeAdd()">Cancel</button>
       <button class="btn-save" id="saveBtn" onclick="saveJob()">Save application</button>
