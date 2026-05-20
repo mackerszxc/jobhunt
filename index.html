@@ -566,6 +566,8 @@ option{background:var(--c1)}
       <button class="btn-cancel" style="padding:6px 12px;font-size:12px" onclick="document.getElementById('goalPopover').classList.add('hidden')">Cancel</button>
     </div>
   </div>
+
+  <div class="toolbar">
     <div class="search-wrap">
       <i class="fa-solid fa-magnifying-glass"></i>
       <input class="search-input" id="searchInput" type="text" placeholder="Search jobs, companies, notes… (/)" oninput="onSearch(this.value);document.getElementById('searchClear').style.display=this.value?'flex':'none'"/>
