@@ -1465,7 +1465,7 @@ ${jd}`
   try{
     const response=await fetch('https://api.groq.com/openai/v1/chat/completions',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
+      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
       body:JSON.stringify({
         model:'llama-3.3-70b-versatile',
         max_tokens:1000,
