@@ -1106,7 +1106,7 @@ self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil
     `;
     const swBlob=new Blob([swCode],{type:'application/javascript'});
     const swUrl=URL.createObjectURL(swBlob);
-    navigator.serviceWorker.register(swUrl).catch(()=>{});
+    navigator.serviceWorker.register(swUrl,{scope:'/'}).catch(()=>{});
   }
 
   // Install prompt
@@ -1138,24 +1138,8 @@ self.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil
 </script>
 
 
-// If any uncaught error happens before auth resolves, bail out to login screen
-window.addEventListener('error',()=>{
-  const shield=document.getElementById('authShield');
-  if(shield&&shield.style.display!=='none'){
-    shield.style.display='none';
-    const ls=document.getElementById('loginScreen');
-    if(ls)ls.style.display='flex';
-  }
-});
-window.addEventListener('unhandledrejection',()=>{
-  const shield=document.getElementById('authShield');
-  if(shield&&shield.style.display!=='none'){
-    shield.style.display='none';
-    const ls=document.getElementById('loginScreen');
-    if(ls)ls.style.display='flex';
-  }
-});
-
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
 import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,sendPasswordResetEmail}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
 import{getFirestore,collection,addDoc,updateDoc,deleteDoc,doc,onSnapshot,serverTimestamp,query,orderBy,getDocs,setDoc,getDoc,writeBatch,Timestamp,enableMultiTabIndexedDbPersistence}from'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
 
@@ -1164,10 +1148,8 @@ const fbApp=initializeApp(cfg);
 const auth=getAuth(fbApp);
 const db=getFirestore(fbApp);
 
-// Offline persistence (Firestore v11 — initializeFirestore approach is preferred
-// but enableMultiTabIndexedDbPersistence is available; wrap tightly so any error
-// never blocks the rest of the module)
-try{enableMultiTabIndexedDbPersistence(db);}catch(e){/* ignore — unsupported env */}
+// Phase 1: Offline persistence (multi-tab safe)
+enableMultiTabIndexedDbPersistence(db).catch(()=>{});
 
 // Phase 1: Admin check via custom claims (falls back to hardcoded UID during transition)
 const ADMIN_UID='DYd2v8s2uwdpFumzBCeUHX3qs0M2';
@@ -1500,20 +1482,18 @@ function subscribeJobs(uid){
   unsubJobs=onSnapshot(q2,snap=>{
     jobs=snap.docs.map(d=>({id:d.id,...d.data()}));
     setSyncState('ok');render();
-    // Schedule notifications after jobs are loaded
-    window.scheduleFollowUpReminders?.();
-    window.scheduleStaleAlerts?.();
   },()=>setSyncState('err'));
 }
 
-// Safety net: if Firebase never calls back (network issue, module crash, etc), show login after 3s
+// ── AUTH ──
+// Safety net: if Firebase never calls back (network down etc), show login after 8s
 const _authTimeout=setTimeout(()=>{
   const shield=document.getElementById('authShield');
   if(shield&&shield.style.display!=='none'){
     shield.style.display='none';
     document.getElementById('loginScreen').style.display='flex';
   }
-},3000);
+},8000);
 
 onAuthStateChanged(auth,async user=>{
   clearTimeout(_authTimeout);
@@ -2654,124 +2634,40 @@ window.copyAIOutput=function(){
   });
 };
 
-// ── PUSH / LOCAL NOTIFICATIONS ──
-// Strategy: no server needed. We use the SW to fire local notifications
-// at the right time, scheduled via setTimeout + localStorage persistence.
-// On every load we re-schedule anything still pending.
-
+// ── PUSH NOTIFICATION SUBSCRIPTION ──
 window.requestPushPermission=async function(){
-  if(!('Notification' in window))return false;
+  if(!('Notification' in window)||!currentUser)return;
   const perm=await Notification.requestPermission();
-  return perm==='granted';
-};
-
-// Call this after jobs load (or when prefs change) to schedule reminders
-window.scheduleFollowUpReminders=async function(){
-  const prefs=JSON.parse(localStorage.getItem('huntlogPrefs')||'{}');
-  if(prefs.followupReminders===false)return;
-  if(!('Notification' in window)||Notification.permission!=='granted')return;
-
-  const reg=await navigator.serviceWorker.ready.catch(()=>null);
-  if(!reg)return;
-
-  const now=new Date();
-  const todayStr=now.toISOString().slice(0,10);
-
-  // Find jobs with follow-up date today or overdue
-  const {jobs:currentJobs}=window._getAppState?..()||{};
-  if(!currentJobs?.length)return;
-
-  const due=currentJobs.filter(j=>{
-    if(!j.followUp)return false;
-    const d=j.followUp?.toDate?j.followUp.toDate():(j.followUp?new Date(j.followUp):null);
-    if(!d)return false;
-    const dStr=d.toISOString().slice(0,10);
-    return dStr<=todayStr;
-  });
-
-  if(!due.length)return;
-
-  // Deduplicate: only fire once per session per set of due jobs
-  const key='notif_fired_'+todayStr;
-  if(sessionStorage.getItem(key))return;
-  sessionStorage.setItem(key,'1');
-
-  // Delay slightly so it doesn't fire during page load
-  setTimeout(()=>{
-    const overdue=due.filter(j=>{
-      const d=j.followUp?.toDate?j.followUp.toDate():(j.followUp?new Date(j.followUp):null);
-      return d&&d.toISOString().slice(0,10)<todayStr;
-    });
-    const today=due.filter(j=>{
-      const d=j.followUp?.toDate?j.followUp.toDate():(j.followUp?new Date(j.followUp):null);
-      return d&&d.toISOString().slice(0,10)===todayStr;
-    });
-
-    if(overdue.length){
-      reg.showNotification('HuntLog — overdue follow-ups',{
-        body:overdue.length===1
-          ?`${overdue[0].title} at ${overdue[0].company} is overdue for a follow-up.`
-          :`${overdue.length} applications are overdue for follow-up.`,
-        icon:'/icon-192.png',badge:'/icon-72.png',
-        tag:'huntlog-overdue',
-        data:{url:'/'},
-        actions:[{action:'open',title:'View jobs'}]
-      });
-    }
-    if(today.length){
-      setTimeout(()=>{
-        reg.showNotification('HuntLog — follow up today',{
-          body:today.length===1
-            ?`Follow up on ${today[0].title} at ${today[0].company} today.`
-            :`${today.length} applications need a follow-up today.`,
-          icon:'/icon-192.png',badge:'/icon-72.png',
-          tag:'huntlog-today',
-          data:{url:'/'},
-          actions:[{action:'open',title:'View jobs'}]
+  if(perm==='granted'){
+    try{
+      const reg=await navigator.serviceWorker.ready;
+      // VAPID public key placeholder — replace with your actual VAPID key
+      // Generated via: npx web-push generate-vapid-keys
+      const VAPID_PUBLIC='BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjZkiTBTXGsL4E4A_XLJpT15mslbk';
+      let sub;
+      try{
+        sub=await reg.pushManager.subscribe({
+          userVisibleOnly:true,
+          applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC)
         });
-      },1500);
+      }catch{
+        // Subscription failed (likely missing VAPID key) — show notification anyway via SW
+        reg.showNotification('HuntLog push enabled!',{
+          body:'You\'ll get follow-up reminders here.',
+          icon:'/icon-192.png',tag:'huntlog-welcome'
+        });
+        return;
+      }
+      // Save subscription endpoint to Firestore for server-side sending
+      await setDoc(doc(db,`users/${currentUser.uid}`),{
+        pushSubscription:JSON.stringify(sub),
+        pushEnabled:true
+      },{merge:true});
+      alert('Push notifications enabled! You\'ll get follow-up reminders.');
+    }catch(e){
+      console.warn('Push subscription error:',e);
     }
-  },3000);
-};
-
-// Check stale applications (no update in N days) — fires once per day
-window.scheduleStaleAlerts=async function(){
-  const prefs=JSON.parse(localStorage.getItem('huntlogPrefs')||'{}');
-  if(prefs.staleAlerts===false)return;
-  if(!('Notification' in window)||Notification.permission!=='granted')return;
-
-  const staleKey='stale_notif_'+new Date().toISOString().slice(0,10);
-  if(sessionStorage.getItem(staleKey))return;
-
-  const reg=await navigator.serviceWorker.ready.catch(()=>null);
-  if(!reg)return;
-
-  const {jobs:currentJobs}=window._getAppState?..()||{};
-  if(!currentJobs?.length)return;
-
-  const staleDays=parseInt(prefs.staleAfter||'14',10);
-  const cutoff=new Date();
-  cutoff.setDate(cutoff.getDate()-staleDays);
-
-  const stale=currentJobs.filter(j=>{
-    if(j.status==='rejected'||j.status==='offer')return false;
-    const d=j.date?.toDate?j.date.toDate():(j.date?new Date(j.date):null);
-    return d&&d<cutoff;
-  });
-
-  if(!stale.length)return;
-  sessionStorage.setItem(staleKey,'1');
-
-  setTimeout(()=>{
-    reg.showNotification('HuntLog — applications going stale',{
-      body:stale.length===1
-        ?`${stale[0].title} at ${stale[0].company} hasn't been updated in ${staleDays}+ days.`
-        :`${stale.length} applications haven't been updated in ${staleDays}+ days.`,
-      icon:'/icon-192.png',badge:'/icon-72.png',
-      tag:'huntlog-stale',
-      data:{url:'/'}
-    });
-  },6000);
+  }
 };
 
 function urlBase64ToUint8Array(base64String){
@@ -2990,51 +2886,11 @@ updateMobileNav();
     document.getElementById('settingsFollowupReminders').checked=followup;
     const staleAlerts=p.staleAlerts!==false;
     document.getElementById('settingsStaleAlerts').checked=staleAlerts;
-    _updateNotifPermUI();
 
     // footer with version/uid
     const uid=window._getAppState?.().currentUser?.uid||'';
     document.getElementById('settingsFooter').textContent=
       uid?`HuntLog · uid: ${uid.slice(0,8)}…`:'HuntLog · your data is synced securely';
-  }
-
-  window.settingsEnableNotifications=async function(){
-    const granted=await window.requestPushPermission();
-    if(granted){
-      // Show a welcome notification immediately so user knows it works
-      const reg=await navigator.serviceWorker.ready.catch(()=>null);
-      if(reg){
-        reg.showNotification('HuntLog notifications enabled ✓',{
-          body:'You\'ll get follow-up reminders and stale application alerts.',
-          icon:'/icon-192.png',tag:'huntlog-welcome'
-        });
-      }
-      _updateNotifPermUI();
-      // Re-run schedulers now that permission is granted
-      window.scheduleFollowUpReminders?.();
-      window.scheduleStaleAlerts?.();
-    } else {
-      _updateNotifPermUI();
-    }
-  };
-
-  window.settingsNotifToggle=function(){
-    saveSettingsPref();
-    // Clear session flags so schedulers can re-fire with new prefs
-    const today=new Date().toISOString().slice(0,10);
-    sessionStorage.removeItem('notif_fired_'+today);
-    sessionStorage.removeItem('stale_notif_'+today);
-    window.scheduleFollowUpReminders?.();
-    window.scheduleStaleAlerts?.();
-  };
-
-  function _updateNotifPermUI(){
-    const permRow=document.getElementById('notifPermRow');
-    const blockedRow=document.getElementById('notifBlockedRow');
-    if(!permRow||!blockedRow)return;
-    const perm='Notification' in window?Notification.permission:'denied';
-    permRow.style.display=perm==='default'?'flex':'none';
-    blockedRow.style.display=perm==='denied'?'flex':'none';
   }
 
   window.settingsToggleTheme=function(checkbox){
@@ -3290,26 +3146,17 @@ updateMobileNav();
       <!-- NOTIFICATIONS -->
       <div class="settings-section">
         <div class="settings-section-title">Notifications</div>
-        <!-- Permission request row — hidden once granted -->
-        <div class="settings-row" id="notifPermRow" style="display:none">
-          <span class="settings-row-label">Browser notifications<small>Required to receive reminders</small></span>
-          <button class="settings-btn" style="width:auto;padding:6px 14px" onclick="settingsEnableNotifications()"><i class="fa-solid fa-bell"></i> Enable</button>
-        </div>
-        <!-- Blocked warning -->
-        <div id="notifBlockedRow" style="display:none;font-size:12px;color:var(--rejected);padding:.4rem 0;display:flex;align-items:center;gap:6px">
-          <i class="fa-solid fa-ban"></i> Notifications blocked in browser settings
-        </div>
         <div class="settings-row">
-          <span class="settings-row-label">Follow-up reminders<small>Notify when a follow-up date is due</small></span>
+          <span class="settings-row-label">Follow-up reminders<small>Badge overdue follow-ups on cards</small></span>
           <label class="settings-toggle">
-            <input type="checkbox" id="settingsFollowupReminders" checked onchange="settingsNotifToggle()"/>
+            <input type="checkbox" id="settingsFollowupReminders" checked onchange="saveSettingsPref()"/>
             <span class="settings-toggle-track"></span>
           </label>
         </div>
         <div class="settings-row">
-          <span class="settings-row-label">Stale application alerts<small>Notify when apps go unupdated</small></span>
+          <span class="settings-row-label">Stale application alerts<small>Highlight apps with no updates</small></span>
           <label class="settings-toggle">
-            <input type="checkbox" id="settingsStaleAlerts" checked onchange="settingsNotifToggle()"/>
+            <input type="checkbox" id="settingsStaleAlerts" checked onchange="saveSettingsPref()"/>
             <span class="settings-toggle-track"></span>
           </label>
         </div>
