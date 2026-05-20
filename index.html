@@ -1165,6 +1165,7 @@ const SM={applied:{label:'Applied'},screening:{label:'Screening'},interview:{lab
 const REJECT_REASONS={no_response:'No response',skills_gap:'Skills gap',salary_mismatch:'Salary mismatch',position_filled:'Position filled',culture_fit:'Culture fit',withdrew:'I withdrew',other:'Other'};
 const ROUND_LABELS={1:'Round 1 · Phone Screen',2:'Round 2 · Technical',3:'Round 3 · Final',4:'Offer Stage'};
 let jobs=[],currentFilter='all',currentSearch='',currentSort='date-desc',openJobId=null,unsubJobs=null,currentUser=null;
+window._getAppState=()=>({currentUser,db,jobs});
 let selectedIds=new Set();
 let editingJobId=null;
 let modalTags=[];
@@ -2832,7 +2833,7 @@ updateMobileNav();
 
   function _populateSettings(){
     // Profile
-    const u=window.currentUser;
+    const u=window._getAppState?.().currentUser;
     if(u){
       const avatar=document.getElementById('settingsAvatar');
       const placeholder=document.getElementById('settingsAvatarPlaceholder');
@@ -2887,7 +2888,7 @@ updateMobileNav();
     document.getElementById('settingsStaleAlerts').checked=staleAlerts;
 
     // footer with version/uid
-    const uid=window.currentUser?.uid||'';
+    const uid=window._getAppState?.().currentUser?.uid||'';
     document.getElementById('settingsFooter').textContent=
       uid?`HuntLog · uid: ${uid.slice(0,8)}…`:'HuntLog · your data is synced securely';
   }
@@ -2936,7 +2937,7 @@ updateMobileNav();
   };
 
   window.settingsCopyUID=function(){
-    const uid=window.currentUser?.uid||'';
+    const uid=window._getAppState?.().currentUser?.uid||'';
     if(!uid){alert('Not signed in');return;}
     navigator.clipboard.writeText(uid).then(()=>{
       const btn=event.target.closest('button');
@@ -2948,14 +2949,10 @@ updateMobileNav();
   window.settingsClearData=function(){
     if(!confirm('Delete ALL your job applications? This cannot be undone.'))return;
     if(!confirm('Are you absolutely sure? All your data will be permanently deleted.'))return;
-    // Use existing bulk-delete pattern if available
-    if(window.jobs&&window.db&&window.currentUser){
-      const batch=[];
-      window.jobs.forEach(j=>{
-        batch.push(window.db.collection('users').doc(window.currentUser.uid).collection('jobs').doc(j.id).delete());
-      });
+    const {currentUser,db,jobs}=window._getAppState?.()||{};
+    if(jobs&&db&&currentUser){
+      const batch=jobs.map(j=>deleteDoc(doc(db,`users/${currentUser.uid}/jobs`,j.id)));
       Promise.all(batch).then(()=>{
-        window.jobs=[];
         window.render&&window.render();
         closeSettings();
       });
