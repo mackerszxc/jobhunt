@@ -479,8 +479,14 @@ option{background:var(--c1)}
 
 <h2 class="sr-only">HuntLog — secure job application tracker</h2>
 
+<!-- AUTH LOADING SHIELD — shown until Firebase confirms auth state -->
+<div id="authShield" style="position:fixed;inset:0;background:var(--c0);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px">
+  <div style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--c6);letter-spacing:-.02em">hunt<span style="color:var(--accent);font-style:italic">log</span></div>
+  <div style="width:20px;height:20px;border:2px solid var(--c3);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite"></div>
+</div>
+
 <!-- LOGIN -->
-<div id="loginScreen" class="login-screen">
+<div id="loginScreen" class="login-screen" style="display:none">
   <div class="login-card">
     <div class="login-logo">hunt<span>log</span></div>
     <p class="login-sub">Track every application, interview, and offer — all synced securely to your account.</p>
@@ -1242,8 +1248,21 @@ function subscribeJobs(uid){
 }
 
 // ── AUTH ──
+// Safety net: if Firebase never calls back (network down etc), show login after 8s
+const _authTimeout=setTimeout(()=>{
+  const shield=document.getElementById('authShield');
+  if(shield&&shield.style.display!=='none'){
+    shield.style.display='none';
+    document.getElementById('loginScreen').style.display='flex';
+  }
+},8000);
+
 onAuthStateChanged(auth,async user=>{
+  clearTimeout(_authTimeout);
   currentUser=user;
+  // Always dismiss the loading shield first
+  const shield=document.getElementById('authShield');
+  if(shield)shield.style.display='none';
   if(user){
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('mainApp').style.display='flex';
