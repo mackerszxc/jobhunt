@@ -574,18 +574,26 @@ option{background:var(--c1)}
   }
 
   /* ── add/edit modal: full-screen on mobile ── */
-  .modal-overlay{padding:0;align-items:flex-end}
+  .modal-overlay{padding:0;align-items:flex-end;padding-bottom:64px} /* clear the bottom nav */
   .modal{
-    border-radius:16px 16px 0 0;max-height:88vh;
+    border-radius:16px 16px 0 0;
+    max-height:calc(88vh - 64px);
     padding:1.25rem 1rem 0;
-    display:flex;flex-direction:column;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .modal-scroll-body{
+    flex:1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:.5rem;
   }
   .modal-actions{
-    position:sticky;bottom:0;background:var(--c1);
-    padding:1rem 0 calc(env(safe-area-inset-bottom,0px) + 1rem);
-    margin-top:auto;border-top:.5px solid var(--c3);
-    margin-left:-1rem;margin-right:-1rem;
-    padding-left:1rem;padding-right:1rem;
+    flex-shrink:0;
+    border-top:.5px solid var(--c3);
+    padding:.75rem 0 .75rem;
+    background:var(--c1);
   }
 
   /* ── analytics overlay ── */
