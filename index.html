@@ -4157,6 +4157,7 @@ updateMobileNav();
 
   window.settingsNotifToggle=function(){
     saveSettingsPref();
+    // clear
     // Clear session flags so schedulers can re-fire with new prefs
     const today=new Date().toISOString().slice(0,10);
     sessionStorage.removeItem('notif_fired_'+today);
