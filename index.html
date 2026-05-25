@@ -416,7 +416,7 @@ option{background:var(--c1)}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ── ADD/EDIT MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:150;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
 .modal{
   background:rgba(12,12,22,.85);
@@ -2919,19 +2919,26 @@ window.saveJob=async function(){
     rejectReason:status==='rejected'?(document.getElementById('f-rejectreason').value||''):'',
     matchScore:currentMatchScore||0
   };
-  if(editingJobId){
-    await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,editingJobId),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${editingJobId}/activity`),{
-      text:'Application details updated',ts:serverTimestamp()
-    });
-    window.closeAdd();
-    await window._openDetail(editingJobId);
-  }else{
-    const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),data);
-    await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
-      text:`Application added as "${SM[status]?.label}"`,ts:serverTimestamp()
-    });
-    window.closeAdd();
+  try{
+    if(editingJobId){
+      await updateDoc(doc(db,`users/${currentUser.uid}/jobs`,editingJobId),data);
+      await addDoc(collection(db,`users/${currentUser.uid}/jobs/${editingJobId}/activity`),{
+        text:'Application details updated',ts:serverTimestamp()
+      });
+      setSyncState('ok');
+      window.closeAdd();
+      await window._openDetail(editingJobId);
+    }else{
+      const ref=await addDoc(collection(db,`users/${currentUser.uid}/jobs`),data);
+      await addDoc(collection(db,`users/${currentUser.uid}/jobs/${ref.id}/activity`),{
+        text:`Application added as "${SM[status]?.label}"`,ts:serverTimestamp()
+      });
+      setSyncState('ok');
+      window.closeAdd();
+    }
+  }catch(e){
+    setSyncState('err');
+    alert('Failed to save: '+e.message);
   }
 };
 
