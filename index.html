@@ -2842,7 +2842,7 @@ window.openAdd=function(){
   ['f-title','f-company','f-location','f-salary','f-notes','f-url','f-followup','f-recruiter','f-resumeUrl','f-resumeVersion'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
-  document.getElementById('f-status').value='applied';
+  try{const _p=JSON.parse(localStorage.getItem('huntlogPrefs')||'{}');document.getElementById('f-status').value=_p.defaultStatus||'applied';}catch(e){document.getElementById('f-status').value='applied';}
   document.getElementById('f-rejectreason').value='';
   document.getElementById('roundSection').classList.remove('visible');
   document.getElementById('rejectSection').classList.remove('visible');
@@ -4249,11 +4249,12 @@ updateMobileNav();
     }
   };
 
-  // On load: apply saved accent + density
+  // On load: apply saved accent + density + sort
   const savedAccent=localStorage.getItem('accentColor');
   if(savedAccent)document.documentElement.style.setProperty('--accent',savedAccent);
   const savedPrefs=getPrefs();
   if(savedPrefs.density)document.documentElement.setAttribute('data-density',savedPrefs.density);
+  if(savedPrefs.defaultSort){const sortEl=document.getElementById('sortSelect');if(sortEl){sortEl.value=savedPrefs.defaultSort;window.onSort&&window.onSort(savedPrefs.defaultSort);}}
 
   // Keyboard shortcut: S
   document.addEventListener('keydown',e=>{
