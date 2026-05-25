@@ -3925,6 +3925,7 @@ document.addEventListener('keydown',e=>{
 
   if(e.key==='Escape'){
     window.closeAdd();window.closeDetail();window.closeAdmin();window.closeAnalytics();
+    window.closeAIAssist?.();
     if(quickAddOpen)toggleQuickAdd();
     document.getElementById('shortcutsModal').classList.remove('open');
     return;
@@ -4368,7 +4369,7 @@ updateMobileNav();
           <div class="accent-swatches" id="accentSwatches">
             <div class="accent-swatch active" style="background:#0a84ff" data-color="#0a84ff" onclick="setAccent(this)" title="Indigo"></div>
             <div class="accent-swatch" style="background:#3b82f6" data-color="#3b82f6" onclick="setAccent(this)" title="Blue"></div>
-            <div class="accent-swatch" style="background:#0a84ff" data-color="#0a84ff" onclick="setAccent(this)" title="Violet"></div>
+            <div class="accent-swatch" style="background:#8b5cf6" data-color="#8b5cf6" onclick="setAccent(this)" title="Violet"></div>
             <div class="accent-swatch" style="background:#ec4899" data-color="#ec4899" onclick="setAccent(this)" title="Pink"></div>
             <div class="accent-swatch" style="background:#10b981" data-color="#10b981" onclick="setAccent(this)" title="Emerald"></div>
             <div class="accent-swatch" style="background:#f59e0b" data-color="#f59e0b" onclick="setAccent(this)" title="Amber"></div>
